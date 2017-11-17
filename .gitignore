@@ -1,0 +1,11 @@
+# IDE Files
+.settings/
+.buildpath
+.project
+
+# Cache Files
+Document/phpdoc-cache-*
+
+# Tools
+phpunit.phar
+phpDocumentor.phar

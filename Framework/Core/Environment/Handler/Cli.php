@@ -1,17 +1,13 @@
 <?php
 namespace X\Core\Environment\Handler;
-
-/**
- * 
- */
 use X\Core\Environment\Util\Handler;
-
 /**
- * 
+ * 命令行运行环境实例
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Cli extends Handler {
     /**
-     * (non-PHPdoc)
+     * 获取当前运行环境名称
      * @see \X\Core\Environment\Util\Handler::getName()
      */
     public function getName() {
@@ -19,7 +15,7 @@ class Cli extends Handler {
     }
     
     /**
-     * (non-PHPdoc)
+     * 初始化运行参数
      * @see \X\Core\Environment\Util\Handler::initParameters()
      */
     protected function initParameters() {
@@ -35,6 +31,6 @@ class Cli extends Handler {
             $name = substr($name, 2);
             $parameters[trim($name)] = $value;
         }
-        $this->parameters = $parameters;
+        return $parameters;
     }
 }

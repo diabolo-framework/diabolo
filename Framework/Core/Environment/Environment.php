@@ -1,24 +1,23 @@
 <?php
 namespace X\Core\Environment;
-
+use X\Core\Component\Exception;
 /**
- * 
- */
-use X\Core\Util\Exception;
-
-/**
- * @method void init()
- * @method string getName()
- * @method array getParameters()
+ * 运行环境处理器
+ * @author Michael Luthor <michaelluthor@163.com>
+ * @method void init() 初始化运行环境
+ * @method string getName() 获取运行环境名称
+ * @method array getParameters() 获取运行环境参数
  */
 class Environment {
     /**
+     * 运行环境实例
      * @var X\Core\Environment\Util\Handler
      */
     private $handler = null;
     
     /**
-     * @throws Exception
+     * 初始化管理器
+     * @throws Exception 找不到对应的环境处理方式
      */
     public function __construct() {
         $handlerName = php_sapi_name();
@@ -27,11 +26,11 @@ class Environment {
         if ( !class_exists($handlerClass) ) {
             throw new Exception("Unable to find a environment handler '$handlerClass'.");
         }
-        
         $this->handler = new $handlerClass();
     }
     
     /**
+     * 调用运行环境实例的方法。
      * @param string $name
      * @param array $params
      */

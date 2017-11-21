@@ -1,9 +1,9 @@
 <?php
 namespace X\Core\Module;
 use X\Core\X;
-use X\Core\Util\XUtil;
-use X\Core\Util\ConfigurationFile;
-use X\Core\Util\ConfigurationArray;
+use X\Core\Component\ConfigurationFile;
+use X\Core\Component\ConfigurationArray;
+use X\Core\Component\ClassHelper;
 abstract class XModule {
     /** @var ConfigurationArray contains the config of this module.*/
     private $configuration = null;
@@ -65,11 +65,11 @@ abstract class XModule {
      * @return string
      */
     public function getPath( $path=null ) {
-        return XUtil::getPathRelatedClass($this, $path);
+        return ClassHelper::getPathRelatedClass($this, $path);
     }
     
     /**
-     * @return \X\Core\Util\ConfigurationFile
+     * @return \X\Core\Component\ConfigurationFile
      */
     public function getConfiguration( ) {
         return $this->configuration;
@@ -107,58 +107,6 @@ abstract class XModule {
      * @return NULL
      */
     protected function onDisabled() {
-        return null;
-    }
-    
-    /**
-     * @return string
-     */
-    public function getAssetsPath() {
-        return X::system()->getPath('Assets/'.$this->getName());
-    }
-    
-    /**
-     * @return string
-     */
-    public function getAssetsLink( $assets ) {
-        return 'Assets/'.$this->getName().'/'.$assets;
-    }
-    
-    /**
-     * @return void
-     */
-    public function publishAssets() {
-        $fromPath = $this->getPath('Assets/');
-        if ( !is_dir($fromPath) ) {
-            return;
-        }
-        
-        $targetPath = $this->getAssetsPath();
-        if ( !is_dir($targetPath) ) {
-            mkdir($targetPath, 0777, true);
-        }
-        
-        XUtil::copyPath($fromPath, $targetPath);
-    }
-    
-    /**
-     * @return void
-     */
-    public function cleanAssets() {
-        $path = $this->getAssetsPath();
-        if ( is_dir($path) ) {
-            XUtil::deleteFile($path);
-        }
-    }
-    
-    /**
-     * @return string
-     */
-    public function getAssetsLastPublishTime() {
-        $path = $this->getAssetsPath();
-        if ( is_dir($path) ) {
-            return filemtime($path);
-        }
         return null;
     }
 }

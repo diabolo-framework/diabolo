@@ -1,11 +1,6 @@
 <?php
 namespace X\Core\Event;
-
-/**
- * 
- */
-use X\Core\Util\Exception;
-use X\Core\Util\Manager as UtilManager;
+use X\Core\Component\Manager as UtilManager;
 
 /**
  * 

@@ -1,11 +1,8 @@
 <?php
+namespace X\Core\Component;
 /**
- *
- */
-namespace X\Core\Util;
-
-/**
- * 
+ * 配置文件
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class ConfigurationFile extends ConfigurationArray  {
     /**
@@ -31,13 +28,5 @@ class ConfigurationFile extends ConfigurationArray  {
             $this->merge($configuration);
         }
         $this->path = $path;
-    }
-    
-    /**
-     * 保存配置信息。如果没有更改则不会进行保存。
-     * @return void
-     */
-    public function save() {
-        XUtil::storeArrayToPHPFile($this->path, $this->toArray());
     }
 }

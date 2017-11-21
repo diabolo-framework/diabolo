@@ -1,30 +1,45 @@
 <?php
+namespace X\Core\Component;
 /**
- *
- */
-namespace X\Core\Util;
-
-/**
- * @property \X\Core\Util\ConfigurationFile $configuration
+ * 资源管理器基础类
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 abstract class Manager {
-    /** @var Manager[] All manager instances*/
+    /** 
+     * 管理器实例列表
+     * @var Manager[]
+     * */
     protected static $managers = null;
-    /** @var string config key in configuration array */
+    
+    /** 
+     * 在全局配置文件中， 每个管理器使用一个顶级的元素来存储配置信息。
+     * 其键名在这里配置。
+     * @example 
+     * <pre>
+     * array(
+     *  'manager-001' => array(), # 管理器001的配置
+     *  'manager-002' => array(), # 管理器002的配置
+     * );
+     * </pre>
+     * @var string
+     * */
     protected $configurationKey = null;
-    /** @var ConfigurationArray */
+    
+    /**
+     * 管理器配置实例
+     * @var ConfigurationArray 
+     * */
     private $configuration = null;
     
     /**
      * 获取Management的实例。
-     * @return \X\Core\Util\Manager
+     * @return \X\Core\Component\Manager
      */
     public static function getManager() {
         $manager = get_called_class();
         if ( !isset(self::$managers[$manager]) ) {
             self::$managers[$manager] = new $manager();
         }
-        
         return self::$managers[$manager];
     }
     
@@ -43,22 +58,26 @@ abstract class Manager {
     protected function init() {}
     
     /**
+     * 当前管理器的状态
      * @var integer
      */
     private $status = self::STATUS_STOPED;
     
     /**
-     * @var unknown
+     * 管理器状态 ：已停止
+     * @var integer
      */
     const STATUS_STOPED = 0;
     
     /**
-     * @var unknown
+     * 管理器状态 ：已启动
+     * @var integer
      */
     const STATUS_RUNNING = 1;
     
     /**
-     * @return number
+     * 获取当前管理器的状态
+     * @return integer
      */
     public function getStatus() {
         return $this->status;
@@ -82,6 +101,7 @@ abstract class Manager {
     
     /**
      * 销毁当前管理器
+     * @return void
      */
     public function destroy() {
         self::$managers[get_class($this)] = null;
@@ -89,7 +109,8 @@ abstract class Manager {
     }
     
     /**
-     * @return \X\Core\Util\ConfigurationFile
+     * 获取当前管理器配置
+     * @return ConfigurationArray
      */
     public function getConfiguration() {
         if ( null === $this->configuration ) {
@@ -98,17 +119,5 @@ abstract class Manager {
             $this->configuration->setValues($config);
         }
         return $this->configuration;
-    }
-    
-    /**
-     * @param string $name
-     * @throws Exception
-     * @return \X\Core\Util\ConfigurationFile
-     */
-    public function __get( $name ) {
-        if ( 'configuration' === $name ) {
-            return $this->getConfiguration();
-        }
-        throw new Exception('Unable to access prototype "'.$name.'"');
     }
 }

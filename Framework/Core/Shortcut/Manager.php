@@ -4,8 +4,8 @@ namespace X\Core\Shortcut;
 /**
  *
  */
-use X\Core\Util\Manager as UtilManager;
-use X\Core\Util\Exception;
+use X\Core\Component\Manager as UtilManager;
+use X\Core\Component\Exception;
 
 /**
  * 
@@ -18,7 +18,7 @@ class Manager extends UtilManager {
     
     /**
      * (non-PHPdoc)
-     * @see \X\Core\Util\Manager::start()
+     * @see \X\Core\Component\Manager::start()
      */
     public function start() {
         parent::start();
@@ -27,7 +27,7 @@ class Manager extends UtilManager {
     
     /**
      * (non-PHPdoc)
-     * @see \X\Core\Util\Manager::stop()
+     * @see \X\Core\Component\Manager::stop()
      */
     public function stop() {
         $this->shortcuts = array();

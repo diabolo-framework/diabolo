@@ -1,13 +1,12 @@
 <?php
-namespace X\Core\Util;
-
+namespace X\Core\Component;
 /**
+ * 配置数组 用于从数组中读取配置信息
  * @author Michael Luthor <michaelluthor@163.com> 
- * @version 0.0.0
  */
 class ConfigurationArray implements \ArrayAccess, \Iterator {
     /**
-     * This value contains the real array values.
+     * 配置信息
      * @var array
      */
     private $data = array();
@@ -107,9 +106,10 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
-     * @param string $name
-     * @param mixed $value
-     * @return \X\Core\Util\ConfigurationArray
+     * 设置参数
+     * @param string $name 参数名称
+     * @param mixed $value  参数值
+     * @return ConfigurationArray
      */
     public function set( $name, $value ) {
         $this->data[$name] = $value;
@@ -117,8 +117,9 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
-     * @param string $name
-     * @param mixed $default
+     * 获取参数
+     * @param string $name 参数名称
+     * @param mixed $default 默认值
      * @return mixed
      */
     public function get( $name, $default=null ) {
@@ -130,27 +131,35 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
-     * @param unknown $values
+     * 批量设置参数
+     * @param array $values 参数列表
+     * @return \X\Core\Component\ConfigurationArray
      */
-    public function setValues( $values ) {
+    public function setValues( array $values ) {
         $this->merge($values);
+        return $this;
     }
     
     /**
+     * 批量设置参数
      * @param array $value
      * @param boolean $recursive
+     * @return \X\Core\Component\ConfigurationArray
      */
-    public function merge( $value ) {
+    public function merge( array $value ) {
         if ( !is_array($value) ) {
             throw new Exception('Unable to merge a non array value to configuration array.');
         }
         
         $this->doMerge($value, $this->data);
+        return $this;
     }
     
     /**
-     * @param unknown $source
-     * @param unknown $target
+     * 递归的合并数组
+     * @param array $source 源数组
+     * @param array $target 目标数组
+     * @return void
      */
     private function doMerge( $source, &$target ) {
         foreach ( $source as $key => $value ) {
@@ -165,7 +174,8 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
-     * @param string|integer $name
+     * 检查配置中是否存在指定的配置项目
+     * @param string|integer $name 配置名称
      * @return boolean
      */
     public function has( $name ) {
@@ -173,7 +183,8 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
-     * @param string $name
+     * 从配置中移除指定的项目
+     * @param string $name 配置名称
      * @return void
      */
     public function remove( $name ) {
@@ -183,6 +194,7 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
+     * 清空当前配置
      * @return void
      */
     public function removeAll() {
@@ -190,6 +202,7 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
+     * 获取配置项目数量
      * @return number
      */
     public function getLength() {
@@ -197,6 +210,7 @@ class ConfigurationArray implements \ArrayAccess, \Iterator {
     }
     
     /**
+     * 将配置信息转换为数组
      * @return array
      */
     public function toArray() {

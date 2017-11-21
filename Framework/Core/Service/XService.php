@@ -1,8 +1,8 @@
 <?php
 namespace X\Core\Service;
 use X\Core\X;
-use X\Core\Util\XUtil;
-use X\Core\Util\ConfigurationArray;
+use X\Core\Component\ConfigurationArray;
+use X\Core\Component\ClassHelper;
 abstract class XService {
     /** @var \X\Core\Service\XService[] all service instances. */
     private static $services = array();
@@ -69,7 +69,7 @@ abstract class XService {
     }
     
     /**
-     * @return \X\Core\Util\ConfigurationArray
+     * @return \X\Core\Component\ConfigurationArray
      */
     public function getConfiguration() {
         return $this->configuration;
@@ -111,7 +111,7 @@ abstract class XService {
      * @return string
      */
     public function getPath( $path=null ) {
-        return XUtil::getPathRelatedClass($this, $path);
+        return ClassHelper::getPathRelatedClass($this, $path);
     }
     
     

@@ -13,9 +13,9 @@ class X {
     private $root = null;
     /** @var \X\Core\Environment\Environment application env instance. */
     private $environment = null;
-    /** @var \X\Core\Util\ConfigurationArray params from client. */
+    /** @var \X\Core\Component\ConfigurationArray params from client. */
     private $parameters = array();
-    /** @var \X\Core\Util\ConfigurationFile Configuration for framework, modules and services.*/
+    /** @var \X\Core\Component\ConfigurationFile Configuration for framework, modules and services.*/
     private $configuration = null;
     /** @var \X\Core\Shortcut\Manager a shortcut manager instance. */
     private $shortcutManager = null;
@@ -56,11 +56,11 @@ class X {
         $this->environment = new \X\Core\Environment\Environment();
         $this->environment->init();
         
-        $this->parameters = new \X\Core\Util\ConfigurationArray();
+        $this->parameters = new \X\Core\Component\ConfigurationArray();
         $this->parameters->merge($this->environment->getParameters());
-        $this->configuration = new \X\Core\Util\ConfigurationArray();
+        $this->configuration = new \X\Core\Component\ConfigurationArray();
         if ( isset($config['params']) ) {
-            $params = new \X\Core\Util\ConfigurationArray();
+            $params = new \X\Core\Component\ConfigurationArray();
             $params->setValues($config['params']);
             $config['params'] = $params;
         }
@@ -84,7 +84,7 @@ class X {
     }
     
     /**
-     * @return \X\Core\Util\ConfigurationArray
+     * @return \X\Core\Component\ConfigurationArray
      */
     public function getParameter() {
         return $this->parameters;
@@ -106,7 +106,7 @@ class X {
     
     /**
      * 获取当前框架的配置信息。
-     * @return \X\Core\Util\ConfigurationFile
+     * @return \X\Core\Component\ConfigurationFile
      */
     public function getConfiguration() {
         return $this->configuration;
@@ -163,7 +163,7 @@ class X {
      */
     public static function system() {
         if ( null === self::$system ) {
-            throw new \X\Core\Util\Exception('X has not been started.');
+            throw new \X\Core\Component\Exception('X has not been started.');
         }
         return self::$system;
     }

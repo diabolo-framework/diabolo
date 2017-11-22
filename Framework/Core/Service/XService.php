@@ -27,24 +27,14 @@ abstract class XService {
     private $configuration = null;
     
     /**
-     * 获取该服务的实例, 如果配置不为空，则创建该服务。
+     * 获取该服务的实例
      * @return self
      */
-    static public function getService($config=null) {
+    static public function getService() {
         $manager =  X::system()->getServiceManager();
         $className = get_called_class();
         $serviceName = self::getServiceName();
-    
-        if ( $manager->isLoaded($serviceName) ) {
-            return $manager->get($serviceName);
-        }
-    
-        if ( null !== $config ) {
-            self::$services[$className] = new $className($config);
-            return self::$services[$className];
-        } else {
-            return $manager->get($serviceName);
-        }
+        return $manager->get($serviceName);
     }
     
     /**
@@ -73,10 +63,10 @@ abstract class XService {
     }
     
     /**
-     * 将构造函数保护起来以禁止从其他地方实例化服务。
+     * 实例化服务
      * @return void
      */
-    protected function __construct( $config=array() ) {
+    public function __construct( $config=array() ) {
         $this->configuration = new ConfigurationArray();
         $this->configuration->setValues($config);
         

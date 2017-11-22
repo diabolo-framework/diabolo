@@ -102,7 +102,6 @@ class Manager extends UtilManager {
         $config = $this->getConfiguration()->get($name);
         $module = new $moduleClass($config['params']);
         $this->loadedModules[$name] = $module;
-        $module->afterLoaded();
         return $module;
     }
     

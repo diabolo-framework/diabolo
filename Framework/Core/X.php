@@ -102,7 +102,6 @@ class X {
         $this->eventManager = \X\Core\Event\Manager::getManager();
         
         $this->eventManager->start();
-        $this->shortcutManager->start();
         if ( self::$isFirstStart ) {
             register_shutdown_function(array($this, '_shutdown'));
         }
@@ -212,8 +211,6 @@ class X {
         $this->getServiceManager()->stop();
         $this->getServiceManager()->destroy();
         $this->eventManager->stop();
-        $this->shortcutManager->stop();
-        $this->shortcutManager->destroy();
         self::$system = null;
         spl_autoload_unregister(array($this, '_autoloader'));
     }

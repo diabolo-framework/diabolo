@@ -83,7 +83,7 @@ class Manager extends UtilManager {
             throw new Exception("Service class '$serviceClass' should be extends from '\\X\\Core\\Service\\XService'.");
         }
         
-        $service = $serviceClass::getService($configuration['params']);
+        $service = new $serviceClass($configuration['params']);
         $this->services[$name]['isLoaded']  = true;
         $this->services[$name]['service']   = $service;
     }

@@ -1,29 +1,62 @@
 <?php
 namespace X\Core;
-
 /**
- * 
+ * 框架主类
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class X {
-    /** @var X The instance of X framework. */
+    /**
+     * 框架实例
+     * @var X
+     */
     private static $system = null;
-    /** @var boolean wether is the first time to start the framework. */
+    
+    /**
+     * 是否为第一次启动
+     * @var boolean
+     */
     private static $isFirstStart = null;
-    /** @var string the base path for application.*/
+    
+    /**
+     * 应用根目录
+     * @var string
+     */
     private $root = null;
-    /** @var \X\Core\Environment\Environment application env instance. */
+    
+    /** 
+     * 运行环境管理器
+     * @var \X\Core\Environment\Environment
+     * */
     private $environment = null;
-    /** @var \X\Core\Component\ConfigurationArray params from client. */
+    
+    /** 
+     * 参数管理器
+     * @var \X\Core\Component\ConfigurationArray
+     * */
     private $parameters = array();
-    /** @var \X\Core\Component\ConfigurationFile Configuration for framework, modules and services.*/
+    
+    /** 
+     * 配置管理器
+     * @var \X\Core\Component\ConfigurationFile 
+     * */
     private $configuration = null;
-    /** @var \X\Core\Shortcut\Manager a shortcut manager instance. */
-    private $shortcutManager = null;
-    /** @var \X\Core\Event\Manager a event manager instance. */
+    
+    /** 
+     * 事件管理器
+     * @var \X\Core\Event\Manager 
+     * */
     private $eventManager = null;
-    /** @var \X\Core\Service\Manager a service manager instance. */
+    
+    /** 
+     * 服务管理器
+     * @var \X\Core\Service\Manager
+     * */
     private $serviceManager = null;
-    /** @var \X\Core\Module\Manager a module manager instance. */
+    
+    /** 
+     * 模块管理器
+     * @var \X\Core\Module\Manager 
+     * */
     private $moduleManager = null;
     
     /**
@@ -66,7 +99,6 @@ class X {
         }
         $this->configuration->setValues($config);
         
-        $this->shortcutManager = \X\Core\Shortcut\Manager::getManager();
         $this->eventManager = \X\Core\Event\Manager::getManager();
         
         $this->eventManager->start();
@@ -77,6 +109,7 @@ class X {
     }
     
     /**
+     * 获取事件管理器
      * @return \X\Core\Event\Manager
      */
     public function getEventManager() {
@@ -84,6 +117,7 @@ class X {
     }
     
     /**
+     * 获取参数
      * @return \X\Core\Component\ConfigurationArray
      */
     public function getParameter() {
@@ -91,17 +125,11 @@ class X {
     }
     
     /**
+     * 获取运行环境
      * @return \X\Core\Environment\Environment
      */
     public function getEnvironment() {
         return $this->environment;
-    }
-    
-    /**
-     * @return \X\Core\Shortcut\Manager
-     */
-    public function getShortcutManager() {
-        return $this->shortcutManager;
     }
     
     /**
@@ -238,23 +266,5 @@ class X {
         $this->getServiceManager()->start();
         $this->getModuleManager()->start();
         $this->getModuleManager()->run();
-    }
-    
-    /**
-     * PHP的魔法方法， 用于实现虚拟方法的调用， 这里主要用来实现快捷函数的调用。
-     * @param string $name 调用的方法名称
-     * @param array $parameters 传递给被调用方法的参数列表
-     * @return mixed
-     */
-    public function __call( $name, $parameters ) {
-        return $this->shortcutManager->call($name, $parameters);
-    }
-    
-    /**
-     * 返回当前框架的版本信息。
-     * @return array
-     */
-    public function getVersion() {
-        return array(1,0,0);
     }
 }

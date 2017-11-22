@@ -1,12 +1,13 @@
 <?php
 namespace X\Core\Event;
 use X\Core\Component\Manager as UtilManager;
-
 /**
- * 
+ * 事件管理器
+ * @author Michael Luthor <michaelluthor@163.com>
  */
 class Manager extends UtilManager {
     /**
+     * 已经注册的事件处理器列表
      * @var array
      */
     private $eventHandlers = array(
@@ -14,22 +15,23 @@ class Manager extends UtilManager {
     );
     
     /**
-     * @param string $eventName
-     * @param callable $eventHandler
-     * @throws Exception
+     * 注册事件处理器
+     * @param string $eventName 事件名称
+     * @param callable $eventHandler 事件处理器
+     * @return void
      */
     public function registerHandler( $eventName, $eventHandler ) {
         if ( !isset($this->eventHandlers[$eventName]) ) {
             $this->eventHandlers[$eventName] = array();
         }
-        
         $this->eventHandlers[$eventName][] = $eventHandler;
     }
     
     /**
-     * @param string $eventName
-     * @param mixed $param1
-     * @param mixed $param2,...
+     * 触发事件， 并返回每个事件处理器的处理结果数组
+     * @param string $eventName 事件名称
+     * @param mixed $param1 触发参数1
+     * @param mixed $param2,... 触发参数2....
      * @return array
      */
     public function trigger( $eventName ) {

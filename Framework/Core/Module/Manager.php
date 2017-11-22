@@ -1,19 +1,35 @@
 <?php
 namespace X\Core\Module;
 use X\Core\X;
-use X\Core\Component\Manager as UtilManager;
 use X\Core\Component\Exception;
+use X\Core\Component\Manager as UtilManager;
+/**
+ * 模块管理器
+ * @author Michael Luthor <michaelluthor@163.com>
+ */
 class Manager extends UtilManager {
-    /** @var string config key in configuration array */
+    /** 
+     * 管理器配置键名
+     * @var string 
+     * */
     protected $configurationKey = 'modules';
-    /** @var string default module name. */
+    
+    /**
+     * 默认模块名称
+     * @var string
+     * */
     protected $defaultModuleName = null;
-    /** @var array Loaded instances */
+    
+    /** 
+     * 已加载模块列表
+     * @var array
+     * */
     private $loadedModules = array();
     
     /**
-     * (non-PHPdoc)
+     * 启动模块管理器
      * @see \X\Core\Component\Manager::start()
+     * @return void
      */
     public function start() {
         parent::start();
@@ -28,7 +44,7 @@ class Manager extends UtilManager {
     }
     
     /**
-     * (non-PHPdoc)
+     * 停止模块管理器
      * @see \X\Core\Component\Manager::stop()
      */
     public function stop() {
@@ -38,7 +54,10 @@ class Manager extends UtilManager {
     }
     
     /**
+     * 运行模块, 并返回运行结果
+     * @param string $name 模块名称
      * @throws Exception
+     * @return mixed
      */
     public function run( $name=null ) {
         $parameters = X::system()->getParameter()->toArray();
@@ -58,9 +77,10 @@ class Manager extends UtilManager {
     }
     
     /**
-     * @param unknown $name
+     * 根据模块名称加载模块
+     * @param string $name 模块名称
      * @throws Exception
-     * @return boolean
+     * @return XModule
      */
     protected function load($name) {
         if ( !$this->has($name) ) {
@@ -86,13 +106,18 @@ class Manager extends UtilManager {
         return $module;
     }
     
-    /** @return boolean */
+    /**
+     * 判断模块是否启动
+     * @param string $name 模块名称 
+     * @return boolean 
+     * */
     public function isEnabled( $name ) {
         $config = $this->getConfiguration()->get($name);
         return isset($config['enable']) ? $config['enable'] : false;
     }
     
     /**
+     * 获取所有模块名称
      * @return array
      */
     public function getList() {
@@ -100,16 +125,18 @@ class Manager extends UtilManager {
     }
     
     /**
-     * @param unknown $moduleName
+     * 判断模块是否存在
+     * @param string $name 模块名称
+     * @return boolean
      */
     public function has( $name ) {
         return $this->getConfiguration()->has($name);
     }
     
     /**
-     * @param unknown $name
-     * @throws Exception
-     * @return \X\Core\Module\XModule
+     * 获取模块实例
+     * @param string $name 模块名称
+     * @return XModule
      */
     public function get( $name ) {
         return $this->load($name);

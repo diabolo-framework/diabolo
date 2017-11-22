@@ -1,20 +1,30 @@
 <?php
 namespace X\Core\Module;
 use X\Core\X;
-use X\Core\Component\ConfigurationFile;
 use X\Core\Component\ConfigurationArray;
 use X\Core\Component\ClassHelper;
+/**
+ * 模块基础类
+ * @author Michael Luthor <michaelluthor@163.com>
+ */
 abstract class XModule {
-    /** @var ConfigurationArray contains the config of this module.*/
+    /** 
+     * 保存当前模块的配置数据
+     * @var ConfigurationArray
+     * */
     private $configuration = null;
     
     /**
-     * @param array $parameters
+     * 模块执行方法，在实现类中实现
+     * @param array $parameters 运行参数
+     * @return mixed
      */
     abstract public function run($parameters=array());
     
     /**
-     * 
+     * 初始化模块
+     * @param array $config 配置信息
+     * @return void
      */
     public function __construct( $config=array() ) {
         $this->configuration = new ConfigurationArray();
@@ -23,12 +33,16 @@ abstract class XModule {
         $this->onLoaded();
     }
     
-    /** @return self */
+    /** 
+     * 通过模块类静态获取模块的快捷方式
+     * @return self 
+     * */
     public static function getModule() {
         return X::system()->getModuleManager()->get(self::getModuleName());
     }
     
     /**
+     * 当模块被加载后执行
      * @return boolean
      */
     protected function onLoaded() {
@@ -36,13 +50,7 @@ abstract class XModule {
     }
     
     /**
-     * @return null
-     */
-    public function afterLoaded() {
-        return null;
-    }
-    
-    /**
+     * 获取当前模块名称
      * @return string
      */
     public function getName() {
@@ -52,6 +60,7 @@ abstract class XModule {
     }
     
     /**
+     * 获取当前模块名称的静态方法
      * @return string
      */
     public static function getModuleName() {
@@ -61,7 +70,8 @@ abstract class XModule {
     }
     
     /**
-     * @param string $path
+     * 根据路径获取相对于当前模块的绝对路径
+     * @param string $path 相对路径
      * @return string
      */
     public function getPath( $path=null ) {
@@ -69,44 +79,10 @@ abstract class XModule {
     }
     
     /**
-     * @return \X\Core\Component\ConfigurationFile
+     * 获取当前模块的配置
+     * @return \X\Core\Component\ConfigurationArray
      */
     public function getConfiguration( ) {
         return $this->configuration;
-    }
-    
-    /**
-     * @return string
-     */
-    public function getPrettyName() {
-        return $this->getName();
-    }
-    
-    /**
-     * @return string
-     */
-    public function getDescription() {
-        return '';
-    }
-    
-    /**
-     * @return array
-     */
-    public function getVersion() {
-        return array(0,0,0);
-    }
-    
-    /**
-     * @return NULL
-     */
-    protected function onEnabled() {
-        return null;
-    }
-    
-    /**
-     * @return NULL
-     */
-    protected function onDisabled() {
-        return null;
     }
 }

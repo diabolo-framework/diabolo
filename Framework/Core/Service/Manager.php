@@ -3,10 +3,21 @@ namespace X\Core\Service;
 use X\Core\X;
 use X\Core\Component\Exception;
 use X\Core\Component\Manager as UtilManager;
+/**
+ * 服务管理器
+ * @author Michael Luthor <michaelluthor@163.com>
+ */
 class Manager extends UtilManager {
-    /** @var string */
+    /** 
+     * 服务配置键名
+     * @var string 
+     * */
     protected $configurationKey = 'services';
-    /** @var array hood all services instance and status. */
+    
+    /**
+     * 所有已经加载的服务实例
+     * @var array
+     */
     private $services = array(
         # 'name' => array(
         #      'isLoaded'  => true,
@@ -14,8 +25,9 @@ class Manager extends UtilManager {
     );
     
     /**
-     * (non-PHPdoc)
+     * 启动服务管理器
      * @see \X\Core\Component\Manager::start()
+     * @return void
      */
     public function start(){
         parent::start();
@@ -33,8 +45,9 @@ class Manager extends UtilManager {
     }
     
     /**
-     * (non-PHPdoc)
+     * 停止服务管理器
      * @see \X\Core\Component\Manager::stop()
+     * @return void
      */
     public function stop() {
         foreach ( $this->services as $name => $service ) {
@@ -51,7 +64,8 @@ class Manager extends UtilManager {
     }
     
     /**
-     * @param string $name
+     * 加载服务
+     * @param string $name 服务名称
      * @throws Exception
      */
     public function load($name) {
@@ -75,19 +89,21 @@ class Manager extends UtilManager {
     }
     
     /**
-     * @param unknown $serviceName
+     * 判断服务是否已经加载
+     * @param string $name 服务名称
      * @throws Exception
      * @return boolean
      */
-    public function isLoaded( $serviceName ) {
-        if ( !$this->has($serviceName) ) {
-            throw new Exception("Service '$serviceName' does not exists.");
+    public function isLoaded( $name ) {
+        if ( !$this->has($name) ) {
+            throw new Exception("Service '{$name}' does not exists.");
         }
-        return isset($this->services[$serviceName]) ? $this->services[$serviceName]['isLoaded'] : false;
+        return isset($this->services[$name]) ? $this->services[$name]['isLoaded'] : false;
     }
     
     /**
-     * @param string $name
+     * 卸载指定服务
+     * @param string $name 服务名称
      * @throws Exception
      */
     public function unload( $name ) {
@@ -104,7 +120,8 @@ class Manager extends UtilManager {
     }
     
     /**
-     * @param string $name
+     * 根据名称获取服务实例
+     * @param string $name 服务名称
      * @throws Exception
      * @return \X\Core\Service\XService
      */
@@ -125,20 +142,29 @@ class Manager extends UtilManager {
         return $service;
     }
     
-    /** @return boolean */
+    /**
+     * 判断服务是否启用
+     * @param string $name 服务名称
+     * @return boolean|mixed
+     */
     public function isEnabled( $name ) {
         $config = $this->getConfiguration()->get($name);
         return isset($config['enable']) ? $config['enable'] : false;
     }
     
-    /** @return boolean */
+    /**
+     * 判断服务是否延迟加载
+     * @param string $name 服务名称
+     * @return boolean|mixed
+     */
     public function isLazyLoadEnabled($name) {
         $config = $this->getConfiguration()->get($name);
         return isset($config['delay']) ? $config['delay'] : false;
     }
     
     /**
-     * @param string $name
+     * 判断服务是否存在
+     * @param string $name 服务名称
      * @return boolean
      */
     public function has( $name ) {
@@ -146,6 +172,7 @@ class Manager extends UtilManager {
     }
     
     /**
+     * 获取所有服务名称列表
      * @return array
      */
     public function getList() {

@@ -3,12 +3,27 @@ namespace X\Core\Service;
 use X\Core\X;
 use X\Core\Component\ConfigurationArray;
 use X\Core\Component\ClassHelper;
+/**
+ * 服务基础类
+ * @author Michael Luthor <michaelluthor@163.com>
+ */
 abstract class XService {
-    /** @var \X\Core\Service\XService[] all service instances. */
+    /** 
+     * 服务实例化缓存
+     * @var \X\Core\Service\XService[]
+     * */
     private static $services = array();
-    /** @var string serive name */
+    
+    /** 
+     * 服务名称
+     * @var string
+     * */
     protected static $serviceName = null;
-    /** @var ConfigurationArray */
+    
+    /** 
+     * 当前服务配置
+     * @var ConfigurationArray 
+     * */
     private $configuration = null;
     
     /**
@@ -69,6 +84,7 @@ abstract class XService {
     }
     
     /**
+     * 获取当前服务配置
      * @return \X\Core\Component\ConfigurationArray
      */
     public function getConfiguration() {
@@ -76,10 +92,11 @@ abstract class XService {
     }
     
     /**
-     * @return NULL
+     * 服务加载时调用
+     * @return void
      */
     protected function onLoaded() {
-        return null;
+        return;
     }
     
     /**
@@ -99,7 +116,8 @@ abstract class XService {
     }
     
     /**
-     * 
+     * 销毁当前服务
+     * @return void
      */
     public function destroy() {
         $className = get_called_class();
@@ -116,46 +134,29 @@ abstract class XService {
     
     
     /**
+     * 服务运行状态 : 已停止
      * @var integer
      */
     const STATUS_STOPPED = 0;
     
     /**
+     * 服务运行状态 : 运行中
      * @var integer
      */
     const STATUS_RUNNING = 1;
     
     /**
-     * @var status
+     * 当前服务状态
+     * @var integer
      */
     private $status = self::STATUS_STOPPED;
     
     /**
+     * 获取当前服务状态
      * @return integer
      */
     public function getStatus() {
         return $this->status;
-    }
-    
-    /**
-     * @return string
-     */
-    public function getPrettyName(){
-        return $this->getName();
-    }
-    
-    /**
-     * @return string
-     */
-    public function getDescription(){
-        return '';
-    }
-    
-    /**
-     * @return multitype:number
-     */
-    public function getVersion() {
-        return array(0,0,0);
     }
     
     /**

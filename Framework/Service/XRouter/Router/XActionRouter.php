@@ -66,6 +66,13 @@ class XActionRouter implements RouterInterface {
             unset($path[0]);
         }
         
+        if ( empty($path) && isset($params[$module]) ) {
+            $this->defaultAction = 'detail';
+        }
+        if ( !empty($path) && isset($params[$path[count($path)-1]]) ) {
+            $this->defaultAction = 'detail';
+        }
+        
         $fragment = '';
         if ( isset($urlInfo['fragment']) ) {
             $fragment = '#'.$urlInfo['fragment'];

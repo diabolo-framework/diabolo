@@ -1,5 +1,6 @@
 <?php
 namespace X\Service\XRouter;
+use X\Core\X;
 use X\Core\Service\XService;
 use X\Service\XRouter\Router\RouterInterface;
 use X\Service\XRouter\Router\MapUrlRouter;
@@ -38,9 +39,10 @@ class Service extends XService {
     
     /** @return void */
     private function setupRequestParams() {
-        $result = $this->router->route($this->request->getUrl());
-        parse_str($result, $params);
-        $_GET = array_merge($_GET, $params);
+        $url = $this->router->route($this->request->getUrl());
+        $query = parse_url($url,PHP_URL_QUERY);
+        parse_str($query, $params);
+        X::system()->getParameter()->merge($params);
     }
     
     /** @return \X\Service\XRequest\RouterInterface */

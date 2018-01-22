@@ -14,6 +14,8 @@ class XActionRouter implements RouterInterface {
     private $mainModuleName = null;
     /** @var string */
     private $defaultAction = null;
+    /** @var boolean */
+    private $hideMainModuleName = false;
     
     /**
      * {@inheritDoc}
@@ -24,6 +26,7 @@ class XActionRouter implements RouterInterface {
         $this->fakeExt = $service->getConfiguration()->get('fakeExt', null);
         $this->mainModuleName = $service->getConfiguration()->get('mainModuleName','dionysos');
         $this->defaultAction = $service->getConfiguration()->get('defaultAction','index');
+        $this->hideMainModuleName = $service->getConfiguration()->get('hideMainModuleName', false);
         $this->moduleManager = X::system()->getModuleManager();
     }
 
@@ -58,7 +61,7 @@ class XActionRouter implements RouterInterface {
         }
         
         $module = $this->mainModuleName;
-        if ( !empty($path) && $this->moduleManager->has(ucfirst($path[0])) ) {
+        if ( $this->hideMainModuleName && !empty($path) && $this->moduleManager->has(ucfirst($path[0])) ) {
             $module = $path[0];
             unset($path[0]);
         }
@@ -104,7 +107,7 @@ class XActionRouter implements RouterInterface {
             
             # 处理module
             $module = $params['module'];
-            if ( $this->mainModuleName === $module ) {
+            if ( $this->hideMainModuleName && $this->mainModuleName === $module ) {
                 unset($params[$module]);
             } else if ( isset($params[$module]) ) {
                 $path[] = $module.'-'.$params[$module];

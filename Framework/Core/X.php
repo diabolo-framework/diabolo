@@ -23,6 +23,9 @@ class X {
      */
     private $root = null;
     
+    /** @var string framework root path. */
+    private $frameworkRoot = null;
+    
     /** 
      * 运行环境管理器
      * @var \X\Core\Environment\Environment
@@ -86,6 +89,7 @@ class X {
         spl_autoload_register(array($this, '_autoloader'));
         
         $this->root = $config['document_root'];
+        $this->frameworkRoot = dirname(__DIR__);
         $this->environment = new \X\Core\Environment\Environment();
         $this->environment->init();
         
@@ -233,9 +237,11 @@ class X {
         } else if ( 'Module' === $path[1] ) {
             unset($path[1]);
             $basePaths = $this->getConfiguration()->get('module_path');
+            $basePaths[] = $this->frameworkRoot.'/Module';
         } else if ( 'Service' === $path[1] ) {
             unset($path[1]);
             $basePaths = $this->getConfiguration()->get('service_path');
+            $basePaths[] = $this->frameworkRoot.'/Service';
         } else if ( 'Library' === $path[1] ) {
             unset($path[1]);
             $basePaths = $this->getConfiguration()->get('library_path', array());

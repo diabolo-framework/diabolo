@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Diabolo" default="publish">
+  <!-- 
+    @name 发布新版本 
+    @param releasetype Major|Minor|Bugfix
+    @param prefix 目标路径
+  -->
+  <target name="publish">
+    <version releasetype="${releaseType}" file="${prefix}/version.txt" property="version.number"/> 
+    <echo msg="Prefix : ${prefix}" />
+    <echo msg="Release Type : ${releaseType}" />
+    <echo msg="Version : ${version.number}" />
+   
+    <mkdir dir="${prefix}/program/v_${version.number}" />
+    <append destFile="${prefix}/program/v_${version.number}/version.txt" text="${version.number}" />
+    <copy todir="${prefix}/program/v_${version.number}" >
+      <fileset dir="./src" defaultexcludes="false" expandsymboliclinks="true" >
+        <include name="**/*" />
+        <exclude name="**/.gitignore"/>
+      </fileset>
+    </copy>
+    
+    <delete file="${prefix}/program/current" />
+    <symlink target="${prefix}/program/v_${version.number}" link="${prefix}/program/current" />
+  </target>
+
+  <!-- 
+    @name 回滚到旧版本 
+    @param prefix 目标路径
+    @param rollBackVerion 回滚版本号 
+  -->
+  <target name="rollback">
+    <echo msg="Prefix : ${prefix}" />
+    <echo msg="Version : ${rollBackVerion}" />
+    <available file="${prefix}/program/v_${rollBackVerion}" type="dir" property="testVerExists"/>
+    <if>
+      <equals arg1="${testVerExists}" arg2="true" />
+      <then>
+        <delete file="${prefix}/program/current" />
+        <symlink target="${prefix}/program/v_${rollBackVerion}" link="${prefix}/program/current" />
+        <delete file="${prefix}/version.txt" />
+        <append destFile="${prefix}/version.txt" text="${rollBackVerion}" />
+        <foreach param="filename" target="rollbackDeleteOld">
+          <fileset dir="${prefix}/program/">
+            <type type="dir"/>
+            <contains text="v_"/>
+            <depth max="0"/>
+          </fileset>
+        </foreach>
+      </then>
+      <else>
+        <echo msg="Target version `${rollBackVerion}` does not exists." />
+      </else>
+    </if>
+  </target>
+
+  <!-- 回滚删除旧的版本 -->
+  <target name="rollbackDeleteOld">
+    <echo msg="Rollback Version : ${rollBackVerion}" />
+    <echo msg="Checking : ${filename}" />
+    <available file="${prefix}/program/${filename}/version.txt" type="file" property="testVerTxtExists" />
+    <if>
+      <equals arg1="${testVerTxtExists}" arg2="true" />
+      <then>
+        <loadfile property="oldVersion" file="${prefix}/program/${filename}/version.txt"/>
+        <if>
+          <versioncompare version="${oldVersion}" desiredVersion="${rollBackVerion}" operator="gt" />
+          <then>
+            <delete dir="${prefix}/program/${filename}" includeemptydirs="true" failonerror="true" />
+            <echo msg="del" />
+          </then>
+          <else>
+            <echo msg="keep" />
+          </else>
+        </if>
+      </then>
+      <else>
+        <echo msg="Version file `${prefix}/program/${filename}/version.txt` does not exists." />
+      </else>
+    </if>
+  </target>
+  
+  <!-- 
+    @name 清理掉非当前版本 
+    @param prefix 目标路径
+  -->
+  <target name="clean">
+    <loadfile property="curVersion" file="${prefix}/version.txt" />
+    <echo msg="Current Version : ${curVersion}" />
+
+    <foreach param="filename" target="cleanVersionDir">
+      <fileset dir="${prefix}/program/">
+        <type type="dir"/>
+        <contains text="v_"/>
+        <depth max="0"/>
+      </fileset>
+    </foreach>
+  </target>
+
+  <!-- 删除指定版本目录 -->
+  <target name="cleanVersionDir">
+    <loadfile property="curVersion" file="${prefix}/version.txt" />
+    <available file="${prefix}/program/${filename}/version.txt" type="file" property="testVerTxtExists" />
+    <if>
+      <equals arg1="${testVerTxtExists}" arg2="true" />
+      <then>
+        <loadfile property="fileVersion" file="${prefix}/program/${filename}/version.txt"/>
+        <echo msg="Checking ${fileVersion}" />
+        <if>
+          <equals arg1="${fileVersion}" arg2="${curVersion}" trim="true" />
+          <then>
+            <echo msg="keep" />
+          </then>
+          <else>
+            <delete dir="${prefix}/program/${filename}" includeemptydirs="true" failonerror="true" />
+            <echo msg="del" />
+          </else>
+        </if>
+      </then>
+      <else>
+        <echo msg="Version file `${prefix}/program/${filename}/version.txt` does not exists." />
+      </else>
+    </if>
+  </target>
+</project>

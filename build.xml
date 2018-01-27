@@ -14,7 +14,7 @@
     <mkdir dir="${prefix}/program/v_${version.number}" />
     <append destFile="${prefix}/program/v_${version.number}/version.txt" text="${version.number}" />
     <copy todir="${prefix}/program/v_${version.number}" >
-      <fileset dir="./src" defaultexcludes="false" expandsymboliclinks="true" >
+      <fileset dir="./Framework" defaultexcludes="false" expandsymboliclinks="true" >
         <include name="**/*" />
         <exclude name="**/.gitignore"/>
       </fileset>

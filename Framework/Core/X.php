@@ -238,14 +238,17 @@ class X {
             unset($path[1]);
             $basePaths = $this->getConfiguration()->get('module_path');
             $basePaths[] = $this->frameworkRoot.'/Module';
+            $basePaths[] = $this->getConfiguration()->get('document_root').'/Module';
         } else if ( 'Service' === $path[1] ) {
             unset($path[1]);
             $basePaths = $this->getConfiguration()->get('service_path');
             $basePaths[] = $this->frameworkRoot.'/Service';
+            $basePaths[] = $this->getConfiguration()->get('document_root').'/Service';
         } else if ( 'Library' === $path[1] ) {
             unset($path[1]);
             $basePaths = $this->getConfiguration()->get('library_path', array());
             $basePaths[] = $this->root."/Library";
+            $basePaths[] = $this->getConfiguration()->get('document_root').'/Library';
         }
         
         $basePaths[] = $this->root;

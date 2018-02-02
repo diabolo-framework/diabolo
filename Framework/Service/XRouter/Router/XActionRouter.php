@@ -149,7 +149,7 @@ class XActionRouter implements RouterInterface {
         if ( null !== $this->fakeExt ) {
             $path .= '.'.$this->fakeExt;
         }
-        return $path.$query.$fragment;
+        return '/'.$path.$query.$fragment;
     }
     
     /** @var self */

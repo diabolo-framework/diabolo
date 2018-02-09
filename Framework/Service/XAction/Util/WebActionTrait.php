@@ -59,6 +59,6 @@ trait WebActionTrait {
      * @return boolean
      */
     public function hasUploadFile( $name ) {
-        return isset($_FILES[$name]);
+        return isset($_FILES[$name]) && $_FILES[$name]['error'] != UPLOAD_ERR_NO_FILE;
     }
 }

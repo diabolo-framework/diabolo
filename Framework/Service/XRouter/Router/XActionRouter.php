@@ -69,9 +69,14 @@ class XActionRouter implements RouterInterface {
         if ( empty($path) && isset($params[$module]) ) {
             $this->defaultAction = 'detail';
         }
-        if ( !empty($path) && isset($params[$path[count($path)-1]]) ) {
+        
+        # 判断是否为详情动作，如果路径以"food-123"格式结尾，这将路由到id为123的美食详情动作上
+        # 所以这里判断path的最后一个元素是不是在参数列表中
+        end($path);
+        if ( !empty($path) && isset($params[current($path)]) ) {
             $this->defaultAction = 'detail';
         }
+        reset($path);
         
         $fragment = '';
         if ( isset($urlInfo['fragment']) ) {

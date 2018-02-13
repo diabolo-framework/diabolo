@@ -277,8 +277,13 @@ class Attribute extends TableColumn {
             return false;
         }
         
+        $defaultValidator = new AttributeValidator();
         foreach ( $this->validators as $validator ) {
-            call_user_func_array($validator, array($this->record, $this));
+            if ( is_callable($validator) ) {
+                call_user_func_array($validator, array($this->record, $this));
+            } else {
+                $defaultValidator->$validator($this->record, $this);
+            }
         }
         
         return !$this->hasError();

@@ -65,7 +65,6 @@ class Manager {
      */
     public static function open( $name ) {
         $manager = new Manager($name);
-        $manager->getInformation();
         return $manager;
     }
     

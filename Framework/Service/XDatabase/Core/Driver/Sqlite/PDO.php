@@ -54,9 +54,7 @@ class PDO implements InterfaceDriver {
      * @return boolean
      */
     public function exec( $query ) {
-        $timeStarted = microtime(true);
         $this->connection->exec($query);
-        $this->recordQuery($timeStarted, microtime(true), $query);
         $errorCode = $this->connection->errorCode();
         if ( '00000' !== $errorCode ) {
             throw new Exception($this->getErrorMessage());
@@ -70,9 +68,7 @@ class PDO implements InterfaceDriver {
      * @return array
      */
     public function query( $query ) {
-        $timeStart = microtime(true);
         $result = $this->connection->query($query);
-        $this->recordQuery($timeStart, microtime(true), $query);
         if ( false === $result ) {
             throw new Exception($this->getErrorMessage());
         }
@@ -138,18 +134,5 @@ class PDO implements InterfaceDriver {
     private function getErrorMessage() {
         $error = $this->connection->errorInfo();
         return isset($error[2]) ? $error[2] : '';
-    }
-    
-    /**
-     * Record sql query to by log service.
-     * @param integer $timeStarted
-     * @param integer $timeEnded
-     * @param string $query
-     * @return void
-     */
-    private function recordQuery( $timeStarted, $timeEnded, $query) {
-        $timeSpend = bcsub($timeEnded, $timeStarted, 4);
-        $message = '['.$timeSpend.'s]     '.$query;
-        $this->service->log($message);
     }
 }

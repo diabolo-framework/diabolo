@@ -107,9 +107,16 @@ class Manager {
      * @param array $values The value of new record.
      * @return \X\Service\XDatabase\Core\Table\Manager
      */
-    public function insert( $values ) {
-        $query = SQLBuilder::build()->insert()
-            ->into($this->name)->values($values)->toString();
+    public function insert( $values,$isMutil=false ) {
+        $query = SQLBuilder::build()->insert()->into($this->name);
+        if ( !$isMutil ) {
+            $values = array($values);
+        }
+        foreach ( $values as $record ) {
+            $query->values($record);
+        }
+        
+        $query = $query->toString();
         self::executeSQLQueryWithOutResult($query);
         return $this;
     }

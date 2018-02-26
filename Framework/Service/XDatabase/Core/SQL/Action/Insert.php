@@ -39,7 +39,7 @@ class Insert extends ActionBase {
         if ( empty($values) ) {
             throw new Exception('Unable to insert empty data.');
         }
-        $this->values = $values;
+        $this->values[] = $values;
         return $this;
     }
     
@@ -92,27 +92,32 @@ class Insert extends ActionBase {
      */
     protected function buildHandlerValue() {
         $columns = array();
-        $values = array();
-            
-        foreach ( $this->values as $columnName => $value ) {
-            if ( !is_numeric($columnName) ) {
-                $columns[] = $this->quoteColumnName($columnName);
+        $group = array();
+        
+        foreach ( $this->values as $index => $record ) {
+            $values = array();
+            foreach ( $record as $columnName => $value ) {
+                if ( !is_numeric($columnName) && 0===$index ) {
+                    $columns[] = $this->quoteColumnName($columnName);
+                }
+                if ( $value instanceof DefaultValue ) {
+                    $values[] = 'DEFAULT';
+                } else if ( $value instanceof Expression ) {
+                    $values[] = $value->toString();
+                }  else {
+                    $values[] = $this->quoteValue($value);
+                }
             }
-            if ( $value instanceof DefaultValue ) {
-                $values[] = 'DEFAULT';
-            } else if ( $value instanceof Expression ) {
-                $values[] = $value->toString();
-            }  else {
-                $values[] = $this->quoteValue($value);
-            }
+            $values = '('.implode(',', $values).')';
+            $group[] = $values;
         }
-        $values = '('.implode(',', $values).')';
+        
         if ( !empty($columns) ) {
             $columns = '('.implode(',', $columns).')';
         } else {
             $columns = '';
         }
-        $this->sqlCommand[] = $columns.' VALUES '.$values;
+        $this->sqlCommand[] = $columns.' VALUES '.implode(',', $group);
         return $this;
     }
 }

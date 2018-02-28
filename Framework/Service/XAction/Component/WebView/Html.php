@@ -6,6 +6,14 @@ use X\Core\Component\ConfigurationArray;
  * @author Michael Luthor <michaelluthor@163.com>
  */
 class Html {
+    /** 蜘蛛索引方式 */
+    const ROBOT_INDEX_ALL = 'all';
+    const ROBOT_INDEX_NONE = 'none';
+    const ROBOT_INDEX_NOINDEX = 'noindex';
+    const ROBOT_INDEX_NOFOLLOW = 'nofollow';
+    const ROBOT_INDEX_INDEX = 'index';
+    const ROBOT_INDEX_FOLLOW = 'follow';
+    
     /**
      * 样式管理器
      * @var StyleManager

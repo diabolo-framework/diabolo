@@ -121,15 +121,15 @@ class MetaManager {
     
     /**
      * 设置当前页面蜘蛛的处理方式
-     * @param string|array $term 处理方式
-     * @param string $robots 蜘蛛名称，例如 'googlebot'
+     * @param string|array $indexMethod 处理方式
+     * @param string $robot 蜘蛛类型
      * @return void
      */
-    public function setRobots( $term, $robots) {
-        if ( is_array($term) ) {
-            $term = implode(',', $term);
+    public function setRobots( $indexMethod, $robot='robots') {
+        if ( is_array($indexMethod) ) {
+            $indexMethod = implode(', ', $indexMethod);
         }
-        $this->addMetaData('page.robots', $robots, $term);
+        $this->addMetaData('page.robots',$robot, $indexMethod);
     }
     
     /**

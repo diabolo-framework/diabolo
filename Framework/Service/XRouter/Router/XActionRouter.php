@@ -41,6 +41,7 @@ class XActionRouter implements RouterInterface {
             parse_str($urlInfo['query'], $params); 
         }
         
+        # 去除后缀
         $path = $urlInfo['path'];
         if ( null !== $this->fakeExt ) {
             $path = substr($path, 0, strrpos($path, '.'.$this->fakeExt));
@@ -52,6 +53,7 @@ class XActionRouter implements RouterInterface {
             $path = explode('/', ltrim($path, '/'));
         }
         
+        # 解析出参数和执行路径
         foreach ( $path as $index => $pathItem ) {
             if ( false !== strpos($pathItem, '-') ) {
                 $pathItem = explode('-', $pathItem);
@@ -61,20 +63,16 @@ class XActionRouter implements RouterInterface {
         }
         
         $module = $this->mainModuleName;
+        # 在启用隐藏主模块名的情况下，如果路径中的第一个元素是一个模块名，则指定模块，否则使用配置的模块名
         if ( $this->hideMainModuleName && !empty($path) && $this->moduleManager->has(ucfirst($path[0])) ) {
             $module = $path[0];
             unset($path[0]);
         }
         
-        if ( empty($path) && isset($params[$module]) ) {
-            $this->defaultAction = 'detail';
-        }
-        
-        # 判断是否为详情动作，如果路径以"food-123"格式结尾，这将路由到id为123的美食详情动作上
-        # 所以这里判断path的最后一个元素是不是在参数列表中
+        # 判断路径的最后一个元素，如果最后一个元素在参数列表中，则为'detail'操作，
         end($path);
         if ( !empty($path) && isset($params[current($path)]) ) {
-            $this->defaultAction = 'detail';
+            $path[] = 'detail';
         }
         reset($path);
         

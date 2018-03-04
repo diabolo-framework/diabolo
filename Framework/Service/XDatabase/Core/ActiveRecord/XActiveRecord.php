@@ -192,6 +192,9 @@ abstract class XActiveRecord implements \Iterator {
      */
     public function setAttributeValues ( $values ) {
         foreach ( $values as $key => $value ) {
+            if ( !$this->has($key) ) {
+                continue;
+            }
             $this->set($key, $value);
         }
     }

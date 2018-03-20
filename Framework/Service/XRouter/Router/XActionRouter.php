@@ -182,6 +182,8 @@ class XActionRouter implements RouterInterface {
      */
     public static function action($module,$action,$params=array()) {
         $url = "/index.php?module={$module}&action={$action}";
+        
+        $params = array_filter($params);
         if ( !empty($params) ) {
             $url .= '&'.http_build_query($params);
         }

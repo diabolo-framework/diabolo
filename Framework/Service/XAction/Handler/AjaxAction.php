@@ -48,7 +48,18 @@ class AjaxAction extends Action {
         }
     }
     
-    public function error($message) {}
+    /**
+     * 错误响应
+     * @param unknown $message
+     * @param unknown $code
+     */
+    public function error($message, $code=null) {
+        $this->response(array(
+            'success' => false,
+            'message' => $message,
+            'code' => $code
+        ));
+    }
     
     /**
      * 成功响应

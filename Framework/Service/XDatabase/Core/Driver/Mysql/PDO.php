@@ -56,11 +56,12 @@ class PDO implements InterfaceDriver {
      */
     public function exec( $query ) {
         $timeStarted = microtime(true);
-        $this->connection->exec($query);
+        $rowCount = $this->connection->exec($query);
         $errorCode = $this->connection->errorCode();
         if ( '00000' !== $errorCode ) {
             throw new Exception($this->getErrorMessage());
         }
+        return $rowCount;
     }
     
     /**

@@ -92,12 +92,16 @@ class MetaManager {
     
     /**
      * 设置当前页面的过期时间
-     * @param int $time 过期时间戳
+     * @param int $seconds 过期的秒数
      * @return void
      */
-    public function setExpireTime( $time ) {
-        $time = gmstrftime('%A %d %B %Y %H:%M GMT', $time);
-        $this->addMetaData('page.expires', null, $time, null, 'expires');
+    public function setExpireTime( $seconds) {
+        $expires = gmdate("D, d M Y H:i:s", time()+$seconds )." GMT";
+        
+        header ("Last-Modified: " .gmdate("D, d M Y H:i:s", time() )." GMT");
+        header ("Expires: {$expires}");
+        header ("Cache-Control: max-age={$seconds}");
+        $this->addMetaData('page.expires', null, $expires, null, 'expires');
     }
     
     /**

@@ -56,6 +56,14 @@ class LinkManager {
     }
     
     /**
+     * 页面资源预加载
+     * @param string $url
+     */
+    public function addPrefetch ( $url ) {
+        $this->addLink('prefetch-'.$url,'prefetch',null,$url);
+    }
+    
+    /**
      * 增加自定义链接到当前视图
      * @param string $identifier 名称
      * @param string $rel 规定当前文档与被链接文档之间的关系。

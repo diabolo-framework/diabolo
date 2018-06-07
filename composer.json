@@ -1,0 +1,35 @@
+{
+  "name":"diabolo/diabolo-framework",
+  "description":"Yet another easy-to-use framework.",
+  "version":"1.0.0",
+  "type":"library",
+  "homepage":"http://diabolo-framework.com",
+  "license":"MIT",
+  "keywords": [
+    "framework",
+    "diabolo"
+  ],
+  "authors":[
+    {
+      "name":"sige",
+      "homepage":"https://github.com/MichaelLuthor",
+      "email":"michaelluthor@163.com",
+      "role":"Developer"
+    }
+  ],
+  "support":{
+    "email":"michaelluthor@163.com",
+    "issues":"https://github.com/Diabolo-Framework/Diabolo/issues",
+    "source":"https://github.com/Diabolo-Framework/Diabolo"
+  },
+  "require":{
+    "php":">=5.3"
+  },
+  "suggest":{
+
+  },
+  "autoload": {
+    "psr-4": {"X\\": "Framework/"}
+  },
+  "bin": ["x"]
+}

@@ -87,8 +87,6 @@ class X {
      */
     private function __construct($config) {
         spl_autoload_register(array($this, '_autoloader'));
-        $config = (new ConfigurationPretreatment($config))->getConfiguration();
-        
         $this->root = $config['document_root'];
         $this->frameworkRoot = dirname(__DIR__);
         $this->environment = new \X\Core\Environment\Environment();

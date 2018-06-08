@@ -7,6 +7,55 @@ use X\Core\X;
  */
 abstract class CommandAction extends \X\Service\XAction\Util\Action {
     /**
+     * {@inheritDoc}
+     * @see \X\Service\XAction\Util\Action::doRunAction()
+     */
+    protected function doRunAction($parameters) {
+        $handlerName = 'runAction';
+        if ( !method_exists($this, $handlerName) || !is_callable(array($this, $handlerName)) ) {
+            throw new \Exception("Can not find action handler \"runAction()\".");
+        }
+        
+        $paramsToMethod = array();
+        $class = new \ReflectionClass($this);
+        $method = $class->getMethod($handlerName);
+        
+        $parameterInfos = $method->getParameters();
+        foreach ( $parameterInfos as $index => $parmInfo ) {
+            /* @var $parmInfo \ReflectionParameter */
+            $name = $parmInfo->getName();
+            if ( isset($parameters['params'][$index]) ) {
+                $paramsToMethod[$name] = $parameters['params'][$index];
+            } else if ( $parmInfo->isOptional() && $parmInfo->isDefaultValueAvailable() ) {
+                $paramsToMethod[$name] = $parmInfo->getDefaultValue();
+            } else {
+                throw new \Exception('Parameters to action handler is not available.');
+            }
+        }
+        
+        # setup options
+        foreach ( $parameters['options'] as $key => $value ) {
+            $key = lcfirst($this->convertToUpperCamelBySeparator($key, '-'));
+            if ( property_exists($this, $key) ) {
+                $this->$key = $value;
+            }
+        }
+        
+        $handler = array($this, $handlerName);
+        return \call_user_func_array($handler, $paramsToMethod);
+    }
+    
+    /**
+     * Convert to Upper Camel (LikeThis) by separator.
+     * @param string $string
+     * @return string
+     */
+    protected function convertToUpperCamelBySeparator( $string, $separator, $glue='' ) {
+        $string = explode($separator, $string);
+        return implode($glue, array_map('ucfirst', $string));
+    }
+    
+    /**
      * 退出运行
      * @return void
      */

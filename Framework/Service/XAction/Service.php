@@ -244,8 +244,10 @@ class Service extends \X\Core\Service\XService {
             }
         }
         
-        $actionClass = explode('/', $action);
-        $actionClass = array_map('ucfirst', $actionClass);
+        $actionClass = array_map('ucfirst', explode('-', $action));
+        $actionClass = implode('', $actionClass);
+        
+        $actionClass = array_map('ucfirst', explode('/', $actionClass));
         $actionClass = implode('\\', $actionClass);
         $namespace = $this->groups[$group]['namespace'];
         $actionClass = $namespace.'\\'.$actionClass;

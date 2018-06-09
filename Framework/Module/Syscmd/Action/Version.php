@@ -3,10 +3,10 @@ namespace X\Module\Syscmd\Action;
 use X\Service\XAction\Handler\CommandAction;
 class Version extends CommandAction {
     /**
-     * {@inheritDoc}
-     * @see \X\Service\XAction\Util\Action::runAction()
+     * display the version of diabolo framework
+     * @return void
      */
-    public function runAction() {
+    public function runAction($ddd=11111) {
         echo "1.0.0\n";
     }
 }

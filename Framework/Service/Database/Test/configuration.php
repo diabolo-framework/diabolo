@@ -24,6 +24,13 @@ return array(
         'dbname' => 'test',
         'port' => 5432
     ),
+    'MSsqlDriverConfig' => array(
+        'host' => '39.104.28.34',
+        'username' => 'sa',
+        'password' => 'websoft9!',
+        'dbname' => 'dbtester',
+        'port' => 1433
+    ),
 ),
 'services' => array(
     'Database' => array(

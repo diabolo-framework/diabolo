@@ -124,6 +124,20 @@ class Manager extends UtilManager {
     }
     
     /**
+     * Get All Modules
+     * @return XModule[]
+     */
+    public function getAllModules() {
+        $names = $this->getList();
+        
+        $modules = array();
+        foreach ( $names as $name ) {
+            $modules[$name] = $this->load($name);
+        }
+        return $modules;
+    }
+    
+    /**
      * 判断模块是否存在
      * @param string $name 模块名称
      * @return boolean

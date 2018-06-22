@@ -40,6 +40,15 @@ abstract class WebPageAction extends \X\Service\XAction\Util\Action {
     }
     
     /**
+     * @param string $layout
+     * @return self
+     */
+    public function setLayout( $layout ) {
+        $this->layout = $layout;
+        return $this;
+    }
+    
+    /**
      * 如果只为真则跳转到404错误页面。
      * @param boolean $value
      * @return void
@@ -101,7 +110,9 @@ abstract class WebPageAction extends \X\Service\XAction\Util\Action {
         
         $viewPath = null;
         $fileName = $name;
-        if ( '/' === $name[0] ) {
+        if ( is_file($name) ) {
+            return $name;
+        } else if ( '/' === $name[0] ) {
             $viewPath = X::system()->getPath($service->getConfiguration()->get('CommonViewPath', 'View/'));
             $fileName = substr($name, 1);
         } else {

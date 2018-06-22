@@ -10,13 +10,16 @@ class X {
      * @var X
      */
     private static $system = null;
-    
     /**
      * 是否为第一次启动
      * @var boolean
      */
     private static $isFirstStart = null;
-    
+    /**
+     * 配置文件路径
+     * @var string
+     */
+    private $configPath = null;
     /**
      * 应用根目录
      * @var string
@@ -66,10 +69,10 @@ class X {
      * 动该框架。
      * @return X
      */
-    public static function start( $config ){
+    public static function start( $configPath ){
         if ( null === self::$system ) {
             self::$isFirstStart = ( null === self::$isFirstStart ) ? true : false;
-            self::$system = new X($config);
+            self::$system = new X($configPath);
         }
         return self::$system;
     }
@@ -85,7 +88,10 @@ class X {
      * 构造函数， 初始化框架的环境。
      * @return void
      */
-    private function __construct($config) {
+    private function __construct($configPath) {
+        $this->configPath = $configPath;
+        $config = require $configPath;
+        
         spl_autoload_register(array($this, '_autoloader'));
         $this->root = $config['document_root'];
         $this->frameworkRoot = dirname(__DIR__);
@@ -141,7 +147,14 @@ class X {
     public function getConfiguration() {
         return $this->configuration;
     }
-     
+    
+    /**
+     * @return string
+     */
+    public function getConfigurationPath() {
+        return $this->configPath;
+    }
+    
     /**
      * 获取当前框架种的service manager的实例。
      * @return \X\Core\Service\Manager

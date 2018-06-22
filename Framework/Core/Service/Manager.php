@@ -178,4 +178,18 @@ class Manager extends UtilManager {
     public function getList() {
         return array_keys($this->getConfiguration()->toArray());
     }
+    
+    /**
+     * Get All Services
+     * @return XService[]
+     */
+    public function getAllServices() {
+        $names = $this->getList();
+        
+        $services = array();
+        foreach ( $names as $name ) {
+            $services[$name] = $this->get($name);
+        }
+        return $services;
+    }
 }

@@ -31,6 +31,13 @@ return array(
         'dbname' => 'dbtester',
         'port' => 1433
     ),
+    'OracleDriverConfig' => array(
+        'host' => '127.0.0.1',
+        'username' => 'c##bighero',
+        'password' => 'bighero',
+        'serviceName' => 'ORCL',
+        'port' => 1521
+    ),
 ),
 'services' => array(
     'Database' => array(

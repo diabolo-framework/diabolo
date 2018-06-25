@@ -38,6 +38,12 @@ return array(
         'serviceName' => 'ORCL',
         'port' => 1521
     ),
+    'FirebirdDriverConfig' => array(
+        'host' => '39.104.28.34',
+        'username' => 'SYSDBA',
+        'password' => 'ginhappy',
+        'dbname' => 'C:\\Program Files\\Firebird\\Data\\TEST1.FDB',
+    ),
 ),
 'services' => array(
     'Database' => array(

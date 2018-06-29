@@ -13,7 +13,7 @@ return array(
         'host' => '127.0.0.1',
         'username' => 'root',
         'password' => 'root',
-        'charset' => 'UTF-8',
+        'charset' => 'UTF8',
         'dbname' => 'diabolo.test',
     ),
     'SqliteDriverConfig' => array(

@@ -76,4 +76,16 @@ class Database {
     public function query( $query, array $params=array() ) {
         return $this->driver->query($query, $params);
     }
+    
+    /**
+     * Execute the sql query and return the number of
+     * affected rows.
+     * @param string $query the query to exec
+     * @param array $params the key is param's name, and
+     * value is the value to bind
+     * @return integer
+     */
+    public function exec( $query, array $params=array() ) {
+        return $this->driver->exec($query, $params);
+    }
 }

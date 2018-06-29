@@ -457,7 +457,7 @@ class Condition {
      * @return string
      */
     private function convertNormalConditionToString( array $condition ) {
-        $expr = $this->database->quoteColumnName($condition['expr']);
+        $expr = $this->database->quoteExpression($condition['expr']);
         
         switch ( $condition['operator'] ) {
         case 'IS NULL': 
@@ -465,26 +465,35 @@ class Condition {
             return "{$expr} {$condition['operator']}";
         case 'NOT BETWEEN' :
         case 'BETWEEN' :
-            $paramsKeyMin = ':qp'.count($this->params);
-            $this->params[$paramsKeyMin] = $condition['value']['min'];
-            $paramsKeyMax = ':qp'.count($this->params);
-            $this->params[$paramsKeyMax] = $condition['value']['max'];
+            $paramsKeyMin = $this->getParamKey($condition['value']['min']);
+            $paramsKeyMax = $this->getParamKey($condition['value']['max']);
             return "{$expr} {$condition['operator']} {$paramsKeyMin} AND {$paramsKeyMax}";
         case 'IN' :
         case 'NOT IN' :
             $markList = array();
             foreach ( $condition['value'] as $value ) {
-                $paramsKey = ':qp'.count($this->params);
-                $this->params[$paramsKey] = $value;
-                $markList[] = $paramsKey;
+                $markList[] = $this->getParamKey($value);
             }
             $markList = implode(', ', $markList);
             return "{$expr} {$condition['operator']} ( $markList )";
         default :
-            $paramsKey = ':qp'.count($this->params);
-            $this->params[$paramsKey] = $condition['value'];
+            $paramsKey = $this->getParamKey($condition['value']);
             return "{$expr} {$condition['operator']} {$paramsKey}";
         }
+    }
+    
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    private function getParamKey( $value ) {
+        if ( $value instanceof Expression ) {
+            return $value->toString();
+        }
+        
+        $paramsKey = ':qp'.count($this->params);
+        $this->params[$paramsKey] = $value;
+        return $paramsKey;
     }
     
     /** @return string  */

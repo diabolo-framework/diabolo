@@ -1,5 +1,6 @@
 <?php
 use X\Service\Database\Service as DatabaseService;
+use X\Service\Database\Driver\Mysql;
 return array(
 'document_root' => __DIR__,
 'module_path' => array(),
@@ -8,6 +9,7 @@ return array(
 'modules' => array(),
 'params' => array(
     'MysqlDriverConfig' => array(
+        'driver' => Mysql::class,
         'host' => '127.0.0.1',
         'username' => 'root',
         'password' => 'root',

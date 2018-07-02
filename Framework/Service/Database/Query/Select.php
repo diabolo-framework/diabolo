@@ -3,7 +3,7 @@ namespace X\Service\Database\Query;
 /**
  * @author Michael Luthor <michaelluthor@163.com>
  */
-class Select extends DatabaseQuery {
+class Select extends DatabaseLimitableQuery {
     /** @var string join type for inner join */
     const INNER_JOIN = 'INNER';
     /** @var string join type for left join */
@@ -16,11 +16,6 @@ class Select extends DatabaseQuery {
     const CROSS_JOIN = 'CROSS';
     /** @var string join type for outer join */
     const OUTER_JOIN = 'OUTER';
-    
-    /** @var string sort type for asc */
-    const SORT_ASC = 'ASC';
-    /** @var string sort type for desc */
-    const SORT_DESC = 'DESC';
     
     /** @var array */
     private $expressions = array(
@@ -35,22 +30,11 @@ class Select extends DatabaseQuery {
         # arrary('table'=>'table', 'alias'=>'alias', 'type'=>'type','condition'=>$condition)
     );
     /** @var array */
-    private $orders = array(
-        # array ('name' => 'expr', 'order'=> 'order')
-    );
-    /** @var mixed */
-    private $condition = null;
-    /** @var array */
     private $groupByNames = array();
     /** @var mixed */
     private $havingCondition = null;
-    /** @var integer */
-    private $limit = null;
     /** @var offset */
     private $offset = null;
-    
-    /** @var array */
-    private $queryParams = array();
     
     /**
      * @param mixed $expression
@@ -91,15 +75,6 @@ class Select extends DatabaseQuery {
     }
     
     /**
-     * @param mixed $condition
-     * @return self
-     */
-    public function where( $condition ) {
-        $this->condition = $condition;
-        return $this;
-    }
-    
-    /**
      * @param mixed $name
      * @return self
      */
@@ -130,25 +105,6 @@ class Select extends DatabaseQuery {
             'condition'=>$condition,
             'type'=>$type
         );
-        return $this;
-    }
-    
-    /**
-     * @param mixed $name
-     * @param string $order
-     * @return self
-     */
-    public function orderBy( $name, $order ) {
-        $this->orders[] = array('name'=>$name, 'order'=>$order);
-        return $this;
-    }
-    
-    /**
-     * @param integer $limit
-     * @return self
-     */
-    public function limit( $limit ) {
-        $this->limit = $limit;
         return $this;
     }
     
@@ -269,24 +225,6 @@ class Select extends DatabaseQuery {
      * @param array $query
      * @return void
      */
-    private function buildCondition( &$query ) {
-        if ( null === $this->condition ) {
-            return;
-        }
-        
-        $condition = $this->condition;
-        if ( !($condition instanceof Condition ) ) {
-            $condition = Condition::build()->add($this->condition);
-        }
-        $condition->setPreviousParams($this->queryParams);
-        $condition->setDatabase($this->getDatabase());
-        $query[] = 'WHERE '.$condition->toString();
-    }
-    
-    /**
-     * @param array $query
-     * @return void
-     */
     private function buildGroupBy( &$query ) {
         if ( empty($this->groupByNames) ) {
             return;
@@ -316,36 +254,6 @@ class Select extends DatabaseQuery {
         $condition->setPreviousParams($this->queryParams);
         $condition->setDatabase($this->getDatabase());
         $query[] = 'HAVING '.$condition->toString();
-    }
-    
-    /**
-     * @param array $query
-     * @return void
-     */
-    private function buildOrderBy( &$query ) {
-        if ( empty($this->orders) ) {
-            return;
-        }
-        
-        $db = $this->getDatabase();
-        $orderList = array();
-        foreach ( $this->orders as $order ) {
-            $name = $this->getDatabase()->quoteExpression($order['name']);
-            $order = $order['order'];
-            $orderList[] = "{$name} {$order}";
-        }
-        $query[] = 'ORDER BY '.implode(', ', $orderList);
-    }
-    
-    /**
-     * @param array $query
-     * @return void
-     */
-    private function buildLimit( &$query ) {
-        if ( null === $this->limit ) {
-            return;
-        }
-        $query[] = 'LIMIT '.$this->limit;
     }
     
     /**

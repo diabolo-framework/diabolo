@@ -444,7 +444,11 @@ class Condition {
             return $condition;
         } else if ( is_array($condition) ) {
             foreach ( $condition as $key => $value ) {
-                $content = array('expr' => $key,'operator' => '=','value' => $value);
+                $content = array(
+                    'expr' => $key,
+                    'operator' => is_array($value) ? 'IN' : '=',
+                    'value' => $value
+                );
                 return $this->convertNormalConditionToString($content);
             }
         } else {

@@ -88,4 +88,13 @@ class Database {
     public function exec( $query, array $params=array() ) {
         return $this->driver->exec($query, $params);
     }
+    
+    /**
+     * get the last insert id
+     * @param string $sequenceName name of sequence
+     * @return mixed
+     */
+    public function getLastInsertId($sequenceName=null) {
+        return $this->driver->getLastInsertId($sequenceName);
+    }
 }

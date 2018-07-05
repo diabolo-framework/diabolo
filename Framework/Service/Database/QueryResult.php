@@ -1,29 +1,155 @@
 <?php
 namespace X\Service\Database;
-class QueryResult {
+class QueryResult implements \ArrayAccess, \Iterator, \Countable {
+    const FETCH_ASSOC = \PDO::FETCH_ASSOC;
+    const FETCH_CLASS = \PDO::FETCH_CLASS;
+    
+    /** @var int fetch style */
+    private $fetchStyle = \PDO::FETCH_ASSOC;
+    /** @var string class name to fetch into */
+    private $fetchClassName = null;
+    
     /** @var \PDOStatement */
-    private $result = null;
+    private $resultStatement = null;
+    /** @var array|false|null */
+    private $resultItems = null;
+    
+    /**
+     * @param string $style
+     * @return self
+     */
+    public function setFetchStyle( $style ) {
+        $this->fetchStyle = $style;
+        return $this;
+    }
+    
+    /**
+     * @param string $className
+     * @return \X\Service\Database\QueryResult
+     */
+    public function setFetchClass( $className ) {
+        $this->fetchClassName = $className;
+        return $this;
+    }
     
     /**
      * @param \PDOStatement $result
      */
     public function __construct( \PDOStatement $result ) {
-        $this->result = $result;
+        $this->resultStatement = $result;
     }
     
     /**
-     * @param string $target class name 
      * @return array
      */
-    public function fetchAll( $target=null ) {
-        return $this->result->fetchAll(\PDO::FETCH_ASSOC);
+    public function fetchAll() {
+        if ( null !== $this->resultItems ) {
+            return $this->resultItems;
+        }
+        
+        if ( self::FETCH_CLASS === $this->fetchStyle 
+        && is_subclass_of($this->fetchClassName, ActiveRecord::class) ) {
+            $items = $this->resultStatement->fetchAll(\PDO::FETCH_ASSOC);
+            foreach ( $items as $index => $item ) {
+                $model = new $this->fetchClassName();
+                $model->applyData($item);
+                $items[$index] = $model;
+            }
+            $this->resultItems = $items;
+        } else if ( self::FETCH_CLASS === $this->fetchStyle ) {
+            $this->resultItems = $this->resultStatement->fetchAll($this->fetchStyle, $this->fetchClassName);
+        } else {
+            $this->resultItems = $this->resultStatement->fetchAll($this->fetchStyle);
+        }
+        return $this->resultItems;
     }
     
     /**
-     * @param string $target class name
      * @return array
      */
-    public function fetch( $target=null ) {
-        return $this->result->fetch(\PDO::FETCH_ASSOC);
+    public function fetch() {
+        if ( null !== $this->resultItems ) {
+            return array_shift($this->resultItems);
+        }
+        
+        if ( self::FETCH_CLASS === $this->fetchStyle
+        && is_subclass_of($this->fetchClassName, ActiveRecord::class) ) {
+            $item = $this->resultStatement->fetch(\PDO::FETCH_ASSOC);
+            $model = new $this->fetchClassName();
+            $model->applyData($item);
+            return $model;
+        } else if ( self::FETCH_CLASS === $this->fetchStyle ) {
+            return $this->resultStatement->fetch($this->fetchStyle, $this->fetchClassName);
+        } else {
+            return $this->resultStatement->fetch($this->fetchStyle);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see ArrayAccess::offsetExists()
+     */
+    public function offsetExists($offset) {
+        $this->fetchAll();
+        return isset($this->resultItems[$offset]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ArrayAccess::offsetGet()
+     */
+    public function offsetGet($offset){
+        $this->fetchAll();
+        return $this->resultItems[$offset];
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ArrayAccess::offsetSet()
+     */
+    public function offsetSet($offset, $value) {
+        throw new DatabaseException('query result is read only');
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see ArrayAccess::offsetUnset()
+     */
+    public function offsetUnset($offset) {
+        throw new DatabaseException('query result is read only');
+    }
+    
+    /** */
+    public function current () {
+        return current($this->resultItems);
+    }
+    
+    /** */
+    public function next () {
+        return next($this->resultItems);
+    }
+    
+    /** */
+    public function key () {
+        return key($this->resultItems);
+    }
+    
+    /***/
+    public function valid () {
+        return isset($this->resultItems[key($this->resultItems)]);
+    }
+    
+    /***/
+    public function rewind () {
+        return reset($this->resultItems);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see Countable::count()
+     */
+    public function count() {
+        $this->fetchAll();
+        return count($this->resultItems);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 namespace X\Service\Database\Query;
+use X\Service\Database\QueryResult;
+
 /**
  * @author Michael Luthor <michaelluthor@163.com>
  */
@@ -35,6 +37,11 @@ class Select extends DatabaseLimitableQuery {
     private $havingCondition = null;
     /** @var offset */
     private $offset = null;
+    
+    /** @var int fetch style */
+    private $fetchStyle = QueryResult::FETCH_ASSOC;
+    /** @var string class name to fetch into */
+    private $fetchClassName = null;
     
     /**
      * @param mixed $expression
@@ -268,10 +275,30 @@ class Select extends DatabaseLimitableQuery {
     }
     
     /**
+     * @param string $style
+     * @return self
+     */
+    public function setFetchStyle( $style ) {
+        $this->fetchStyle = $style;
+        return $this;
+    }
+    
+    /**
+     * @param string $className
      * @return \X\Service\Database\QueryResult
      */
+    public function setFetchClass( $className ) {
+        $this->fetchClassName = $className;
+        return $this;
+    }
+    
+    
+    /** @return \X\Service\Database\QueryResult */
     public function all() {
-        return $this->getDatabase()->query($this->toString(), $this->queryParams);
+        $queryResult = $this->getDatabase()->query($this->toString(), $this->queryParams);
+        $queryResult->setFetchStyle($this->fetchStyle);
+        $queryResult->setFetchClass($this->fetchClassName);
+        return $queryResult;
     }
     
     /**

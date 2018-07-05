@@ -71,6 +71,11 @@ abstract class DatabaseLimitableQuery extends DatabaseQuery {
      * @return self
      */
     public function orderBy( $name, $order ) {
+        if ( SORT_DESC === $order ) {
+            $order = self::SORT_DESC;
+        } else if ( SORT_ASC === $order ) {
+            $order = self::SORT_ASC;
+        }
         $this->orders[] = array('name'=>$name, 'order'=>$order);
         return $this;
     }

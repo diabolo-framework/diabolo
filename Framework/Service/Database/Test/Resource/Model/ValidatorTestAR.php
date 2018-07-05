@@ -34,7 +34,7 @@ class ValidatorTestAR extends ActiveRecord {
         return new Database($config);
     }
     
-    public static function getTable() {
+    public static function tableName() {
         return 'students';
     }
 }

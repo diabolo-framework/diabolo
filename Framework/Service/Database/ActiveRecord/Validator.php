@@ -78,7 +78,7 @@ class Validator {
         
         $attrName = $attribute->getName();
         $counter = Query::select($model->getDB())->expression(Expression::count(),'RowCount')
-            ->from($model->getTable())
+            ->from($model->tableName())
             ->where([$attrName=>$attribute->getValue()])
             ->one();
         

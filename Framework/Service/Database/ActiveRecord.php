@@ -145,7 +145,7 @@ abstract class ActiveRecord {
     private function insert() {
         $values = $this->getDirtyValues();
         $rowCount = Query::insert($this->getDatabase())
-            ->table(static::getTable())
+            ->table(static::tableName())
             ->value($values)
             ->exec();
         
@@ -169,7 +169,7 @@ abstract class ActiveRecord {
     /** @return bool */
     private function update() {
         $qurey = Query::update($this->getDatabase())
-            ->table(static::getTable())
+            ->table(static::tableName())
             ->values($this->getDirtyValues())
             ->where($this->getOperationCondition())
             ->limit(1);
@@ -230,7 +230,7 @@ abstract class ActiveRecord {
         }
         
         $rowCount = Query::delete($this->getDatabase())
-            ->from(static::getTable())
+            ->from(static::tableName())
             ->where($this->getOperationCondition())
             ->limit(1)
             ->exec();
@@ -297,14 +297,14 @@ abstract class ActiveRecord {
     }
     
     /** @return string */
-    public static function getTable() {
+    public static function tableName() {
         throw new DatabaseException('table name is not defined');
     }
     
     /** @return \X\Service\Database\Query\Select */
     public static function find() {
         $query = Query::select(static::getDB())
-            ->from(static::getTable());
+            ->from(static::tableName());
         $query->setFetchStyle(QueryResult::FETCH_CLASS);
         $query->setFetchClass(get_called_class());
         return $query;
@@ -332,7 +332,7 @@ abstract class ActiveRecord {
      */
     public static function deleteAll($condition=null) {
         return Query::delete(static::getDB())
-            ->from(static::getTable())
+            ->from(static::tableName())
             ->where($condition)
             ->exec();
     }
@@ -344,7 +344,7 @@ abstract class ActiveRecord {
      */
     public static function updateAll( array $values, $condition=null ) {
         return Query::update(static::getDB())
-            ->table(static::getTable())
+            ->table(static::tableName())
             ->values($values)
             ->where($condition)
             ->exec();

@@ -1,5 +1,7 @@
 <?php
 namespace X\Service\Database\Driver;
+use X\Service\Database\Table\Column;
+
 interface DatabaseDriver {
     /**
      * Driver must be configable.
@@ -48,6 +50,12 @@ interface DatabaseDriver {
     function quoteColumnName( $columnName );
     
     /**
+     * @param unknown $value
+     * @return string
+     */
+    function quoteValue($value);
+    
+    /**
      * get last error code
      * @return mixed
      */
@@ -59,6 +67,18 @@ interface DatabaseDriver {
      */
     function getErrorMessage();
     
+    /**
+     * get table name list
+     * @return \string[]
+     */
+    function tableList();
+    
+    /**
+     * get column list of a table
+     * @return Column[]
+     */
+    function columnList( $tableName );
+    
     //function insert( $option );
     //function batchInsert( $option );
     //function delete( $option );
@@ -69,13 +89,11 @@ interface DatabaseDriver {
 //     function tableCreate();
 //     function tableDelete();
 //     function tableRename();
-//     function tableList();
 //     function tableTruncate();
     
 //     function columAdd();
 //     function columnDelete();
 //     function columnUpdate();
-//     function columnList();
 //     function columnRename();
     
 //     function indexAdd();

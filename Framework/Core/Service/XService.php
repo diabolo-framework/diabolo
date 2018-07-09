@@ -43,7 +43,12 @@ abstract class XService {
      * @return string
      */
     private static function getServiceNameFromClassName( $className ) {
-        return static::$serviceName;
+        $name = static::$serviceName;
+        if ( null === $name ) {
+            $className = explode('\\', $className);
+            $name = $className[count($className)-2];
+        }
+        return $name;
     }
     
     /**

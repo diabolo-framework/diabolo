@@ -29,7 +29,7 @@ abstract class Manager {
      * 管理器配置实例
      * @var ConfigurationArray 
      * */
-    private $configuration = null;
+    protected $configuration = null;
     
     /**
      * 获取Management的实例。

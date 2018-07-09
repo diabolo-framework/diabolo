@@ -97,4 +97,28 @@ class Database {
     public function getLastInsertId($sequenceName=null) {
         return $this->driver->getLastInsertId($sequenceName);
     }
+    
+    /**
+     * get table naems
+     * @return string[]
+     */
+    public function tableList() {
+        return $this->driver->tableList();
+    }
+    
+    /**
+     * @param unknown $value
+     * @return string
+     */
+    public function quoteValue( $value ) {
+        return $this->driver->quoteValue($value);
+    }
+    
+    /**
+     * @param unknown $tableName
+     * @return \X\Service\Database\Table\Column[]
+     */
+    public function columnList($tableName) {
+        return $this->driver->columnList($tableName);
+    }
 }

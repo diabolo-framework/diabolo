@@ -46,6 +46,14 @@ abstract class DatabaseDriverPDO implements DatabaseDriver {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::quoteValue()
+     */
+    public function quoteValue($value) {
+        return $this->connection->quote($value);
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriver::getLastInsertId()
      */
     public function getLastInsertId($sequenceName=null) {

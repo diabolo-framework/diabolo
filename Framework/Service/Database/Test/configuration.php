@@ -12,7 +12,7 @@ return array(
         'driver' => Mysql::class,
         'host' => '127.0.0.1',
         'username' => 'root',
-        'password' => 'root',
+        'password' => '',
         'charset' => 'UTF8',
         'dbname' => 'diabolo.test',
     ),

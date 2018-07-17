@@ -34,4 +34,27 @@ class CommanderTest extends TestCase {
         $command = Commander::getCommand('student.search', $this->db);
         $this->assertTrue($command instanceof Command);
     }
+    
+    public function test_exec() {
+        $command = Commander::getCommand('student.testMixedUp', $this->db);
+        $command->query(['conditions'=>['name'=>'michael','age'=>10, 'falseTest'=>false]])->count();
+        
+        $command = Commander::getCommand('student.testStartByToken', $this->db);
+        $command->query(['value'=>'SELECT'])->count();
+        
+        $command = Commander::getCommand('student.testIf', $this->db);
+        $command->query(['age'=>10, 'name'=>'xxx', 'class'=>1000, 'maxClass'=>10])->count();
+        
+        $command = Commander::getCommand('student.testForeach', $this->db);
+        $command->query(['conditions'=>['name'=>'michael','age'=>10]])->count();
+        
+        $command = Commander::getCommand('student.testPlaceHolder', $this->db);
+        $command->query(['table'=>'students'])->count();
+        
+        $command = Commander::getCommand('student.searchByName', $this->db);
+        $command->query(['name'=>'michael'])->count();
+        
+        $command = Commander::getCommand('student.search', $this->db);
+        $command->exec(array('name'=>'michael'));
+    }
 }

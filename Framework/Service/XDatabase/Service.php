@@ -43,7 +43,7 @@ class Service extends \X\Core\Service\XService {
      * this value contains all database instances.
      * @var array
      */
-    private $databases = array();
+    private $databaseInstances = array();
     
     /**
      * name of default database name.
@@ -69,7 +69,7 @@ class Service extends \X\Core\Service\XService {
      * @see \X\Core\Component\Manager::stop()
      */
     public function stop() {
-        $this->databases = array();
+        $this->databaseInstances = array();
         $this->currentDatabaseName = null;
         parent::stop();
     }
@@ -81,7 +81,7 @@ class Service extends \X\Core\Service\XService {
      */
     public function load( $name, $config ) {
         $this->dbNotExistsRequired($name);
-        $this->databases[$name] = new Database($config);
+        $this->databaseInstances[$name] = new Database($config);
     }
     
     /**
@@ -114,7 +114,7 @@ class Service extends \X\Core\Service\XService {
      */
     public function unregister( $name ) {
         $this->dbExistsRequired($name);
-        unset($this->databases[$name]);
+        unset($this->databaseInstances[$name]);
         if ( $this->currentDatabaseName === $name ) {
             $this->currentDatabaseName = null;
         }
@@ -130,7 +130,7 @@ class Service extends \X\Core\Service\XService {
      * @return boolean
      */
     public function has( $name ) {
-        return isset($this->databases[$name]);
+        return isset($this->databaseInstances[$name]);
     }
     
     /**
@@ -149,7 +149,7 @@ class Service extends \X\Core\Service\XService {
             $name = $this->currentDatabaseName;
         }
         $this->dbExistsRequired($name);
-        return $this->databases[$name];
+        return $this->databaseInstances[$name];
     }
     
     /**

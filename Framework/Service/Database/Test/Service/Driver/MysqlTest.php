@@ -13,6 +13,7 @@ final class MysqlTest extends TestCase {
      * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp() {
+        $this->checkTestable(TEST_DB_NAME_MYSQL);
         $this->createTestTableUser(TEST_DB_NAME_MYSQL);
     }
     
@@ -26,8 +27,6 @@ final class MysqlTest extends TestCase {
     
     /** test exec */
     public function test_exec() {
-        $this->checkTestable(TEST_DB_NAME_MYSQL);
-        
         $driver = $this->getDatabase(TEST_DB_NAME_MYSQL)->getDriver();
         $rowCount = $driver->exec(
             'INSERT INTO users (`name`,`age`,`group`) 

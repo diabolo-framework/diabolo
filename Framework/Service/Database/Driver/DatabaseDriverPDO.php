@@ -30,8 +30,8 @@ abstract class DatabaseDriverPDO implements DatabaseDriver {
      * @see \X\Service\Database\Driver\DatabaseDriver::exec()
      */
     public function exec($query, array $params = array()){
-        $stmt = $this->connection->prepare($query);
         try {
+            $stmt = $this->connection->prepare($query);
             $stmt->execute($params);
         } catch ( \PDOException $e ) {
             throw new DatabaseException($e->getMessage());
@@ -44,8 +44,8 @@ abstract class DatabaseDriverPDO implements DatabaseDriver {
      * @see \X\Service\Database\Driver\DatabaseDriver::query()
      */
     public function query($query, array $params = array()) {
-        $stmt = $this->connection->prepare($query);
         try {
+            $stmt = $this->connection->prepare($query);
             $stmt->execute($params);
         } catch ( \PDOException $e ) {
             throw new DatabaseException($e->getMessage());

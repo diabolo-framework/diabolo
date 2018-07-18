@@ -1,6 +1,7 @@
 <?php
 use X\Service\Database\Service as DatabaseService;
 use X\Service\Database\Driver\Mysql;
+use X\Service\Database\Driver\Sqlite;
 
 return array(
 'document_root' => __DIR__,
@@ -9,9 +10,6 @@ return array(
 'library_path' => array(),
 'modules' => array(),
 'params' => array(
-    'SqliteDriverConfig' => array(
-        'path' => '/home/michael/diabolo.db',
-    ),
     'PostgresqlDriverConfig' => array(
         'host' => '127.0.0.1',
         'username' => 'michael',
@@ -54,6 +52,10 @@ return array(
                     'password' => '',
                     'charset' => 'UTF8',
                     'dbname' => 'diabolo.test',
+                ),
+                'sqliteTestDB' => array(
+                    'driver' => Sqlite::class,
+                    'path' => __DIR__.'/Resource/Data/diabolo.db',
                 ),
             ),
         ),

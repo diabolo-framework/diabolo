@@ -30,7 +30,17 @@ class Service extends XService {
      * @param string $db
      * @return boolean
      */
-    public function hasDB( $db ) {
-        return isset($this->databases[$db]);
+    public function hasDB( $dbName ) {
+        return isset($this->databases[$dbName]);
+    }
+    
+    /**
+     * @param string $dbName
+     */
+    public function reloadDB( $dbName ) {
+        if ( isset($this->databaseInstances[$dbName]) ) {
+            unset($this->databaseInstances[$dbName]);
+            $this->getDB($dbName);
+        }
     }
 }

@@ -20,6 +20,11 @@ class Database {
         $this->driver = $driver;
     }
     
+    /** @return \X\Service\Database\Driver\DatabaseDriver */
+    public function getDriver() {
+        return $this->driver;
+    }
+    
     /**
      * quote table name to make sure it's safe in query
      * @param string $tableName

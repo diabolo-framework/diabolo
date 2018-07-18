@@ -9,6 +9,9 @@ interface DatabaseDriver {
      */
     function __construct( array $config=array() );
     
+    /** @return string */
+    function getName();
+    
     /**
      * Execute the sql query and return the number of 
      * affected rows.

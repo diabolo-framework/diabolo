@@ -1,6 +1,7 @@
 <?php
 use X\Service\Database\Service as DatabaseService;
 use X\Service\Database\Driver\Mysql;
+
 return array(
 'document_root' => __DIR__,
 'module_path' => array(),
@@ -8,14 +9,6 @@ return array(
 'library_path' => array(),
 'modules' => array(),
 'params' => array(
-    'MysqlDriverConfig' => array(
-        'driver' => Mysql::class,
-        'host' => '127.0.0.1',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'UTF8',
-        'dbname' => 'diabolo.test',
-    ),
     'SqliteDriverConfig' => array(
         'path' => '/home/michael/diabolo.db',
     ),
@@ -52,7 +45,18 @@ return array(
         'class' => DatabaseService::class,
         'enable' => true,
         'delay' => true,
-        'params' => array(),
+        'params' => array(
+            'databases' => array(
+                'mysqlTestDB' => array(
+                    'driver' => Mysql::class,
+                    'host' => '127.0.0.1',
+                    'username' => 'root',
+                    'password' => '',
+                    'charset' => 'UTF8',
+                    'dbname' => 'diabolo.test',
+                ),
+            ),
+        ),
     ),
 ),
 );

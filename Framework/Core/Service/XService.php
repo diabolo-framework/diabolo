@@ -72,6 +72,13 @@ abstract class XService {
      * @return void
      */
     public function __construct( $config=array() ) {
+        foreach ( $config as $confKey => $confVal ) {
+            if ( property_exists($this, $confKey) ) {
+                $this->{$confKey} = $confVal;
+            }
+        }
+        
+        # @TODO : remove the following stuff, use the property instead.
         $this->configuration = new ConfigurationArray();
         $this->configuration->setValues($config);
         

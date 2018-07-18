@@ -18,6 +18,14 @@ class Mysql extends DatabaseDriverPDO {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::getName()
+     */
+    public function getName() {
+        return 'mysql';
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriverBase::init()
      */
     protected function init() {
@@ -59,8 +67,8 @@ class Mysql extends DatabaseDriverPDO {
      * @see \X\Service\Database\Driver\DatabaseDriver::columnList()
      */
     public function columnList($tableName) {
-        $query = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = :table";
-        $columns = $this->query($query, array(':table'=>$tableName))->fetchAll();
+        $query = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = :table AND TABLE_SCHEMA = :dbname";
+        $columns = $this->query($query, array(':table'=>$tableName, ':dbname'=>$this->dbname))->fetchAll();
         
         $list = array();
         foreach ( $columns as $index => $item ) {

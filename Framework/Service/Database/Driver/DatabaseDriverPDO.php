@@ -1,6 +1,7 @@
 <?php
 namespace X\Service\Database\Driver;
 use X\Service\Database\QueryResult;
+use X\Service\Database\DatabaseException;
 abstract class DatabaseDriverPDO implements DatabaseDriver {
     /** @var \PDO */
     protected $connection = false;
@@ -30,7 +31,11 @@ abstract class DatabaseDriverPDO implements DatabaseDriver {
      */
     public function exec($query, array $params = array()){
         $stmt = $this->connection->prepare($query);
-        $stmt->execute($params);
+        try {
+            $stmt->execute($params);
+        } catch ( \PDOException $e ) {
+            throw new DatabaseException($e->getMessage());
+        }
         return $stmt->rowCount();
     }
     
@@ -40,7 +45,11 @@ abstract class DatabaseDriverPDO implements DatabaseDriver {
      */
     public function query($query, array $params = array()) {
         $stmt = $this->connection->prepare($query);
-        $stmt->execute($params);
+        try {
+            $stmt->execute($params);
+        } catch ( \PDOException $e ) {
+            throw new DatabaseException($e->getMessage());
+        }
         return new QueryResult($stmt);
     }
     

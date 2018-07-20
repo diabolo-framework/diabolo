@@ -2,6 +2,7 @@
 use X\Service\Database\Service as DatabaseService;
 use X\Service\Database\Driver\Mysql;
 use X\Service\Database\Driver\Sqlite;
+use X\Service\Database\Driver\Postgresql;
 
 return array(
 'document_root' => __DIR__,
@@ -10,13 +11,6 @@ return array(
 'library_path' => array(),
 'modules' => array(),
 'params' => array(
-    'PostgresqlDriverConfig' => array(
-        'host' => '127.0.0.1',
-        'username' => 'michael',
-        'password' => '',
-        'dbname' => 'test',
-        'port' => 5432
-    ),
     'MSsqlDriverConfig' => array(
         'host' => '39.104.28.34',
         'username' => 'sa',
@@ -56,6 +50,14 @@ return array(
                 'sqliteTestDB' => array(
                     'driver' => Sqlite::class,
                     'path' => __DIR__.'/Resource/Data/diabolo.db',
+                ),
+                'postgresqlTestDB' => array(
+                    'driver' => Postgresql::class,
+                    'host' => '106.12.16.95',
+                    'username' => 'postgres',
+                    'password' => 'ginhappy',
+                    'dbname' => 'diabolo.test',
+                    'port' => 5432
                 ),
             ),
         ),

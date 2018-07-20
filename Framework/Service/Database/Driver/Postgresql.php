@@ -1,6 +1,7 @@
 <?php
 namespace X\Service\Database\Driver;
 use OAuth2\Storage\Pdo;
+use X\Service\Database\Table\Column;
 
 class Postgresql extends DatabaseDriverPDO {
     /** @var string host address of mysql server */
@@ -38,4 +39,65 @@ class Postgresql extends DatabaseDriverPDO {
     public function quoteColumnName($columnName) {
         return '"'.str_replace('"', '""', $columnName).'"';
     }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::getName()
+     */
+    public function getName() {
+        return 'postgresql';
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::tableList()
+     */
+    public function tableList() {
+        $query = 'SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname NOT IN(\'pg_catalog\', \'information_schema\')';
+        $tables = $this->query($query)->fetchAll();
+        foreach ( $tables as $index => $table ) {
+            $tables[$index] = $table['tablename'];
+        }
+        return $tables;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::columnList()
+     */
+    public function columnList($tableName) {
+        $query = 'SELECT * FROM information_schema.columns WHERE table_name=:table AND table_catalog=:catalog';
+        $columns = $this->query($query, array(':table'=>$tableName,'catalog'=>$this->dbname))->fetchAll();
+        
+        $query = '
+            SELECT K.TABLE_NAME,
+            K.COLUMN_NAME,
+            K.CONSTRAINT_NAME
+            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS C
+            JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS K
+            ON C.TABLE_NAME = K.TABLE_NAME
+            AND C.CONSTRAINT_CATALOG = K.CONSTRAINT_CATALOG
+            AND C.CONSTRAINT_SCHEMA = K.CONSTRAINT_SCHEMA
+            AND C.CONSTRAINT_NAME = K.CONSTRAINT_NAME
+            WHERE C.CONSTRAINT_TYPE = \'PRIMARY KEY\' 
+            AND C.TABLE_NAME=:table';
+        $primaryKey = $this->query($query,array(':table'=>$tableName))->fetchAll();
+        $primaryKey = isset($primaryKey[0]) ? $primaryKey[0]['column_name'] : null;
+        
+        $list = array();
+        foreach ( $columns as $item ) {
+            $column = new Column();
+            $column->setName($item['column_name']);
+            $column->setType($item['data_type']);
+            $column->setIsNotNull( "NO" === $item['is_nullable'] );
+            $column->setDefaultValue($item['column_default']);
+            $column->setIsAutoIncrement(false !== strpos($item['column_default'], 'nextval'));
+            $column->setIsPrimary($primaryKey === $item['column_name']);
+            
+            $column->setIsUnique(in_array($item['name'], $uniqueColumns));
+            $list[$column->getName()] = $column;
+        }
+        return $list;
+    }
+
 }

@@ -4,7 +4,8 @@ use X\Service\Database\DatabaseException;
 use X\Service\Database\Service;
 trait DatabaseServiceTestTrait {
     use DatabaseServiceMysqlTestTrait,
-        DatabaseServiceSqliteTestTrait;
+        DatabaseServiceSqliteTestTrait,
+        DatabaseServicePostgresqlTestTrait;
     
     /** 
      * @param string $dbName
@@ -14,6 +15,7 @@ trait DatabaseServiceTestTrait {
         switch ( $this->getDatabase($dbName)->getDriver()->getName() ) {
         case 'mysql' : $this->createTestTableUserForMysql($dbName); break;
         case 'sqlite' : $this->createTestTableUserForSqlite($dbName); break;
+        case 'postgresql' : $this->createTestTableUserForPostgresql($dbName); break; 
         }
     }
     
@@ -24,6 +26,7 @@ trait DatabaseServiceTestTrait {
         switch ( $this->getDatabase($dbName)->getDriver()->getName() ) {
         case 'mysql' : $this->insertDemoDataIntoTableUserForMysql($dbName); break;
         case 'sqlite' : $this->insertDemoDataIntoTableUserForSqlite($dbName); break;
+        case 'postgresql' : $this->insertDemoDataIntoTableUserForPostgresql($dbName); break;
         }
     }
     
@@ -34,6 +37,7 @@ trait DatabaseServiceTestTrait {
         switch ( $this->getDatabase($dbName)->getDriver()->getName() ) {
         case 'mysql' : $this->dropTestTableUserForMysql($dbName); break;
         case 'sqlite' : $this->dropTestTableUserForSqlite($dbName); break;
+        case 'postgresql' : $this->dropTestTableUserForPostgresql($dbName); break;
         }
         
         Service::getService()->reloadDB($dbName);

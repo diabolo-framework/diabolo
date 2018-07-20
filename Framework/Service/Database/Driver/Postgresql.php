@@ -84,6 +84,7 @@ class Postgresql extends DatabaseDriverPDO {
         $primaryKey = $this->query($query,array(':table'=>$tableName))->fetchAll();
         $primaryKey = isset($primaryKey[0]) ? $primaryKey[0]['column_name'] : null;
         
+        $quotedAsValueTableName = $this->quoteValue($tableName);
         $list = array();
         foreach ( $columns as $item ) {
             $column = new Column();
@@ -94,7 +95,20 @@ class Postgresql extends DatabaseDriverPDO {
             $column->setIsAutoIncrement(false !== strpos($item['column_default'], 'nextval'));
             $column->setIsPrimary($primaryKey === $item['column_name']);
             
-            $column->setIsUnique(in_array($item['name'], $uniqueColumns));
+            $query = "
+            SELECT c.conname, pg_get_constraintdef(c.oid)
+            FROM   pg_constraint c
+            JOIN  (
+              SELECT array_agg(attnum::int) AS attkey
+              FROM   pg_attribute
+              WHERE  attrelid = {$quotedAsValueTableName}::regclass
+              AND    attname  = ANY('{{$item['column_name']}}')
+            ) a ON c.conkey::int[] <@ a.attkey AND c.conkey::int[] @> a.attkey
+            WHERE  c.contype  = 'u'
+            AND    c.conrelid = {$quotedAsValueTableName}::regclass";
+            $isUniqueKey = $this->query($query)->count() > 0;
+            $column->setIsUnique($isUniqueKey);
+            
             $list[$column->getName()] = $column;
         }
         return $list;

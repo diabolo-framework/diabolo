@@ -12,7 +12,7 @@ class Service extends XService {
     protected static $serviceName = 'XRouter';
     
     /** @var RouterInterface */
-    private $router = null;
+    private $routerHandler = null;
     /** @var CurrentRequest */
     private $request = null;
     
@@ -32,14 +32,14 @@ class Service extends XService {
         if ( !($router instanceof RouterInterface) ) {
             throw new \Exception("XRequest router must be instance of `".RouterInterface::class.'`');
         }
-        $this->router = $router;
+        $this->routerHandler = $router;
         
         $this->setupRequestParams();
     }
     
     /** @return void */
     private function setupRequestParams() {
-        $url = $this->router->route($this->request->getUrl());
+        $url = $this->routerHandler->route($this->request->getUrl());
         $query = parse_url($url,PHP_URL_QUERY);
         parse_str($query, $params);
         X::system()->getParameter()->merge($params);
@@ -47,6 +47,6 @@ class Service extends XService {
     
     /** @return \X\Service\XRequest\RouterInterface */
     public function getRouter () {
-        return $this->router;
+        return $this->routerHandler;
     }
 }

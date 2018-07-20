@@ -69,10 +69,10 @@ class X {
      * 动该框架。
      * @return X
      */
-    public static function start( $configPath ){
+    public static function start( $config ){
         if ( null === self::$system ) {
             self::$isFirstStart = ( null === self::$isFirstStart ) ? true : false;
-            self::$system = new X($configPath);
+            self::$system = new X($config);
         }
         return self::$system;
     }
@@ -88,9 +88,11 @@ class X {
      * 构造函数， 初始化框架的环境。
      * @return void
      */
-    private function __construct($configPath) {
-        $this->configPath = $configPath;
-        $config = require $configPath;
+    private function __construct($config) {
+        if ( is_string($config) && file_exists($config) ) {
+            $this->configPath = $config;
+            $config = require $config;
+        }
         
         spl_autoload_register(array($this, '_autoloader'));
         $this->root = $config['document_root'];

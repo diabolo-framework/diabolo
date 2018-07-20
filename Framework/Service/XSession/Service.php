@@ -15,7 +15,7 @@ class Service extends XService {
     /** 会话状态 */
     private $sessionStatus = PHP_SESSION_NONE;
     /**  @var \SessionHandlerInterface */
-    private $storage = null;
+    private $storageHandler = null;
     
     /**
      * {@inheritDoc}
@@ -33,8 +33,8 @@ class Service extends XService {
      * @see \X\Core\Service\XService::stop()
      */
     public function stop () {
-        if ( null !== $this->storage ) {
-            $this->storage->beforeServiceClose();
+        if ( null !== $this->storageHandler ) {
+            $this->storageHandler->beforeServiceClose();
         }
         return parent::stop();
     }
@@ -148,7 +148,7 @@ class Service extends XService {
      * 垃圾回收
      */
     public function clean($lifetime=0) {
-        $this->storage->gc($lifetime);
+        $this->storageHandler->gc($lifetime);
     }
     
     /**
@@ -167,7 +167,7 @@ class Service extends XService {
         }
         
         $stroageObj = new $handler($storage);
-        $this->storage = $stroageObj;
+        $this->storageHandler = $stroageObj;
         
         session_set_save_handler($stroageObj);
     }

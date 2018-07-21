@@ -1,24 +1,19 @@
 <?php
 namespace X\Service\Database\Test\Service\Driver;
-use X\Core\X;
 use PHPUnit\Framework\TestCase;
-use X\Service\Database\Driver\Oracle;
 use X\Service\Database\DatabaseException;
+use X\Service\Database\Test\Util\DatabaseServiceTestTrait;
 final class OracleTest extends TestCase {
-    /** @var Oracle */
-    private $driver = null;
+    /***/
+    use DatabaseServiceTestTrait;
     
     /**
      * {@inheritDoc}
      * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp() {
-        $config = X::system()->getConfiguration()->get('params')->get('OracleDriverConfig');
-        $this->driver = new Oracle($config);
-        
-        $this->driver->exec('INSERT INTO "students" ("id","name","age") VALUES (1, \'michael\', 10)');
-        $this->driver->exec('INSERT INTO "students" ("id","name","age") VALUES (2, \'lois\', 20)');
-        $this->driver->exec('INSERT INTO "students" ("id","name","age") VALUES (3, \'lana\', 30)');
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->createTestTableUser(TEST_DB_NAME_ORACLE);
     }
     
     /**
@@ -26,37 +21,66 @@ final class OracleTest extends TestCase {
      * @see \PHPUnit\Framework\TestCase::tearDown()
      */
     protected function tearDown() {
-        $this->driver->exec('TRUNCATE TABLE "students"');
-        $this->driver = null;
+        $this->dropTestTableUser(TEST_DB_NAME_ORACLE);
     }
     
     /** test exec */
     public function test_exec() {
-        $rowCount = $this->driver->exec('DELETE FROM "students" WHERE "name"=\'michael\'');
+        $driver = $this->getDatabase(TEST_DB_NAME_ORACLE)->getDriver();
+        $rowCount = $driver->exec('INSERT INTO "users" ("id","name","age","group") VALUES (1000,\'U001\', 10, \'TEST\')');
         $this->assertEquals(1, $rowCount);
         
-        $this->driver->exec('TRUNCATE TABLE "students"');
+        $rowCount = $driver->exec('DELETE FROM "users" WHERE "name"=\'U001\'');
+        $this->assertEquals(1, $rowCount);
+        
         for ( $i=0; $i<10; $i++ ) {
-            $query = 'INSERT INTO "students" ("id","name","age") VALUES (:id, :name, :age)';
+            $query = 'INSERT INTO "users" ("id","name","age") VALUES (:id, :name, :age)';
             $params = array(
-                ':id' => $i,
-                ':name' => "stu-{$i}",
+                ':id' => 2000 + $i,
+                ':name' => "U-{$i}",
                 ':age'  => $i
             );
-            $rowCount = $this->driver->exec($query, $params);
+            $rowCount = $driver->exec($query, $params);
             $this->assertEquals(1, $rowCount);
         }
+        
+        try {
+            $driver->exec('ERROR QUERY');
+        } catch ( DatabaseException $e ) {}
     }
     
     /** test query */
     public function test_query() {
-        $result = $this->driver->query('SELECT * FROM "students" where "name"=\'michael\'')->fetch();
-        $this->assertEquals('michael', $result['name']);
+        $this->insertDemoDataIntoTableUser(TEST_DB_NAME_ORACLE);
+        $driver = $this->getDatabase(TEST_DB_NAME_ORACLE)->getDriver();
+        
+        $result = $driver->query('SELECT * FROM "users" WHERE "group"=\'DEMO\' AND ROWNUM = 1 ORDER BY "id" ASC')->fetch();
+        $this->assertEquals('U001-DM', $result['name']);
+        
+        try {
+            $driver->query('ERROR QUERY');
+        } catch ( DatabaseException $e ) {}
     }
     
     /** test_getLastInsertId */
     public function test_getLastInsertId() {
-        $this->expectException(DatabaseException::class);
-        $this->driver->getLastInsertId();
+        # 不支持
+    }
+    
+    /**  */
+    public function test_tableList() {
+        $driver = $this->getDatabase(TEST_DB_NAME_ORACLE)->getDriver();
+        $tables = $driver->tableList();
+        $this->assertTrue(in_array('users', $tables));
+    }
+    
+    /***/
+    public function test_columnList() {
+        $driver = $this->getDatabase(TEST_DB_NAME_ORACLE)->getDriver();
+        $columns = $driver->columnList('users');
+        $this->assertArrayHasKey('id', $columns);
+        $this->assertArrayHasKey('name', $columns);
+        $this->assertArrayHasKey('age', $columns);
+        $this->assertArrayHasKey('group', $columns);
     }
 }

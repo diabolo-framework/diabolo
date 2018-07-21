@@ -3,6 +3,7 @@ use X\Service\Database\Service as DatabaseService;
 use X\Service\Database\Driver\Mysql;
 use X\Service\Database\Driver\Sqlite;
 use X\Service\Database\Driver\Postgresql;
+use X\Service\Database\Driver\Oracle;
 
 return array(
 'document_root' => __DIR__,
@@ -17,13 +18,6 @@ return array(
         'password' => 'websoft9!',
         'dbname' => 'dbtester',
         'port' => 1433
-    ),
-    'OracleDriverConfig' => array(
-        'host' => '127.0.0.1',
-        'username' => 'c##bighero',
-        'password' => 'bighero',
-        'serviceName' => 'ORCL',
-        'port' => 1521
     ),
     'FirebirdDriverConfig' => array(
         'host' => '39.104.28.34',
@@ -58,6 +52,14 @@ return array(
                     'password' => 'ginhappy',
                     'dbname' => 'diabolo.test',
                     'port' => 5432
+                ),
+                'oracleTestDB' => array(
+                    'driver' => Oracle::class,
+                    'host' => '192.168.1.102',
+                    'username' => 'C##DIABOLO',
+                    'password' => 'C##DIABOLO',
+                    'serviceName' => 'ORCL',
+                    'port' => 1521
                 ),
             ),
         ),

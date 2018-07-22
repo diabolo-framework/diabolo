@@ -6,7 +6,8 @@ trait DatabaseServiceTestTrait {
     use DatabaseServiceMysqlTestTrait,
         DatabaseServiceSqliteTestTrait,
         DatabaseServicePostgresqlTestTrait,
-        DatabaseServiceOracleTestTrait;
+        DatabaseServiceOracleTestTrait,
+        DatabaseServiceMssqlTestTrait;
     
     /** 
      * @param string $dbName
@@ -18,6 +19,7 @@ trait DatabaseServiceTestTrait {
         case 'sqlite' : $this->createTestTableUserForSqlite($dbName); break;
         case 'postgresql' : $this->createTestTableUserForPostgresql($dbName); break; 
         case 'oracle' : $this->createTestTableUserForOracle($dbName); break;
+        case 'mssql' : $this->createTestTableUserForMssql($dbName); break;
         }
     }
     
@@ -30,6 +32,7 @@ trait DatabaseServiceTestTrait {
         case 'sqlite' : $this->insertDemoDataIntoTableUserForSqlite($dbName); break;
         case 'postgresql' : $this->insertDemoDataIntoTableUserForPostgresql($dbName); break;
         case 'oracle' : $this->insertDemoDataIntoTableUserForOracle($dbName); break;
+        case 'mssql' : $this->insertDemoDataIntoTableUserForMssql($dbName); break;
         }
     }
     
@@ -42,6 +45,7 @@ trait DatabaseServiceTestTrait {
         case 'sqlite' : $this->dropTestTableUserForSqlite($dbName); break;
         case 'postgresql' : $this->dropTestTableUserForPostgresql($dbName); break;
         case 'oracle' : $this->dropTestTableUserForOracle($dbName); break;
+        case 'mssql' : $this->dropTestTableUserForMssql($dbName); break;
         }
         
         Service::getService()->reloadDB($dbName);

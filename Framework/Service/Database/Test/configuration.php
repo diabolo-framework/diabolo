@@ -4,6 +4,7 @@ use X\Service\Database\Driver\Mysql;
 use X\Service\Database\Driver\Sqlite;
 use X\Service\Database\Driver\Postgresql;
 use X\Service\Database\Driver\Oracle;
+use X\Service\Database\Driver\Mssql;
 
 return array(
 'document_root' => __DIR__,
@@ -12,13 +13,6 @@ return array(
 'library_path' => array(),
 'modules' => array(),
 'params' => array(
-    'MSsqlDriverConfig' => array(
-        'host' => '39.104.28.34',
-        'username' => 'sa',
-        'password' => 'websoft9!',
-        'dbname' => 'dbtester',
-        'port' => 1433
-    ),
     'FirebirdDriverConfig' => array(
         'host' => '39.104.28.34',
         'username' => 'SYSDBA',
@@ -60,6 +54,14 @@ return array(
                     'password' => 'C##DIABOLO',
                     'serviceName' => 'ORCL',
                     'port' => 1521
+                ),
+                'mssqlTestDB' => array(
+                    'driver' => Mssql::class,
+                    'host' => '192.168.1.104',
+                    'username' => 'diabolo',
+                    'password' => 'diabolo',
+                    'dbname' => 'diabolo',
+                    'port' => 1433
                 ),
             ),
         ),

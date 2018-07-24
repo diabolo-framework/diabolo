@@ -5,6 +5,7 @@ use X\Service\Database\Driver\Sqlite;
 use X\Service\Database\Driver\Postgresql;
 use X\Service\Database\Driver\Oracle;
 use X\Service\Database\Driver\Mssql;
+use X\Service\Database\Driver\Firebird;
 
 return array(
 'document_root' => __DIR__,
@@ -12,14 +13,7 @@ return array(
 'service_path' => array(),
 'library_path' => array(),
 'modules' => array(),
-'params' => array(
-    'FirebirdDriverConfig' => array(
-        'host' => '39.104.28.34',
-        'username' => 'SYSDBA',
-        'password' => 'ginhappy',
-        'dbname' => 'C:\\Program Files\\Firebird\\Data\\TEST1.FDB',
-    ),
-),
+'params' => array(),
 'services' => array(
     'Database' => array(
         'class' => DatabaseService::class,
@@ -62,6 +56,13 @@ return array(
                     'password' => 'diabolo',
                     'dbname' => 'diabolo',
                     'port' => 1433
+                ),
+                'firebirdTestDB' => array(
+                    'driver' => Firebird::class,
+                    'host' => '192.168.1.103',
+                    'username' => 'SYSDBA',
+                    'password' => '123456789',
+                    'dbname' => 'D:\\DIABOLO.FDB',
                 ),
             ),
         ),

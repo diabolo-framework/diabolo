@@ -23,7 +23,11 @@ class DeleteTest extends TestCase {
         # delete one
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $delCount = Query::delete($dbName)->from($tableName)->limit(1)->exec();
+        $deleteQuery = Query::delete($dbName);
+        if ( 'postgresql' === $this->getDatabase($dbName)->getDriver()->getName() ) {
+            $deleteQuery->setPrimaryKeyName('id');
+        }
+        $delCount = $deleteQuery->from($tableName)->limit(1)->exec();
         $rowCount = Query::select($dbName)->from($tableName)->all()->count();
         $this->assertEquals(1, $delCount, 'failed to delete one on assert $delCount');
         $this->assertEquals($insertCount-1, $rowCount, 'failed to delete one on assert $rowCount');
@@ -32,7 +36,11 @@ class DeleteTest extends TestCase {
         # delete ten
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $delCount = Query::delete($dbName)->from($tableName)->limit(10)->exec();
+        $deleteQuery = Query::delete($dbName);
+        if ( 'postgresql' === $this->getDatabase($dbName)->getDriver()->getName() ) {
+            $deleteQuery->setPrimaryKeyName('id');
+        }
+        $delCount = $deleteQuery->from($tableName)->limit(10)->exec();
         $this->assertEquals($insertCount, $delCount, 'failed to delete ten');
         $this->dropTestTableUser($dbName);
         
@@ -40,7 +48,11 @@ class DeleteTest extends TestCase {
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
         $this->assertEquals(1, Query::select($dbName)->from($tableName)->where(['name'=>'U001-DM'])->all()->count());
-        $delCount = Query::delete($dbName)->from($tableName)->where(['name'=>'U001-DM'])->exec();
+        $deleteQuery = Query::delete($dbName);
+        if ( 'postgresql' === $this->getDatabase($dbName)->getDriver()->getName() ) {
+            $deleteQuery->setPrimaryKeyName('id');
+        }
+        $delCount = $deleteQuery->from($tableName)->where(['name'=>'U001-DM'])->exec();
         $this->assertEquals(1, $delCount, 'failed to delete with condition');
         $this->assertEquals(0, Query::select($dbName)->from($tableName)->where(['name'=>'U001-DM'])->all()->count());
         $this->dropTestTableUser($dbName);
@@ -49,7 +61,11 @@ class DeleteTest extends TestCase {
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
         $minId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
-        $delCount = Query::delete($dbName)->from($tableName)->orderBy('id',SORT_ASC)->limit(1)->exec();
+        $deleteQuery = Query::delete($dbName);
+        if ( 'postgresql' === $this->getDatabase($dbName)->getDriver()->getName() ) {
+            $deleteQuery->setPrimaryKeyName('id');
+        }
+        $delCount = $deleteQuery->from($tableName)->orderBy('id',SORT_ASC)->limit(1)->exec();
         $this->assertEquals(1, $delCount, 'failed to delete with order');
         $deletedMinId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
         $this->assertLessThan($deletedMinId['id'],$minId['id']);
@@ -64,5 +80,10 @@ class DeleteTest extends TestCase {
     /** */
     public function test_sqlite() {
         $this->doTestDelete(TEST_DB_NAME_SQLITE, 'users');
+    }
+    
+    /** */
+    public function test_postgresql() {
+        $this->doTestDelete(TEST_DB_NAME_POSTGRESQL, 'users');
     }
 }

@@ -3,7 +3,7 @@ namespace X\Service\Database\Query;
 use X\Service\Database\DatabaseException;
 class Delete extends DatabaseLimitableQuery {
     /** @var string */
-    private $table = null;
+    protected $table = null;
     
     /**
      * @param string $table
@@ -37,7 +37,7 @@ class Delete extends DatabaseLimitableQuery {
     }
     
     /** @param array $query */
-    private function buildTable( &$query ) {
+    protected function buildTable( &$query ) {
         if ( null === $this->table ) {
             throw new DatabaseException('no table specified on delete query');
         }

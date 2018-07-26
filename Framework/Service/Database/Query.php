@@ -33,13 +33,15 @@ class Query {
     
     /**
      * @param string|Database $db
-     * @return \X\Service\Database\Query\Delete
+     * @return \X\Service\Database\Query\Delete|\X\Service\Database\Query\Postgresql\Delete
      */
     public static function delete( $db ) {
         if ( is_string($db) ) {
             $db = Service::getService()->getDB($db);
         }
-        return new Delete($db);
+        $name = $db->getDriver()->getName();
+        $class = '\\X\\Service\\Database\\Query\\'.ucfirst($name).'\\Delete';
+        return class_exists($class) ? new $class($db) : new Delete($db);
     }
     
     /**

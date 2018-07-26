@@ -7,11 +7,11 @@ abstract class DatabaseLimitableQuery extends DatabaseQuery {
     const SORT_DESC = 'DESC';
     
     /** @var mixed */
-    private $condition = null;
+    protected $condition = null;
     /** @var integer */
-    private $limit = null;
+    protected $limit = null;
     /** @var array */
-    private $orders = array(
+    protected $orders = array(
         # array ('name' => 'expr', 'order'=> 'order')
     );
     
@@ -77,6 +77,15 @@ abstract class DatabaseLimitableQuery extends DatabaseQuery {
             $order = self::SORT_ASC;
         }
         $this->orders[] = array('name'=>$name, 'order'=>$order);
+        return $this;
+    }
+    
+    /**
+     * @param array $orders
+     * @return self
+     */
+    public function orders( $orders ) {
+        $this->orders = $orders;
         return $this;
     }
     

@@ -41,5 +41,6 @@ trait DatabaseServiceSqliteTestTrait {
                    ("U005-DM", 30, "DEMO2"),
                    ("U006-DM", 30, "DEMO2")
         ');
+        return 6;
     }
 }

@@ -1,52 +1,68 @@
 <?php
 namespace X\Service\Database\Test\Service\Query;
-use X\Core\X;
 use PHPUnit\Framework\TestCase;
 use X\Service\Database\Database;
 use X\Service\Database\Query\Delete;
-use X\Service\Database\Query\Insert;
+use X\Service\Database\Test\Util\DatabaseServiceTestTrait;
+use X\Service\Database\Query;
 class DeleteTest extends TestCase {
-    /** @var Database */
-    private $db = null;
+    /** Uses */
+    use DatabaseServiceTestTrait;
     
     /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::setUp()
+     * @param unknown $dbName
      */
-    protected function setUp() {
-        $config = X::system()->getConfiguration()->get('params')->get('MysqlDriverConfig');
-        $db = new Database($config);
-        $this->db = $db;
-    }
-    
-    /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::tearDown()
-     */
-    protected function tearDown() {
-        $this->db = null;
-    }
-    
-    /** */
-    public function test_table() {
-        $delete = (new Delete($this->db))
-            ->table('mytable');
-        $this->assertEquals('DELETE FROM `mytable`', $delete->toString());
-    }
-    
-    /** */
-    public function test_exec() {
-        $insert = (new Insert($this->db))
-        ->table('students')
-        ->values(array(
-            array('name'=>'NAME-DEL-001','age'=>10),
-            array('name'=>'NAME-DEL-002','age'=>10),
-        ));
-        $this->assertEquals(2, $insert->exec());
+    private function doTestDelete( $dbName, $tableName ) {
+        # delete all
+        $this->createTestTableUser($dbName);
+        $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $delCount = Query::delete($dbName)->from($tableName)->exec();
+        $this->assertEquals($insertCount, $delCount, 'failed to delete all');
+        $this->dropTestTableUser($dbName);
         
-        $delete = (new Delete($this->db))
-            ->table('students')
-            ->where(['name'=>array('NAME-DEL-001','NAME-DEL-002')]);
-        $this->assertEquals(2, $delete->exec());
+        # delete one
+        $this->createTestTableUser($dbName);
+        $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $delCount = Query::delete($dbName)->from($tableName)->limit(1)->exec();
+        $rowCount = Query::select($dbName)->from($tableName)->all()->count();
+        $this->assertEquals(1, $delCount, 'failed to delete one on assert $delCount');
+        $this->assertEquals($insertCount-1, $rowCount, 'failed to delete one on assert $rowCount');
+        $this->dropTestTableUser($dbName);
+        
+        # delete ten
+        $this->createTestTableUser($dbName);
+        $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $delCount = Query::delete($dbName)->from($tableName)->limit(10)->exec();
+        $this->assertEquals($insertCount, $delCount, 'failed to delete ten');
+        $this->dropTestTableUser($dbName);
+        
+        # delete with condition
+        $this->createTestTableUser($dbName);
+        $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $this->assertEquals(1, Query::select($dbName)->from($tableName)->where(['name'=>'U001-DM'])->all()->count());
+        $delCount = Query::delete($dbName)->from($tableName)->where(['name'=>'U001-DM'])->exec();
+        $this->assertEquals(1, $delCount, 'failed to delete with condition');
+        $this->assertEquals(0, Query::select($dbName)->from($tableName)->where(['name'=>'U001-DM'])->all()->count());
+        $this->dropTestTableUser($dbName);
+        
+        # delete with order
+        $this->createTestTableUser($dbName);
+        $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $minId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
+        $delCount = Query::delete($dbName)->from($tableName)->orderBy('id',SORT_ASC)->limit(1)->exec();
+        $this->assertEquals(1, $delCount, 'failed to delete with order');
+        $deletedMinId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
+        $this->assertLessThan($deletedMinId['id'],$minId['id']);
+        $this->dropTestTableUser($dbName);
+    }
+    
+    /** */
+    public function test_mysql() {
+        $this->doTestDelete(TEST_DB_NAME_MYSQL, 'users');
+    }
+    
+    /** */
+    public function test_sqlite() {
+        $this->doTestDelete(TEST_DB_NAME_SQLITE, 'users');
     }
 }

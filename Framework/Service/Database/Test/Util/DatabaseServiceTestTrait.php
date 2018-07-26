@@ -29,14 +29,9 @@ trait DatabaseServiceTestTrait {
      * @param string $dbName
      */
     protected function insertDemoDataIntoTableUser( $dbName ) {
-        switch ( $this->getDatabase($dbName)->getDriver()->getName() ) {
-        case 'mysql' : $this->insertDemoDataIntoTableUserForMysql($dbName); break;
-        case 'sqlite' : $this->insertDemoDataIntoTableUserForSqlite($dbName); break;
-        case 'postgresql' : $this->insertDemoDataIntoTableUserForPostgresql($dbName); break;
-        case 'oracle' : $this->insertDemoDataIntoTableUserForOracle($dbName); break;
-        case 'mssql' : $this->insertDemoDataIntoTableUserForMssql($dbName); break;
-        case 'firebird' : $this->insertDemoDataIntoTableUserForFirebird($dbName); break;
-        }
+        $name = $this->getDatabase($dbName)->getDriver()->getName();
+        $handler = 'insertDemoDataIntoTableUserFor'.ucfirst($name);
+        return $this->$handler($dbName);
     }
     
     /**

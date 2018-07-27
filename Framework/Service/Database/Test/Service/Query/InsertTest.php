@@ -4,63 +4,57 @@ use X\Core\X;
 use PHPUnit\Framework\TestCase;
 use X\Service\Database\Database;
 use X\Service\Database\Query\Insert;
+use X\Service\Database\Test\Util\DatabaseServiceTestTrait;
+use X\Service\Database\Query;
 class InsertTest extends TestCase {
-    /** @var Database */
-    private $db = null;
+    /***/
+    use DatabaseServiceTestTrait;
     
     /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::setUp()
+     * @param unknown $dbName
      */
-    protected function setUp() {
-        $config = X::system()->getConfiguration()->get('params')->get('MysqlDriverConfig');
-        $db = new Database($config);
-        $this->db = $db;
-    }
-    
-    /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::tearDown()
-     */
-    protected function tearDown() {
-        $this->db = null;
+    private function doTestInsert( $dbName ) {
+        # test insert one row
+        $this->createTestTableUser($dbName);
+        $totalCount = Query::select($dbName)->from('users')->all()->count();
+        $insertCount = Query::insert($dbName)->table('users')->value(array(
+            'name' => 'INS-0001',
+            'age' => 100,
+            'group' => 'INS_T'
+        ))->exec();
+        $newTotalCount = Query::select($dbName)->from('users')->all()->count();
+        $this->assertEquals(1, $insertCount);
+        $this->assertEquals($totalCount+$insertCount, $newTotalCount);
+        $this->dropTestTableUser($dbName);
+        
+        # test insert tow rows
+        $this->createTestTableUser($dbName);
+        $totalCount = Query::select($dbName)->from('users')->all()->count();
+        $insertCount = Query::insert($dbName)->table('users')->values(array(
+            array('name' => 'INS-000X','age' => 100,'group' => 'INS_T'),
+            array('name' => 'INS-000Y','age' => 100,'group' => 'INS_T'),
+        ))->exec();
+        $newTotalCount = Query::select($dbName)->from('users')->all()->count();
+        $this->assertEquals(2, $insertCount);
+        $this->assertEquals($totalCount+$insertCount, $newTotalCount);
+        $this->dropTestTableUser($dbName);
     }
     
     /** */
-    public function test_toString () {
-        $insert = new Insert($this->db);
-        $insert->table('mytable')->value(array(
-            'name' => '铁柱',
-            'age' => 10,
-        ));
-        $this->assertEquals('INSERT INTO `mytable` ( `name`, `age` ) VALUES ( :qp0, :qp1 )', $insert->toString());
-        
-        $insert = new Insert($this->db);
-        $insert->table('mytable')->values(array(
-            array('name' => '铁柱','age' => 10,),
-            array('name' => '二妞','age' => 10,),
-        ));
-        $this->assertEquals('INSERT INTO `mytable` ( `name`, `age` ) VALUES ( :qp0, :qp1 ),( :qp2, :qp3 )', $insert->toString());
+    public function test_mysql() {
+        $this->checkTestable(TEST_DB_NAME_MYSQL);
+        $this->doTestInsert(TEST_DB_NAME_MYSQL);
     }
     
     /** */
-    public function test_exec() {
-        $this->db->exec('TRUNCATE TABLE students');
-        
-        $insert = new Insert($this->db);
-        $insert->table('students')->value(array(
-            'name' => '铁柱-001',
-            'age' => 10,
-        ));
-        $this->assertEquals(1, $insert->exec());
-        
-        $insert = new Insert($this->db);
-        $insert->table('students')->values(array(
-            array('name' => '铁柱-002','age' => 10,),
-            array('name' => '二妞-002','age' => 10,),
-        ));
-        $this->assertEquals(2, $insert->exec());
-        
-        $this->db->exec('TRUNCATE TABLE students');
+    public function test_sqlite() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
+        $this->doTestInsert(TEST_DB_NAME_SQLITE);
+    }
+    
+    /** */
+    public function test_postgresql() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
+        $this->doTestInsert(TEST_DB_NAME_POSTGRESQL);
     }
 }

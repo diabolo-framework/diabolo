@@ -74,16 +74,19 @@ class DeleteTest extends TestCase {
     
     /** */
     public function test_mysql() {
+        $this->checkTestable(TEST_DB_NAME_MYSQL);
         $this->doTestDelete(TEST_DB_NAME_MYSQL, 'users');
     }
     
     /** */
     public function test_sqlite() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
         $this->doTestDelete(TEST_DB_NAME_SQLITE, 'users');
     }
     
     /** */
     public function test_postgresql() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestDelete(TEST_DB_NAME_POSTGRESQL, 'users');
     }
 }

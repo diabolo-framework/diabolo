@@ -359,7 +359,7 @@ class Condition {
     }
     
     /** @return self */
-    public function and( ) {
+    public function andThat( ) {
         $this->cache = null;
         $this->conditions[] = array(
             'type' => self::TYPE_CONNECTOR,
@@ -369,7 +369,7 @@ class Condition {
     }
     
     /** @return self */
-    public function or() {
+    public function orThat() {
         $this->cache = null;
         $this->conditions[] = array(
             'type' => self::TYPE_CONNECTOR,
@@ -444,9 +444,10 @@ class Condition {
             return $condition;
         } else if ( is_array($condition) ) {
             foreach ( $condition as $key => $value ) {
+                $operator = (is_array($value) || ($value instanceof DatabaseQuery)) ? 'IN' : '=';
                 $content = array(
                     'expr' => $key,
-                    'operator' => is_array($value) ? 'IN' : '=',
+                    'operator' => $operator,
                     'value' => $value
                 );
                 return $this->convertNormalConditionToString($content);
@@ -474,6 +475,12 @@ class Condition {
             return "{$expr} {$condition['operator']} {$paramsKeyMin} AND {$paramsKeyMax}";
         case 'IN' :
         case 'NOT IN' :
+            if ( $condition['value'] instanceof DatabaseQuery ) {
+                $condition['value']->setPreviousParams($this->params);
+                $condition['value']->setDatabase($this->database);
+                return "{$expr} {$condition['operator']} ({$condition['value']->toString()})";
+            }
+            
             $markList = array();
             foreach ( $condition['value'] as $value ) {
                 $markList[] = $this->getParamKey($value);
@@ -492,6 +499,8 @@ class Condition {
      */
     private function getParamKey( $value ) {
         if ( $value instanceof Expression ) {
+            return $value->toString();
+        } else if ( $value instanceof DatabaseQuery ) {
             return $value->toString();
         }
         

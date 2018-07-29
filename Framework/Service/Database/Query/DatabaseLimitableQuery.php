@@ -15,9 +15,6 @@ abstract class DatabaseLimitableQuery extends DatabaseQuery {
         # array ('name' => 'expr', 'order'=> 'order')
     );
     
-    /** @var array */
-    protected $queryParams = array();
-    
     /**
      * @param integer $limit
      * @return self

@@ -51,9 +51,11 @@ class CreateTable extends DatabaseQuery {
     private function buildColumns( &$query ) {
         $query[] = '(';
         
+        $database = $this->getDatabase();
         $columnList = array();
         foreach ( $this->columns as $column ) {
             if ( $column instanceof Column ) {
+                $column->setDatabase($database);
                 $columnList[] = $column->toString();
             } else if ( is_string($column) ) {
                 $columnList[] = $column;

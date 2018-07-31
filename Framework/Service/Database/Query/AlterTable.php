@@ -4,9 +4,9 @@ use X\Service\Database\Table\Column;
 
 class AlterTable extends DatabaseQuery {
     /** @var string */
-    private $actionName = null;
+    protected $actionName = null;
     /** @var string */
-    private $table = null;
+    protected $table = null;
     /** @var string rename table name to new one */
     private $newTableName = null;
     /** @var string */
@@ -22,11 +22,11 @@ class AlterTable extends DatabaseQuery {
     /** @var string */
     private $changeColumnNewName = null;
     /** @var string */
-    private $newIndexName = null;
+    protected $newIndexName = null;
     /** @var array */
-    private $newIndexColumns = array();
+    protected $newIndexColumns = array();
     /** @var string */
-    private $dropIndexName = null;
+    protected $dropIndexName = null;
     /** @var string */
     private $addFKName = null;
     /** @var array */

@@ -9,6 +9,14 @@ class DropTableTest extends TestCase {
     /***/
     use DatabaseServiceTestTrait;
     
+    /**
+     * {@inheritDoc}
+     * @see \PHPUnit\Framework\TestCase::tearDown()
+     */
+    protected function tearDown() {
+        $this->cleanAllDatabase();
+    }
+    
     /***/
     private function doTestDropTable( $dbName ) {
         # truncate
@@ -22,5 +30,11 @@ class DropTableTest extends TestCase {
     public function test_mysql() {
         $this->checkTestable(TEST_DB_NAME_MYSQL);
         $this->doTestDropTable(TEST_DB_NAME_MYSQL);
+    }
+    
+    /** */
+    public function test_sqlite() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
+        $this->doTestDropTable(TEST_DB_NAME_SQLITE);
     }
 }

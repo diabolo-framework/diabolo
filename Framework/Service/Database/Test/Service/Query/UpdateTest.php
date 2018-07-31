@@ -9,19 +9,34 @@ class UpdateTest extends TestCase {
     /***/
     use DatabaseServiceTestTrait;
     
+    /**
+     * {@inheritDoc}
+     * @see \PHPUnit\Framework\TestCase::tearDown()
+     */
+    protected function tearDown() {
+        $this->cleanAllDatabase();
+    }
+    
     /***/
-    private function doTestUpdate( $dbName ) {
-        # update all
+    private function doTestUpdateAll( $dbName ) {
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $groupUpCountBefor = Query::select($dbName)->from('users')->where(['group'=>'GROUP-UP'])->all()->count();
+        $this->assertEquals(0, $groupUpCountBefor);
         $updateCount = Query::update($dbName)
             ->table('users')
             ->set('group', 'GROUP-UP')
             ->exec();
         $this->assertEquals($insertCount, $updateCount);
+        $groupUpCountAfter = Query::select($dbName)->from('users')->where(['group'=>'GROUP-UP'])->all()->count();
+        $this->assertEquals($insertCount, $groupUpCountAfter);
         $this->dropTestTableUser($dbName);
-        
-        # update one
+    }
+    
+    /**
+     * @param unknown $dbName
+     */
+    private function doTestUpdateLimit($dbName) {
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
         $updateCount = Query::update($dbName)
@@ -30,12 +45,32 @@ class UpdateTest extends TestCase {
             ->limit(1)
             ->exec();
         $this->assertEquals(1, $updateCount);
+        $groupUpCountAfter = Query::select($dbName)->from('users')->where(['group'=>'GROUP-UP'])->all()->count();
+        $this->assertEquals(1, $groupUpCountAfter);
         $this->dropTestTableUser($dbName);
     }
     
     /** */
-    public function test_mysql() {
+    public function test_mysql_updateAll() {
         $this->checkTestable(TEST_DB_NAME_MYSQL);
-        $this->doTestUpdate(TEST_DB_NAME_MYSQL);
+        $this->doTestUpdateAll(TEST_DB_NAME_MYSQL);
+    }
+    
+    /** */
+    public function test_mysql_updateLimit() {
+        $this->checkTestable(TEST_DB_NAME_MYSQL);
+        $this->doTestUpdateLimit(TEST_DB_NAME_MYSQL);
+    }
+    
+    /** */
+    public function test_sqlite_updateAll() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
+        $this->doTestUpdateAll(TEST_DB_NAME_SQLITE);
+    }
+    
+    /** */
+    public function test_sqlite_updateLimit() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
+        $this->doTestUpdateLimit(TEST_DB_NAME_SQLITE);
     }
 }

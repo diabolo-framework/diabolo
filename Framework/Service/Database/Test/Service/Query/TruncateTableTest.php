@@ -9,9 +9,16 @@ class TruncateTableTest extends TestCase {
     /***/
     use DatabaseServiceTestTrait;
     
+    /**
+     * {@inheritDoc}
+     * @see \PHPUnit\Framework\TestCase::tearDown()
+     */
+    protected function tearDown() {
+        $this->cleanAllDatabase();
+    }
+    
     /***/
     private function doTestTruncateTable( $dbName ) {
-        # truncate
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
         Query::truncateTable($dbName)->table('users')->exec();
@@ -21,8 +28,14 @@ class TruncateTableTest extends TestCase {
     }
     
     /** */
-    public function test_mysql() {
+    public function test_mysql_truncateTable() {
         $this->checkTestable(TEST_DB_NAME_MYSQL);
         $this->doTestTruncateTable(TEST_DB_NAME_MYSQL);
+    }
+    
+    /** */
+    public function test_sqlite_truncateTable() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
+        $this->doTestTruncateTable(TEST_DB_NAME_SQLITE);
     }
 }

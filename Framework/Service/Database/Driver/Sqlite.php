@@ -8,6 +8,32 @@ class Sqlite extends DatabaseDriverPDO {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::getOptions()
+     */
+    protected function getOptions() {
+        return array(
+            self::OPT_PREPARE_CUSTOM_EXPRESSION => false,
+            self::OPT_ALTER_TABLE_DROP_COLUMN => false,
+            self::OPT_ALTER_TABLE_CHANGE_COLUMN => false,
+        );
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::mapColumnTypeToDatabaseType()
+     */
+    public function mapColumnTypeToDatabaseType( $type ) {
+        $map = array(
+            'STRING' => 'TEXT',
+            'INTEGER' => 'INTEGER',
+            'DECIMAL' => 'REAL',
+        );
+        $type = strtoupper($type);
+        return isset($map[$type]) ? $map[$type] : $type;
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriverPDO::init()
      */
     protected function init() {

@@ -3,6 +3,10 @@ namespace X\Service\Database\Table;
 use X\Service\Database\Database;
 
 class Column {
+    const T_STRING = 'STRING';
+    const T_INTEGER = 'INTEGER';
+    const T_DECIMAL = 'DECIMAL';
+    
     const T_TINYINT = 'TINYINT';
     const T_SMALLINT = 'SMALLINT';
     const T_MEDIUMINT = 'MEDIUMINT';
@@ -10,7 +14,6 @@ class Column {
     const T_BIGINT = 'BIGINT';
     const T_DOUBLE = 'DOUBLE';
     const T_FLOAT = 'FLOAT';
-    const T_DECIMAL = 'DECIMAL';
     const T_DATE = 'DATE';
     const T_TIME = 'TIME';
     const T_DATETIME = 'DATETIME';
@@ -172,12 +175,13 @@ class Column {
             $column[] = $this->db->quoteColumnName($this->name);
         }
         
-        switch ( $this->type ) {
+        $type = $this->db->getDriver()->mapColumnTypeToDatabaseType($this->type);
+        switch ( $type ) {
         case self::T_CHAR :
-        case self::T_VARCHAR : $column[] = "{$this->type}({$this->length})";break;
+        case self::T_VARCHAR : $column[] = "{$type}({$this->length})";break;
         case self::T_DOUBLE :
-        case self::T_FLOAT : $column[] = "{$this->type}({$this->length},{$this->decimals})"; break;
-        default: $column[] = $this->type; break;
+        case self::T_FLOAT : $column[] = "{$type}({$this->length},{$this->decimals})"; break;
+        default: $column[] = $type; break;
         }
        
         if ( $this->isNotNull ) {

@@ -3,6 +3,16 @@ namespace X\Service\Database\Driver;
 use X\Service\Database\Table\Column;
 
 interface DatabaseDriver {
+    /** option index for check preparing custom expression */
+    const OPT_PREPARE_CUSTOM_EXPRESSION = 0;
+    const OPT_ALTER_TABLE_DROP_COLUMN = 1;
+    const OPT_ALTER_TABLE_CHANGE_COLUMN = 2;
+    
+    /**
+     * @param unknown $type
+     */
+    function mapColumnTypeToDatabaseType( $type );
+    
     /**
      * Driver must be configable.
      * @param array $config
@@ -81,6 +91,12 @@ interface DatabaseDriver {
      * @return Column[]
      */
     function columnList( $tableName );
+    
+    /**
+     * @param unknown $name
+     * @param unknown $default
+     */
+    function getOption( $name, $default=null );
     
     //function insert( $option );
     //function batchInsert( $option );

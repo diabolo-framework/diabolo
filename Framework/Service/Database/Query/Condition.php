@@ -2,6 +2,7 @@
 namespace X\Service\Database\Query;
 use X\Service\Database\Database;
 use X\Service\Database\DatabaseException;
+use X\Service\Database\Driver\DatabaseDriver;
 /**
  * @author Michael Luthor <michaelluthor@163.com>
  */
@@ -470,8 +471,8 @@ class Condition {
             return "{$expr} {$condition['operator']}";
         case 'NOT BETWEEN' :
         case 'BETWEEN' :
-            $paramsKeyMin = $this->getParamKey($condition['value']['min']);
-            $paramsKeyMax = $this->getParamKey($condition['value']['max']);
+            $paramsKeyMin = $this->getParamKey($condition['value']['min'],$condition['expr']);
+            $paramsKeyMax = $this->getParamKey($condition['value']['max'],$condition['expr']);
             return "{$expr} {$condition['operator']} {$paramsKeyMin} AND {$paramsKeyMax}";
         case 'IN' :
         case 'NOT IN' :
@@ -483,12 +484,12 @@ class Condition {
             
             $markList = array();
             foreach ( $condition['value'] as $value ) {
-                $markList[] = $this->getParamKey($value);
+                $markList[] = $this->getParamKey($value,$condition['expr']);
             }
             $markList = implode(', ', $markList);
             return "{$expr} {$condition['operator']} ( $markList )";
         default :
-            $paramsKey = $this->getParamKey($condition['value']);
+            $paramsKey = $this->getParamKey($condition['value'],$condition['expr']);
             return "{$expr} {$condition['operator']} {$paramsKey}";
         }
     }
@@ -497,7 +498,12 @@ class Condition {
      * @param mixed $value
      * @return string
      */
-    private function getParamKey( $value ) {
+    private function getParamKey( $value, $expr ) {
+        $prepareCustomExpr = $this->database->getDriver()->getOption(DatabaseDriver::OPT_PREPARE_CUSTOM_EXPRESSION, true);
+        if ( !is_string($expr) && !$prepareCustomExpr ) {
+            return is_string($value) ? $this->database->quoteValue($value) : $value;
+        }
+        
         if ( $value instanceof Expression ) {
             return $value->toString();
         } else if ( $value instanceof DatabaseQuery ) {

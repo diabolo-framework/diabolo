@@ -13,6 +13,14 @@ class SelectTest extends TestCase {
     use DatabaseServiceTestTrait;
     
     /**
+     * {@inheritDoc}
+     * @see \PHPUnit\Framework\TestCase::tearDown()
+     */
+    protected function tearDown() {
+        $this->cleanAllDatabase();
+    }
+    
+    /**
      * @param unknown $dbName
      */
     private function doTestSelect( $dbName ) {
@@ -92,5 +100,11 @@ class SelectTest extends TestCase {
     public function test_mysql() {
         $this->checkTestable(TEST_DB_NAME_MYSQL);
         $this->doTestSelect(TEST_DB_NAME_MYSQL);
+    }
+    
+    /** */
+    public function test_sqlite() {
+        $this->checkTestable(TEST_DB_NAME_SQLITE);
+        $this->doTestSelect(TEST_DB_NAME_SQLITE);
     }
 }

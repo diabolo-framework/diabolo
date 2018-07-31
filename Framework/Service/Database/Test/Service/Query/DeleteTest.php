@@ -10,6 +10,14 @@ class DeleteTest extends TestCase {
     use DatabaseServiceTestTrait;
     
     /**
+     * {@inheritDoc}
+     * @see \PHPUnit\Framework\TestCase::tearDown()
+     */
+    protected function tearDown() {
+        $this->cleanAllDatabase();
+    }
+    
+    /**
      * @param unknown $dbName
      */
     private function doTestDelete( $dbName, $tableName ) {

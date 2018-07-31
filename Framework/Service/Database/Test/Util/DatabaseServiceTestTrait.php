@@ -67,4 +67,14 @@ trait DatabaseServiceTestTrait {
             throw new DatabaseException("`{$dbName}` is not configed for testing");
         }
     }
+    
+    /***/
+    protected function cleanAllDatabase() {
+        try {
+            $this->dropTestTableUserForMysql(TEST_DB_NAME_MYSQL);
+        } catch ( \Exception $e ) {}
+        try {
+            $this->dropTestTableUserForMysql(TEST_DB_NAME_SQLITE);
+        } catch ( \Exception $e ) {}
+    }
 }

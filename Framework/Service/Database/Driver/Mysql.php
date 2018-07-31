@@ -18,6 +18,20 @@ class Mysql extends DatabaseDriverPDO {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::mapColumnTypeToDatabaseType()
+     */
+    public function mapColumnTypeToDatabaseType( $type ) {
+        $map = array(
+            'STRING' => 'VARCHAR',
+            'INTEGER' => 'INT',
+            'DECIMAL' => 'DECIMAL',
+        );
+        $type = strtoupper($type);
+        return isset($map[$type]) ? $map[$type] : $type;
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriver::getName()
      */
     public function getName() {

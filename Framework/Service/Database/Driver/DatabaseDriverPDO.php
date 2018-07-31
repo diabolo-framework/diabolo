@@ -6,6 +6,28 @@ abstract class DatabaseDriverPDO implements DatabaseDriver {
     /** @var \PDO */
     protected $connection = false;
     
+    /** @return array */
+    protected function getOptions() {
+        return array();
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::getOption()
+     */
+    public function getOption( $name, $default=null ) {
+        $options = $this->getOptions();
+        return array_key_exists($name, $options) ? $options[$name] : $default;
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriver::mapColumnTypeToDatabaseType()
+     */
+    public function mapColumnTypeToDatabaseType( $type ) {
+        return $type;
+    }
+    
     /**
      * Config the driver
      * @param array $config

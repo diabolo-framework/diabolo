@@ -2,7 +2,7 @@
 namespace X\Service\Database\Query;
 class TruncateTable extends DatabaseQuery {
     /** @var string */
-    private $table = null;
+    protected $table = null;
     
     /**
      * @param string $name

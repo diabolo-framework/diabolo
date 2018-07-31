@@ -8,6 +8,7 @@ use X\Service\Database\Query\CreateTable;
 use X\Service\Database\Query\DropTable;
 use X\Service\Database\Query\TruncateTable;
 use X\Service\Database\Query\AlterTable;
+use X\Service\Database\Query\DatabaseQuery;
 class Query {
     /**
      * @param string|Database $db
@@ -78,8 +79,7 @@ class Query {
      * @return \X\Service\Database\Query\TruncateTable
      */
     public static function truncateTable( $db ) {
-        $db = Service::getService()->getDB($db);
-        return new TruncateTable($db);
+        return self::getQuery($db, 'TruncateTable');
     }
     
     /**
@@ -87,7 +87,20 @@ class Query {
      * @return \X\Service\Database\Query\AlterTable
      */
     public static function alterTable( $db ) {
+        return self::getQuery($db, 'AlterTable');
+    }
+    
+    /**
+     * @param string|Database $db
+     * @param string $queryName
+     * @return DatabaseQuery
+     */
+    private static function getQuery( $db, $queryName ) {
         $db = Service::getService()->getDB($db);
-        return new AlterTable($db);
+        
+        $driverName = $db->getDriver()->getName();
+        $defaultQueryClass = '\\X\\Service\\Database\\Query\\'.$queryName;
+        $driverQueryClass = '\\X\\Service\\Database\\Query\\'.ucfirst($driverName).'\\'.$queryName;
+        return class_exists($driverQueryClass) ? new $driverQueryClass($db) : new $defaultQueryClass($db);
     }
 }

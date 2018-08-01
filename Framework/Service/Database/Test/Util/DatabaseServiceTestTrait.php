@@ -71,10 +71,13 @@ trait DatabaseServiceTestTrait {
     /***/
     protected function cleanAllDatabase() {
         try {
-            $this->dropTestTableUserForMysql(TEST_DB_NAME_MYSQL);
+            $this->dropTestTableUser(TEST_DB_NAME_MYSQL);
         } catch ( \Exception $e ) {}
         try {
-            $this->dropTestTableUserForMysql(TEST_DB_NAME_SQLITE);
+            $this->dropTestTableUser(TEST_DB_NAME_SQLITE);
+        } catch ( \Exception $e ) {}
+        try {
+            $this->dropTestTableUser(TEST_DB_NAME_POSTGRESQL);
         } catch ( \Exception $e ) {}
     }
 }

@@ -16,11 +16,11 @@ class AlterTable extends DatabaseQuery {
     /** @var string */
     private $dropColumnName = null;
     /** @var string */
-    private $changeColumnName = null;
+    protected $changeColumnName = null;
     /** @var mixed */
-    private $changeColumnDefination = null;
+    protected $changeColumnDefination = null;
     /** @var string */
-    private $changeColumnNewName = null;
+    protected $changeColumnNewName = null;
     /** @var string */
     protected $newIndexName = null;
     /** @var array */
@@ -174,7 +174,7 @@ class AlterTable extends DatabaseQuery {
     }
     
     /** @param array $query */
-    private function buildActionChagenColumn( &$query ) {
+    protected function buildActionChagenColumn( &$query ) {
         $name = $this->getDatabase()->quoteColumnName($this->changeColumnName);
         $newName = $this->changeColumnNewName;
         if ( null === $newName ) {

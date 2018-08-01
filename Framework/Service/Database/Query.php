@@ -50,10 +50,7 @@ class Query {
      * @return \X\Service\Database\Query\Update
      */
     public static function update( $db ) {
-        if ( is_string($db) ) {
-            $db = Service::getService()->getDB($db);
-        }
-        return new Update($db);
+        return self::getQuery($db, 'Update');
     }
     
     /**

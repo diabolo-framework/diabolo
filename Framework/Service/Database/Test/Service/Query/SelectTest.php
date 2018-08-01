@@ -107,4 +107,10 @@ class SelectTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_SQLITE);
         $this->doTestSelect(TEST_DB_NAME_SQLITE);
     }
+    
+    /** */
+    public function test_postgresql() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
+        $this->doTestSelect(TEST_DB_NAME_POSTGRESQL);
+    }
 }

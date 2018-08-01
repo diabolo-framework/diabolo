@@ -3,9 +3,9 @@ namespace X\Service\Database\Query;
 use X\Service\Database\DatabaseException;
 class Update extends DatabaseLimitableQuery {
     /** @var string */
-    private $table = null;
+    protected $table = null;
     /** @var array */
-    private $values = array(
+    protected $values = array(
         # array('name'=>$name, 'value'=>$value)
     );
     
@@ -55,7 +55,7 @@ class Update extends DatabaseLimitableQuery {
     }
     
     /** @param array $query */
-    private function buildTable( &$query ) {
+    protected function buildTable( &$query ) {
         if ( null === $this->table ) {
             throw new DatabaseException('no table specified on update query');
         }
@@ -65,7 +65,7 @@ class Update extends DatabaseLimitableQuery {
     }
     
     /** @param array $query */
-    private function buildValues( &$query ) {
+    protected function buildValues( &$query ) {
         if ( empty($this->values) ) {
             throw new DatabaseException('no values specified on update query');
         }

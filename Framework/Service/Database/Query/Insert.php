@@ -7,8 +7,6 @@ class Insert extends DatabaseQuery {
     private $table = null;
     /** @var array */
     private $data = array();
-    /** @var array */
-    private $queryParams = array();
     
     /**
      * @param unknown $table

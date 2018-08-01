@@ -66,4 +66,10 @@ class AlterTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_SQLITE);
         $this->doTestAlterTable(TEST_DB_NAME_SQLITE);
     }
+    
+    /** */
+    public function test_postgresql() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
+        $this->doTestAlterTable(TEST_DB_NAME_POSTGRESQL);
+    }
 }

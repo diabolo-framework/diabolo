@@ -39,11 +39,14 @@ class UpdateTest extends TestCase {
     private function doTestUpdateLimit($dbName) {
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $updateCount = Query::update($dbName)
+        $updateQuery = Query::update($dbName)
             ->table('users')
             ->set('group', 'GROUP-UP')
-            ->limit(1)
-            ->exec();
+            ->limit(1);
+        if ( 'postgresql' === $this->getDatabase($dbName)->getDriver()->getName() ) {
+            $updateQuery->setPrimaryKeyName('id');
+        }
+        $updateCount = $updateQuery->exec();
         $this->assertEquals(1, $updateCount);
         $groupUpCountAfter = Query::select($dbName)->from('users')->where(['group'=>'GROUP-UP'])->all()->count();
         $this->assertEquals(1, $groupUpCountAfter);
@@ -72,5 +75,17 @@ class UpdateTest extends TestCase {
     public function test_sqlite_updateLimit() {
         $this->checkTestable(TEST_DB_NAME_SQLITE);
         $this->doTestUpdateLimit(TEST_DB_NAME_SQLITE);
+    }
+    
+    /** */
+    public function test_postgresql_updateAll() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
+        $this->doTestUpdateAll(TEST_DB_NAME_POSTGRESQL);
+    }
+    
+    /** */
+    public function test_postgresql_updateLimit() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
+        $this->doTestUpdateLimit(TEST_DB_NAME_POSTGRESQL);
     }
 }

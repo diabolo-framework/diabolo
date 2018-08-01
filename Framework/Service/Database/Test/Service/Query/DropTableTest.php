@@ -37,4 +37,10 @@ class DropTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_SQLITE);
         $this->doTestDropTable(TEST_DB_NAME_SQLITE);
     }
+    
+    /** */
+    public function test_postgresql() {
+        $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
+        $this->doTestDropTable(TEST_DB_NAME_POSTGRESQL);
+    }
 }

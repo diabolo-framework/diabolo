@@ -17,6 +17,20 @@ class Postgresql extends DatabaseDriverPDO {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::mapColumnTypeToDatabaseType()
+     */
+    public function mapColumnTypeToDatabaseType( $type ) {
+        $map = array(
+            'STRING' => 'VARCHAR',
+            'INTEGER' => 'INT8',
+            'DECIMAL' => 'DECIMAL',
+        );
+        $type = strtoupper($type);
+        return isset($map[$type]) ? $map[$type] : $type;
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriverPDO::init()
      */
     protected function init() {

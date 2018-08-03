@@ -97,4 +97,10 @@ class DeleteTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestDelete(TEST_DB_NAME_POSTGRESQL, 'users');
     }
+    
+    /** */
+    public function test_oracle() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestDelete(TEST_DB_NAME_ORACLE, 'users');
+    }
 }

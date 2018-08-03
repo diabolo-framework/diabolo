@@ -4,6 +4,7 @@ use X\Core\X;
 use PHPUnit\Framework\TestCase;
 use X\Service\Database\Database;
 use X\Service\Database\Query\Condition;
+use X\Service\Database\Service;
 class ConditionTest extends TestCase {
     private $db = null;
     
@@ -12,9 +13,7 @@ class ConditionTest extends TestCase {
      * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp() {
-        $config = X::system()->getConfiguration()->get('params')->get('MysqlDriverConfig');
-        $db = new Database($config);
-        $this->db = $db;
+        $this->db = Service::getService()->getDB(TEST_DB_NAME_MYSQL);
     }
     
     /**

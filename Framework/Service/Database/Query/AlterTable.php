@@ -10,9 +10,9 @@ class AlterTable extends DatabaseQuery {
     /** @var string rename table name to new one */
     private $newTableName = null;
     /** @var string */
-    private $newColumnName = null;
+    protected $newColumnName = null;
     /** @var string */
-    private $newColumnDefination = null;
+    protected $newColumnDefination = null;
     /** @var string */
     private $dropColumnName = null;
     /** @var string */
@@ -161,9 +161,12 @@ class AlterTable extends DatabaseQuery {
     }
     
     /** @param array $query */
-    private function buildActionAddColumn( &$query ) {
+    protected function buildActionAddColumn( &$query ) {
         $name = $this->getDatabase()->quoteColumnName($this->newColumnName);
         $defination = $this->newColumnDefination;
+        if ( $defination instanceof Column ) {
+            $defination->setDatabase($this->getDatabase());
+        }
         $query[] = "ADD COLUMN {$name} {$defination}";
     }
     
@@ -182,6 +185,9 @@ class AlterTable extends DatabaseQuery {
         }
         $newName = $this->getDatabase()->quoteColumnName($newName);
         $defination = $this->changeColumnDefination;
+        if ( $defination instanceof Column ) {
+            $defination->setDatabase($this->getDatabase());
+        }
         $query[] = "CHANGE COLUMN {$name} {$newName} {$defination}";
     }
     

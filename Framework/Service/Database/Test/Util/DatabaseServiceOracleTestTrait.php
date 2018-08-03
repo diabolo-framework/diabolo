@@ -39,5 +39,6 @@ trait DatabaseServiceOracleTestTrait {
         $this->getDatabase($dbName)->exec('INSERT INTO "users" ("id","name","age","group") VALUES (4,\'U004-DM\', 30, \'DEMO\')');
         $this->getDatabase($dbName)->exec('INSERT INTO "users" ("id","name","age","group") VALUES (5,\'U005-DM\', 30, \'DEMO2\')');
         $this->getDatabase($dbName)->exec('INSERT INTO "users" ("id","name","age","group") VALUES (6,\'U006-DM\', 30, \'DEMO2\')');
+        return 6;
     }
 }

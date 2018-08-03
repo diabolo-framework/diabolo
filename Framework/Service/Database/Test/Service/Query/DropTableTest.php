@@ -43,4 +43,10 @@ class DropTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestDropTable(TEST_DB_NAME_POSTGRESQL);
     }
+    
+    /** */
+    public function test_oracle() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestDropTable(TEST_DB_NAME_ORACLE);
+    }
 }

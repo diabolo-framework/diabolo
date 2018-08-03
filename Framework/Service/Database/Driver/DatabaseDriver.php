@@ -5,8 +5,14 @@ use X\Service\Database\Table\Column;
 interface DatabaseDriver {
     /** option index for check preparing custom expression */
     const OPT_PREPARE_CUSTOM_EXPRESSION = 0;
+    /** option for checking able to drop column */
     const OPT_ALTER_TABLE_DROP_COLUMN = 1;
+    /** option for checking able to change column */
     const OPT_ALTER_TABLE_CHANGE_COLUMN = 2;
+    /** optioni for check able to auto increase on insert */
+    const OPT_AUTO_INCREASE_ON_INSERT = 3;
+    /** option for checking wether able to rename column on changing column */
+    const OPT_RENAME_COLUMN_ON_CHANGING_COLUMN = 4;
     
     /**
      * @param unknown $type

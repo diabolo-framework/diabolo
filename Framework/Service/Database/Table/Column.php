@@ -29,7 +29,7 @@ class Column {
     /** @var string */
     private $type;
     /** @var int */
-    private $length;
+    private $length = null;
     /** @var int */
     private $decimals;
     /** @var boolean */
@@ -178,7 +178,12 @@ class Column {
         $type = $this->db->getDriver()->mapColumnTypeToDatabaseType($this->type);
         switch ( $type ) {
         case self::T_CHAR :
-        case self::T_VARCHAR : $column[] = "{$type}({$this->length})";break;
+        case self::T_VARCHAR : 
+            if ( null === $this->length ) {
+                $this->length = 255;
+            }
+            $column[] = "{$type}({$this->length})";
+            break;
         case self::T_DOUBLE :
         case self::T_FLOAT : $column[] = "{$type}({$this->length},{$this->decimals})"; break;
         default: $column[] = $type; break;

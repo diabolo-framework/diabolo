@@ -24,6 +24,31 @@ class Oracle extends DatabaseDriverPDO {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::getOptions()
+     */
+    protected function getOptions() {
+        return array(
+            self::OPT_AUTO_INCREASE_ON_INSERT => false,
+            self::OPT_RENAME_COLUMN_ON_CHANGING_COLUMN => false,
+        );
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::mapColumnTypeToDatabaseType()
+     */
+    public function mapColumnTypeToDatabaseType( $type ) {
+        $map = array(
+            'STRING' => 'VARCHAR',
+            'INTEGER' => 'INT',
+            'DECIMAL' => 'DECIMAL',
+        );
+        $type = strtoupper($type);
+        return isset($map[$type]) ? $map[$type] : $type;
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriverBase::init()
      */
     protected function init() {

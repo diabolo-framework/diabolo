@@ -44,4 +44,10 @@ class TruncateTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestTruncateTable(TEST_DB_NAME_POSTGRESQL);
     }
+    
+    /** */
+    public function test_oracle_truncateTable() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestTruncateTable(TEST_DB_NAME_ORACLE);
+    }
 }

@@ -21,26 +21,26 @@ return array(
         'delay' => true,
         'params' => array(
             'databases' => array(
-                'mysqlTestDB' => array(
-                    'driver' => Mysql::class,
-                    'host' => '127.0.0.1',
-                    'username' => 'root',
-                    'password' => '',
-                    'charset' => 'UTF8',
-                    'dbname' => 'diabolo.test',
-                ),
-                'sqliteTestDB' => array(
-                    'driver' => Sqlite::class,
-                    'path' => __DIR__.'/Resource/Data/diabolo.db',
-                ),
-                'postgresqlTestDB' => array(
-                    'driver' => Postgresql::class,
-                    'host' => '106.12.16.95',
-                    'username' => 'postgres',
-                    'password' => 'ginhappy',
-                    'dbname' => 'diabolo.test',
-                    'port' => 5432
-                ),
+//                 'mysqlTestDB' => array(
+//                     'driver' => Mysql::class,
+//                     'host' => '127.0.0.1',
+//                     'username' => 'root',
+//                     'password' => '',
+//                     'charset' => 'UTF8',
+//                     'dbname' => 'diabolo.test',
+//                 ),
+//                 'sqliteTestDB' => array(
+//                     'driver' => Sqlite::class,
+//                     'path' => __DIR__.'/Resource/Data/diabolo.db',
+//                 ),
+//                 'postgresqlTestDB' => array(
+//                     'driver' => Postgresql::class,
+//                     'host' => '106.12.16.95',
+//                     'username' => 'postgres',
+//                     'password' => 'ginhappy',
+//                     'dbname' => 'diabolo.test',
+//                     'port' => 5432
+//                 ),
                 'oracleTestDB' => array(
                     'driver' => Oracle::class,
                     'host' => '192.168.1.102',

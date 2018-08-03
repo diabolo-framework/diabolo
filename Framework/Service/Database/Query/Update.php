@@ -84,20 +84,6 @@ class Update extends DatabaseLimitableQuery {
     }
     
     /**
-     * @param mixed $value
-     * @return string
-     */
-    private function getParamKey( $value ) {
-        if ( $value instanceof Expression ) {
-            return $value->toString();
-        }
-        
-        $paramsKey = ':qp'.count($this->queryParams);
-        $this->queryParams[$paramsKey] = $value;
-        return $paramsKey;
-    }
-    
-    /**
      * @return number
      */
     public function exec() {

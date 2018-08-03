@@ -6,6 +6,7 @@ use X\Service\Database\Database;
 use X\Service\Database\Test\Util\DatabaseServiceTestTrait;
 use X\Service\Database\Query;
 use X\Service\Database\Driver\DatabaseDriver;
+use X\Service\Database\Table\Column;
 class AlterTableTest extends TestCase {
     /***/
     use DatabaseServiceTestTrait;
@@ -28,14 +29,19 @@ class AlterTableTest extends TestCase {
         
         # addColumn
         $this->createTestTableUser($dbName);
-        Query::alterTable($dbName)->table('users')->addColumn('newCol', 'TEXT')->exec();
+        $newColumn = new Column();
+        $newColumn->setType(Column::T_STRING);
+        Query::alterTable($dbName)->table('users')->addColumn('newCol', $newColumn)->exec();
         $this->assertArrayHasKey('newCol', $this->getDatabase($dbName)->columnList('users'));
         $this->dropTestTableUser($dbName);
         
         # changeColumn
         if ( $this->getDatabase($dbName)->getDriver()->getOption(DatabaseDriver::OPT_ALTER_TABLE_CHANGE_COLUMN, true) ) {
             $this->createTestTableUser($dbName);
-            Query::alterTable($dbName)->table('users')->changeColumn('name','TEXT')->exec();
+            
+            $newColumn = new Column();
+            $newColumn->setType(Column::T_STRING);
+            Query::alterTable($dbName)->table('users')->changeColumn('name',$newColumn)->exec();
             $this->assertArrayHasKey('name', $this->getDatabase($dbName)->columnList('users'));
             $this->dropTestTableUser($dbName);
         }
@@ -71,5 +77,11 @@ class AlterTableTest extends TestCase {
     public function test_postgresql() {
         $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestAlterTable(TEST_DB_NAME_POSTGRESQL);
+    }
+    
+    /** */
+    public function test_oracle() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestAlterTable(TEST_DB_NAME_ORACLE);
     }
 }

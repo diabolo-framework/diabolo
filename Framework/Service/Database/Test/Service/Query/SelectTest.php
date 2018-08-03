@@ -88,9 +88,13 @@ class SelectTest extends TestCase {
         # join
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
+        $joinCondition = Condition::build()->is(
+            Expression::column('u1.id', $this->getDatabase($dbName)), 
+            Expression::column('u2.id', $this->getDatabase($dbName))
+        );
         $rows = Query::select($dbName)
             ->from('users', 'u1')
-            ->join(Select::LEFT_JOIN, 'users', 'u1.id = u2.id', 'u2')
+            ->join(Select::LEFT_JOIN, 'users', $joinCondition, 'u2')
             ->all();
         $this->assertEquals($insertCount, count($rows));
         $this->dropTestTableUser($dbName);
@@ -112,5 +116,11 @@ class SelectTest extends TestCase {
     public function test_postgresql() {
         $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestSelect(TEST_DB_NAME_POSTGRESQL);
+    }
+    
+    /** */
+    public function test_oracle() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestSelect(TEST_DB_NAME_ORACLE);
     }
 }

@@ -88,4 +88,16 @@ class UpdateTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_POSTGRESQL);
         $this->doTestUpdateLimit(TEST_DB_NAME_POSTGRESQL);
     }
+    
+    /** */
+    public function test_oracle_updateAll() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestUpdateAll(TEST_DB_NAME_ORACLE);
+    }
+    
+    /** */
+    public function test_oracle_updateLimit() {
+        $this->checkTestable(TEST_DB_NAME_ORACLE);
+        $this->doTestUpdateLimit(TEST_DB_NAME_ORACLE);
+    }
 }

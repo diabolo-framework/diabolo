@@ -24,7 +24,7 @@ class Select extends DatabaseLimitableQuery {
         # array('expr'=>'expr', 'alias'=>'alias')
     );
     /** @var array */
-    private $tables = array(
+    protected $tables = array(
         # array('table'=>'table', 'alias'=>'alias')
     );
     /** @var array */
@@ -36,7 +36,7 @@ class Select extends DatabaseLimitableQuery {
     /** @var mixed */
     private $havingCondition = null;
     /** @var offset */
-    private $offset = null;
+    protected $offset = null;
     
     /** @var int fetch style */
     private $fetchStyle = QueryResult::FETCH_ASSOC;
@@ -147,7 +147,7 @@ class Select extends DatabaseLimitableQuery {
      * @param array $query
      * @return void
      */
-    private function buildExpressions( &$query ) {
+    protected function buildExpressions( &$query ) {
         if ( empty($this->expressions) ) {
             $query[] = '*';
             return;
@@ -174,7 +174,7 @@ class Select extends DatabaseLimitableQuery {
      * @param array $query
      * @return void
      */
-    private function buildFrom( &$query ) {
+    protected function buildFrom( &$query ) {
         if ( empty($this->tables) ) {
             return;
         }
@@ -201,7 +201,7 @@ class Select extends DatabaseLimitableQuery {
      * @param array $query
      * @return void
      */
-    private function buildJoin( &$query ) {
+    protected function buildJoin( &$query ) {
         if ( empty($this->joins) ) {
             return;
         }
@@ -232,7 +232,7 @@ class Select extends DatabaseLimitableQuery {
      * @param array $query
      * @return void
      */
-    private function buildGroupBy( &$query ) {
+    protected function buildGroupBy( &$query ) {
         if ( empty($this->groupByNames) ) {
             return;
         }
@@ -249,7 +249,7 @@ class Select extends DatabaseLimitableQuery {
      * @param array $query
      * @return void
      */
-    private function buildHaving( &$query ) {
+    protected function buildHaving( &$query ) {
         if ( null === $this->havingCondition ) {
             return ;
         }
@@ -267,7 +267,7 @@ class Select extends DatabaseLimitableQuery {
      * @param array $query
      * @return void
      */
-    private function buildOffset( &$query ) {
+    protected function buildOffset( &$query ) {
         if ( null === $this->offset ) {
             return;
         }

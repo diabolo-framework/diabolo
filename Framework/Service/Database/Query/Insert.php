@@ -4,9 +4,9 @@ use X\Service\Database\DatabaseException;
 
 class Insert extends DatabaseQuery {
     /** @var string */
-    private $table = null;
+    protected $table = null;
     /** @var array */
-    private $data = array();
+    protected  $data = array();
     
     /**
      * @param unknown $table
@@ -70,19 +70,15 @@ class Insert extends DatabaseQuery {
         $query[] = '( '.implode(', ', $columns).' )';
         $query[] = 'VALUES';
         
-        $params = array();
         $rowList = array();
         foreach ( $this->data as $row ) {
             $rowData = array();
             foreach ( $row as $value ) {
-                $key = ':qp'.count($params);
-                $params[$key] = $value;
-                $rowData[] = $key;
+                $rowData[] = $this->getParamKey($value);
             }
             $rowList[] = '( '.implode(', ', $rowData). ' )';
         }
         $query[] = implode(',', $rowList);
-        $this->queryParams = $params;
     }
     
     /**

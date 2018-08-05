@@ -41,14 +41,14 @@ return array(
 //                     'dbname' => 'diabolo.test',
 //                     'port' => 5432
 //                 ),
-                'oracleTestDB' => array(
-                    'driver' => Oracle::class,
-                    'host' => '192.168.1.102',
-                    'username' => 'C##DIABOLO',
-                    'password' => 'C##DIABOLO',
-                    'serviceName' => 'ORCL',
-                    'port' => 1521
-                ),
+//                 'oracleTestDB' => array(
+//                     'driver' => Oracle::class,
+//                     'host' => '192.168.1.102',
+//                     'username' => 'C##DIABOLO',
+//                     'password' => 'C##DIABOLO',
+//                     'serviceName' => 'ORCL',
+//                     'port' => 1521
+//                 ),
                 'mssqlTestDB' => array(
                     'driver' => Mssql::class,
                     'host' => '192.168.1.104',

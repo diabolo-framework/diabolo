@@ -36,7 +36,7 @@ trait DatabaseServiceMssqlTestTrait {
      * @param unknown $dbName
      */
     protected function insertDemoDataIntoTableUserForMssql ( $dbName ) {
-        $this->getDatabase($dbName)->exec('
+        return $this->getDatabase($dbName)->exec('
             INSERT INTO [users] ([name],[age],[group]) 
             VALUES (\'U001-DM\', 10, \'DEMO\'),
                    (\'U002-DM\', 20, \'DEMO\'),

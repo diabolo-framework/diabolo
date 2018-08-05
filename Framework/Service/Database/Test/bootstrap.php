@@ -10,6 +10,6 @@ require dirname(dirname(dirname(dirname(__FILE__))))."/Core/X.php";
 X\Core\X::start(__DIR__.DIRECTORY_SEPARATOR."configuration.php");
 
 require __DIR__.'/helper.php';
-$tester = new \X\Service\Database\Test\Service\Query\ConditionTest();
-$tester->test_operators();
+$tester = new \X\Service\Database\Test\Service\Query\AlterTableTest();
+$tester->test_mssql();
 $tester->clean();

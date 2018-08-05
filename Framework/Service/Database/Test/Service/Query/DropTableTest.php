@@ -49,4 +49,10 @@ class DropTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_ORACLE);
         $this->doTestDropTable(TEST_DB_NAME_ORACLE);
     }
+    
+    /** */
+    public function test_mssql() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestDropTable(TEST_DB_NAME_MSSQL);
+    }
 }

@@ -8,7 +8,7 @@ class AlterTable extends DatabaseQuery {
     /** @var string */
     protected $table = null;
     /** @var string rename table name to new one */
-    private $newTableName = null;
+    protected $newTableName = null;
     /** @var string */
     protected $newColumnName = null;
     /** @var string */
@@ -155,7 +155,7 @@ class AlterTable extends DatabaseQuery {
     }
     
     /** @param array $query */
-    private function buildActionRenameTable( &$query ) {
+    protected function buildActionRenameTable( &$query ) {
         $table = $this->getDatabase()->quoteTableName($this->newTableName);
         $query[] = "RENAME TO {$table}";
     }

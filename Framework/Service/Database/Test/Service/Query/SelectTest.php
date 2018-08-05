@@ -123,4 +123,10 @@ class SelectTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_ORACLE);
         $this->doTestSelect(TEST_DB_NAME_ORACLE);
     }
+    
+    /** */
+    public function test_mssql() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestSelect(TEST_DB_NAME_MSSQL);
+    }
 }

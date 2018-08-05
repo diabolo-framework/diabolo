@@ -70,7 +70,9 @@ class DeleteTest extends TestCase {
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
         $minId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
         $deleteQuery = Query::delete($dbName);
-        if ( 'postgresql' === $this->getDatabase($dbName)->getDriver()->getName() ) {
+        
+        $driverName = $this->getDatabase($dbName)->getDriver()->getName();
+        if ( 'postgresql' === $driverName || 'mssql' === $driverName ) {
             $deleteQuery->setPrimaryKeyName('id');
         }
         $delCount = $deleteQuery->from($tableName)->orderBy('id',SORT_ASC)->limit(1)->exec();
@@ -102,5 +104,11 @@ class DeleteTest extends TestCase {
     public function test_oracle() {
         $this->checkTestable(TEST_DB_NAME_ORACLE);
         $this->doTestDelete(TEST_DB_NAME_ORACLE, 'users');
+    }
+    
+    /** */
+    public function test_mssql() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestDelete(TEST_DB_NAME_MSSQL, 'users');
     }
 }

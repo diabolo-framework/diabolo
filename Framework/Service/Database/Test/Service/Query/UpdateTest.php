@@ -100,4 +100,16 @@ class UpdateTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_ORACLE);
         $this->doTestUpdateLimit(TEST_DB_NAME_ORACLE);
     }
+    
+    /** */
+    public function test_mssql_updateAll() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestUpdateAll(TEST_DB_NAME_MSSQL);
+    }
+    
+    /** */
+    public function test_mssql_updateLimit() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestUpdateLimit(TEST_DB_NAME_MSSQL);
+    }
 }

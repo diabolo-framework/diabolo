@@ -81,4 +81,10 @@ class InsertTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_ORACLE);
         $this->doTestInsert(TEST_DB_NAME_ORACLE);
     }
+    
+    /** */
+    public function test_mssql() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestInsert(TEST_DB_NAME_MSSQL);
+    }
 }

@@ -84,4 +84,10 @@ class AlterTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_ORACLE);
         $this->doTestAlterTable(TEST_DB_NAME_ORACLE);
     }
+    
+    /** */
+    public function test_mssql() {
+        $this->checkTestable(TEST_DB_NAME_MSSQL);
+        $this->doTestAlterTable(TEST_DB_NAME_MSSQL);
+    }
 }

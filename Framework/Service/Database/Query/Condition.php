@@ -351,6 +351,9 @@ class Condition {
      * @return self
      */
     public function add($condition) {
+        if ( null === $condition ) {
+            return $this;
+        }
         $this->cache = null;
         $this->conditions[] = array(
             'type'=>self::TYPE_CUSTOM_CONDITION,

@@ -39,8 +39,8 @@ class Database {
      * @param string $columnName
      * @return string
      */
-    public function quoteColumnName( $columnName ) {
-        return $this->driver->quoteColumnName($columnName);
+    public function quoteColumnName( $columnName , $options=array() ) {
+        return $this->driver->quoteColumnName($columnName, $options);
     }
     
     /**

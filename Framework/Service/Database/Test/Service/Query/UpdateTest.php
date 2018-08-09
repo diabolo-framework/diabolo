@@ -112,4 +112,16 @@ class UpdateTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestUpdateLimit(TEST_DB_NAME_MSSQL);
     }
+    
+    /** */
+    public function test_firebird_updateAll() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestUpdateAll(TEST_DB_NAME_FIREBIRD);
+    }
+    
+    /** */
+    public function test_firebird_updateLimit() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestUpdateLimit(TEST_DB_NAME_FIREBIRD);
+    }
 }

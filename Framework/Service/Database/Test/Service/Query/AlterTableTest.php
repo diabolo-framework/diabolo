@@ -21,28 +21,40 @@ class AlterTableTest extends TestCase {
     
     /***/
     private function doTestAlterTable( $dbName ) {
+        $driver = $this->getDatabase($dbName)->getDriver();
+        
         # rename
-        $this->createTestTableUser($dbName);
-        Query::alterTable($dbName)->table('users')->rename('new_users')->exec();
-        $this->assertTrue(in_array('new_users', $this->getDatabase($dbName)->tableList()));
-        Query::dropTable($dbName)->table('new_users')->exec();
+        if ( $driver->getOption(DatabaseDriver::OPT_ALTER_TABLE_RENAME, true) ) {
+            $this->createTestTableUser($dbName);
+            Query::alterTable($dbName)->table('users')->rename('new_users')->exec();
+            $this->assertTrue(in_array('new_users', $this->getDatabase($dbName)->tableList()));
+            Query::dropTable($dbName)->table('new_users')->exec();
+        }
         
         # addColumn
         $this->createTestTableUser($dbName);
         $newColumn = new Column();
         $newColumn->setType(Column::T_STRING);
         Query::alterTable($dbName)->table('users')->addColumn('newCol', $newColumn)->exec();
-        $this->assertArrayHasKey('newCol', $this->getDatabase($dbName)->columnList('users'));
+        $columnName = 'newCol';
+        if ( $driver->getOption(DatabaseDriver::OPT_UPPERCASE_COLUMN_NAME, false) ) {
+            $columnName = strtoupper($columnName);
+        }
+        $this->assertArrayHasKey($columnName, $this->getDatabase($dbName)->columnList('users'));
         $this->dropTestTableUser($dbName);
         
         # changeColumn
-        if ( $this->getDatabase($dbName)->getDriver()->getOption(DatabaseDriver::OPT_ALTER_TABLE_CHANGE_COLUMN, true) ) {
+        if ( $driver->getOption(DatabaseDriver::OPT_ALTER_TABLE_CHANGE_COLUMN, true) ) {
             $this->createTestTableUser($dbName);
             
             $newColumn = new Column();
             $newColumn->setType(Column::T_STRING);
             Query::alterTable($dbName)->table('users')->changeColumn('name',$newColumn)->exec();
-            $this->assertArrayHasKey('name', $this->getDatabase($dbName)->columnList('users'));
+            $columnName = 'name';
+            if ( $driver->getOption(DatabaseDriver::OPT_UPPERCASE_COLUMN_NAME, false) ) {
+                $columnName = strtoupper($columnName);
+            }
+            $this->assertArrayHasKey($columnName, $this->getDatabase($dbName)->columnList('users'));
             $this->dropTestTableUser($dbName);
         }
         
@@ -50,7 +62,11 @@ class AlterTableTest extends TestCase {
         if ( $this->getDatabase($dbName)->getDriver()->getOption(DatabaseDriver::OPT_ALTER_TABLE_DROP_COLUMN, true) ) {
             $this->createTestTableUser($dbName);
             Query::alterTable($dbName)->table('users')->dropColumn('name')->exec();
-            $this->assertArrayNotHasKey('name', $this->getDatabase($dbName)->columnList('users'));
+            $columnName = 'name';
+            if ( $driver->getOption(DatabaseDriver::OPT_UPPERCASE_COLUMN_NAME, false) ) {
+                $columnName = strtoupper($columnName);
+            }
+            $this->assertArrayNotHasKey($columnName, $this->getDatabase($dbName)->columnList('users'));
             $this->dropTestTableUser($dbName);
         }
         
@@ -89,5 +105,11 @@ class AlterTableTest extends TestCase {
     public function test_mssql() {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestAlterTable(TEST_DB_NAME_MSSQL);
+    }
+    
+    /** */
+    public function test_firebird() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestAlterTable(TEST_DB_NAME_FIREBIRD);
     }
 }

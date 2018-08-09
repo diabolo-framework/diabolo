@@ -60,7 +60,7 @@ class Mysql extends DatabaseDriverPDO {
      * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriver::quoteColumnName()
      */
-    public function quoteColumnName($columnName) {
+    public function quoteColumnName($columnName, $options=array()) {
         return '`'.str_replace('`', '``', $columnName).'`';
     }
     

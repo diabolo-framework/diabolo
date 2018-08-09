@@ -14,7 +14,7 @@ class AlterTable extends DatabaseQuery {
     /** @var string */
     protected $newColumnDefination = null;
     /** @var string */
-    private $dropColumnName = null;
+    protected $dropColumnName = null;
     /** @var string */
     protected $changeColumnName = null;
     /** @var mixed */
@@ -171,7 +171,7 @@ class AlterTable extends DatabaseQuery {
     }
     
     /** @param array $query */
-    private function buildActionDropColumn( &$query ) {
+    protected function buildActionDropColumn( &$query ) {
         $name = $this->getDatabase()->quoteColumnName($this->dropColumnName);
         $query[] = "DROP COLUMN {$name}";
     }

@@ -56,4 +56,10 @@ class TruncateTableTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestTruncateTable(TEST_DB_NAME_MSSQL);
     }
+    
+    /** */
+    public function test_firebird_truncateTable() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestTruncateTable(TEST_DB_NAME_FIREBIRD);
+    }
 }

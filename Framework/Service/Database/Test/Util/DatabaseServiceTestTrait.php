@@ -85,5 +85,8 @@ trait DatabaseServiceTestTrait {
         try {
             $this->dropTestTableUser(TEST_DB_NAME_MSSQL);
         } catch ( \Exception $e ) {}
+        try {
+            $this->dropTestTableUser(TEST_DB_NAME_FIREBIRD);
+        } catch ( \Exception $e ) {}
     }
 }

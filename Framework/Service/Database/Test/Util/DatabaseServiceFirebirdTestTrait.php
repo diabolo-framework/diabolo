@@ -1,5 +1,6 @@
 <?php
 namespace X\Service\Database\Test\Util;
+use X\Service\Database\Service;
 trait DatabaseServiceFirebirdTestTrait {
     /**
      * @param string $dbName
@@ -48,5 +49,6 @@ trait DatabaseServiceFirebirdTestTrait {
         $this->getDatabase($dbName)->exec('INSERT INTO USERS ("NAME","AGE","GROUP") VALUES (\'U004-DM\', 30, \'DEMO\')');
         $this->getDatabase($dbName)->exec('INSERT INTO USERS ("NAME","AGE","GROUP") VALUES (\'U005-DM\', 30, \'DEMO2\')');
         $this->getDatabase($dbName)->exec('INSERT INTO USERS ("NAME","AGE","GROUP") VALUES (\'U006-DM\', 30, \'DEMO2\')');
+        return 6;
     }
 }

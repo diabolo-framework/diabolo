@@ -25,5 +25,17 @@ namespace PHPUnit\Framework {
             }
         }
         
+        public function assertTrue($value) {
+            if ( true != $value ) {
+                throw new \Exception("assertTrue failed");
+            }
+        }
+        
+        public function assertFalse($value) {
+            if ( false != $value ) {
+                throw new \Exception("assertFalse failed");
+            }
+        }
+        
     }
 }

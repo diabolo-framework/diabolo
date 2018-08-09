@@ -27,8 +27,8 @@ class SelectTest extends TestCase {
         # select all
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $rows = Query::select($dbName)->from('users')->all();
-        $this->assertEquals($insertCount, count($rows));
+        $rowCount = Query::select($dbName)->from('users')->all()->count();
+        $this->assertEquals($insertCount, $rowCount);
         $this->dropTestTableUser($dbName);
         
         # select spefied columns
@@ -56,32 +56,33 @@ class SelectTest extends TestCase {
         # condition
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $rows = Query::select($dbName)->from('users')->where(['name'=>'U001-DM'])->all();
-        $this->assertEquals(1, count($rows));
+        $rowCount = Query::select($dbName)->from('users')->where(['name'=>'U001-DM'])->all()->count();
+        $this->assertEquals(1, $rowCount);
         $this->dropTestTableUser($dbName);
         
         # group and having
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $rows = Query::select($dbName)->from('users')
+        $rowCount = Query::select($dbName)->from('users')
             ->column('group')
             ->expression(Expression::count(),'memCount')
             ->groupBy('group')->having(Condition::build()->greaterThan(Expression::count(), 1))
-            ->all();
-        $this->assertEquals(2, count($rows));
+            ->all()
+            ->count();
+        $this->assertEquals(2, $rowCount);
         $this->dropTestTableUser($dbName);
         
         # order
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $row = Query::select($dbName)->from('users')->orderBy('id', SORT_DESC)->one();
+        $row = Query::select($dbName)->column('id')->from('users')->orderBy('id', SORT_DESC)->one();
         $this->assertEquals(6, $row['id']);
         $this->dropTestTableUser($dbName);
         
         # limit and offset
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $row = Query::select($dbName)->from('users')->orderBy('id', SORT_DESC)->limit(1)->offset(1)->one();
+        $row = Query::select($dbName)->column('id')->from('users')->orderBy('id', SORT_DESC)->limit(1)->offset(1)->one();
         $this->assertEquals(5, $row['id']);
         $this->dropTestTableUser($dbName);
         
@@ -89,14 +90,15 @@ class SelectTest extends TestCase {
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
         $joinCondition = Condition::build()->is(
-            Expression::column('u1.id', $this->getDatabase($dbName)), 
-            Expression::column('u2.id', $this->getDatabase($dbName))
+            Expression::column('U1.id', $this->getDatabase($dbName)), 
+            Expression::column('U2.id', $this->getDatabase($dbName))
         );
-        $rows = Query::select($dbName)
-            ->from('users', 'u1')
-            ->join(Select::LEFT_JOIN, 'users', $joinCondition, 'u2')
-            ->all();
-        $this->assertEquals($insertCount, count($rows));
+        $rowCount = Query::select($dbName)
+            ->from('users', 'U1')
+            ->join(Select::LEFT_JOIN, 'users', $joinCondition, 'U2')
+            ->all()
+            ->count();
+        $this->assertEquals($insertCount, $rowCount);
         $this->dropTestTableUser($dbName);
     }
     
@@ -128,5 +130,11 @@ class SelectTest extends TestCase {
     public function test_mssql() {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestSelect(TEST_DB_NAME_MSSQL);
+    }
+    
+    /** */
+    public function test_firebird() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestSelect(TEST_DB_NAME_FIREBIRD);
     }
 }

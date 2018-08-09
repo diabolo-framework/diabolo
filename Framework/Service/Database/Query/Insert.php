@@ -60,7 +60,7 @@ class Insert extends DatabaseQuery {
      * @param array $query
      * @return void
      */
-    private function buildValues( &$query ) {
+    protected function buildValues( &$query ) {
         if ( empty($this->data) ) {
             throw new DatabaseException('insert data can not be empty');
         }

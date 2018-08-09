@@ -68,7 +68,7 @@ class DeleteTest extends TestCase {
         # delete with order
         $this->createTestTableUser($dbName);
         $insertCount = $this->insertDemoDataIntoTableUser($dbName);
-        $minId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
+        $minId = Query::select($dbName)->column('id')->from($tableName)->orderBy('id',SORT_ASC)->one();
         $deleteQuery = Query::delete($dbName);
         
         $driverName = $this->getDatabase($dbName)->getDriver()->getName();
@@ -77,7 +77,7 @@ class DeleteTest extends TestCase {
         }
         $delCount = $deleteQuery->from($tableName)->orderBy('id',SORT_ASC)->limit(1)->exec();
         $this->assertEquals(1, $delCount, 'failed to delete with order');
-        $deletedMinId = Query::select($dbName)->from($tableName)->orderBy('id',SORT_ASC)->one();
+        $deletedMinId = Query::select($dbName)->column('id')->from($tableName)->orderBy('id',SORT_ASC)->one();
         $this->assertLessThan($deletedMinId['id'],$minId['id']);
         $this->dropTestTableUser($dbName);
     }
@@ -110,5 +110,11 @@ class DeleteTest extends TestCase {
     public function test_mssql() {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestDelete(TEST_DB_NAME_MSSQL, 'users');
+    }
+    
+    /** */
+    public function test_firebird() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestDelete(TEST_DB_NAME_FIREBIRD, 'USERS');
     }
 }

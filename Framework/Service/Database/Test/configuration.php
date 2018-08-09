@@ -49,17 +49,17 @@ return array(
 //                     'serviceName' => 'ORCL',
 //                     'port' => 1521
 //                 ),
-                'mssqlTestDB' => array(
-                    'driver' => Mssql::class,
-                    'host' => '192.168.1.104',
-                    'username' => 'diabolo',
-                    'password' => 'diabolo',
-                    'dbname' => 'diabolo',
-                    'port' => 1433
-                ),
+//                 'mssqlTestDB' => array(
+//                     'driver' => Mssql::class,
+//                     'host' => '192.168.1.104',
+//                     'username' => 'diabolo',
+//                     'password' => 'diabolo',
+//                     'dbname' => 'diabolo',
+//                     'port' => 1433
+//                 ),
                 'firebirdTestDB' => array(
                     'driver' => Firebird::class,
-                    'host' => '192.168.1.103',
+                    'host' => '192.168.1.105',
                     'username' => 'SYSDBA',
                     'password' => '123456789',
                     'dbname' => 'D:\\DIABOLO.FDB',

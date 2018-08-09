@@ -87,4 +87,10 @@ class InsertTest extends TestCase {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestInsert(TEST_DB_NAME_MSSQL);
     }
+    
+    /** */
+    public function test_firebird() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestInsert(TEST_DB_NAME_FIREBIRD);
+    }
 }

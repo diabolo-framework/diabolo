@@ -23,11 +23,38 @@ class Firebird extends DatabaseDriverPDO {
     
     /**
      * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::getOptions()
+     */
+    protected function getOptions() {
+        return array(
+            self::OPT_UPPERCASE_TABLE_NAME => true,
+            self::OPT_UPPERCASE_COLUMN_NAME => true,
+            self::OPT_ALTER_TABLE_RENAME => false,
+        );
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Driver\DatabaseDriverPDO::mapColumnTypeToDatabaseType()
+     */
+    public function mapColumnTypeToDatabaseType( $type ) {
+        $map = array(
+            'STRING' => 'VARCHAR',
+            'INTEGER' => 'INTEGER',
+            'DECIMAL' => 'DECIMAL',
+        );
+        $type = strtoupper($type);
+        return isset($map[$type]) ? $map[$type] : $type;
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriverBase::init()
      */
     protected function init() {
         $dsn = "firebird:dbname={$this->host}/{$this->port}:{$this->dbname}";
         $this->connection = new \PDO($dsn,$this->username,$this->password);
+        $this->connection->exec('SET AUTODDL ON');
     }
     
     /**
@@ -35,6 +62,7 @@ class Firebird extends DatabaseDriverPDO {
      * @see \X\Service\Database\Driver\DatabaseDriver::quoteTableName()
      */
     public function quoteTableName($tableName) {
+        $tableName = strtoupper($tableName);
         return '"'.str_replace('"', '""', $tableName).'"';
     }
     
@@ -42,7 +70,10 @@ class Firebird extends DatabaseDriverPDO {
      * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriver::quoteColumnName()
      */
-    public function quoteColumnName($columnName) {
+    public function quoteColumnName($columnName, $options=array()) {
+        if ( !isset($options['uppercase']) || true===$options['uppercase'] ) {
+            $columnName = strtoupper($columnName);
+        }
         return '"'.str_replace('"', '""', $columnName).'"';
     }
 
@@ -117,7 +148,7 @@ class Firebird extends DatabaseDriverPDO {
           ORDER BY
               R.RDB$RELATION_NAME,
               R.RDB$FIELD_POSITION';
-        $columns = $this->query($query, array(':tbname'=>$tableName))->fetchAll();
+        $columns = $this->query($query, array(':tbname'=>strtoupper($tableName)))->fetchAll();
         
         $list = array();
         foreach ( $columns as $item ) {

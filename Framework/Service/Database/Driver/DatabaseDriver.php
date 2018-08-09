@@ -13,6 +13,12 @@ interface DatabaseDriver {
     const OPT_AUTO_INCREASE_ON_INSERT = 3;
     /** option for checking wether able to rename column on changing column */
     const OPT_RENAME_COLUMN_ON_CHANGING_COLUMN = 4;
+    /** option for checking wehter uppercase table name */
+    const OPT_UPPERCASE_TABLE_NAME = 5;
+    /** option for checking wether uppercase column name */
+    const OPT_UPPERCASE_COLUMN_NAME = 6;
+    /** option for checking wether able to rename table */
+    const OPT_ALTER_TABLE_RENAME = 7;
     
     /**
      * @param unknown $type
@@ -66,7 +72,7 @@ interface DatabaseDriver {
      * @param string $columnName
      * @return string
      */
-    function quoteColumnName( $columnName );
+    function quoteColumnName( $columnName, $options=array() );
     
     /**
      * @param unknown $value

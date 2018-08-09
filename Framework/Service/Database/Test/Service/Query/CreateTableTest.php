@@ -6,6 +6,7 @@ use X\Service\Database\Database;
 use X\Service\Database\Test\Util\DatabaseServiceTestTrait;
 use X\Service\Database\Query;
 use X\Service\Database\Table\Column;
+use X\Service\Database\Driver\DatabaseDriver;
 class CreateTableTest extends TestCase {
     /***/
     use DatabaseServiceTestTrait;
@@ -24,9 +25,14 @@ class CreateTableTest extends TestCase {
             ->name('new_table')
             ->addColumn((new Column())->setName('col1')->setType(Column::T_STRING)->setLength(100))
             ->exec();
-        $this->assertTrue(in_array('new_table', $this->getDatabase($dbName)->tableList()));
-        Query::dropTable($dbName)->table('new_table')->exec();
-        $this->assertFalse(in_array('new_table', $this->getDatabase($dbName)->tableList()));
+        
+        $tableName = 'new_table';
+        if ( $this->getDatabase($dbName)->getDriver()->getOption(DatabaseDriver::OPT_UPPERCASE_TABLE_NAME, false) ) {
+            $tableName = strtoupper($tableName);
+        }
+        $this->assertTrue(in_array($tableName, $this->getDatabase($dbName)->tableList()));
+        Query::dropTable($dbName)->table($tableName)->exec();
+        $this->assertFalse(in_array($tableName, $this->getDatabase($dbName)->tableList()));
     }
     
     /** */
@@ -57,5 +63,11 @@ class CreateTableTest extends TestCase {
     public function test_mssql() {
         $this->checkTestable(TEST_DB_NAME_MSSQL);
         $this->doTestCreateTable(TEST_DB_NAME_MSSQL);
+    }
+    
+    /** */
+    public function test_firebird() {
+        $this->checkTestable(TEST_DB_NAME_FIREBIRD);
+        $this->doTestCreateTable(TEST_DB_NAME_FIREBIRD);
     }
 }

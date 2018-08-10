@@ -45,7 +45,7 @@ class Sqlite extends DatabaseDriverPDO {
      * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriver::quoteTableName()
      */
-    public function quoteTableName($tableName, $options=array()) {
+    public function quoteTableName($tableName) {
         return '`'.str_replace('`', '``', $tableName).'`';
     }
 
@@ -53,7 +53,7 @@ class Sqlite extends DatabaseDriverPDO {
      * {@inheritDoc}
      * @see \X\Service\Database\Driver\DatabaseDriver::quoteColumnName()
      */
-    public function quoteColumnName($columnName) {
+    public function quoteColumnName($columnName, $options=array()) {
         return '`'.str_replace('`', '``', $columnName).'`';
     }
     

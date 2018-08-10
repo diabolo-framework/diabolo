@@ -100,6 +100,12 @@ abstract class ActiveRecord {
      * @return self
      */
     public function set( $name, $value ) {
+        $setter = 'set'.ucfirst($name);
+        if ( is_callable(array($this, $setter)) ) {
+            $this->$setter($value);
+            return $this;
+        }
+        
         $this->attributes[$name]->setValue($value);
         return $this;
     }
@@ -117,6 +123,12 @@ abstract class ActiveRecord {
      * @return mixed
      */
     public function get( $name ) {
+        $getter = 'get'.ucfirst($name);
+        if ( is_callable(array($this, $getter)) ) {
+            $this->$getter();
+            return $this;
+        }
+        
         return $this->attributes[$name]->getValue();
     }
     

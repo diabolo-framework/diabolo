@@ -308,4 +308,18 @@ class Select extends DatabaseLimitableQuery {
         $this->limit(1);
         return $this->all()->fetch();
     }
+    
+    /**
+     * @return integer
+     */
+    public function count() {
+        $oldExpressions = $this->expressions;
+        $this->expression(Expression::count(), 'RowCount');
+        
+        $queryResult = $this->getDatabase()->query($this->toString(), $this->queryParams);
+        $counter = $queryResult->fetchAll();
+        
+        $this->expressions = $oldExpressions;
+        return 1*$counter[0]['RowCount'];
+    }
 }

@@ -139,12 +139,16 @@ class Attribute {
     
     /** @return mixed */
     public function getValue() {
-        return $this->value;
+        $value = $this->value;
+        if ( null === $value ) {
+            $value = $this->defaultVal;
+        }
+        return $value;
     }
     
     /** @return boolean */
     public function getIsDirty() {
-        return $this->oldValue !== $this->value;
+        return $this->oldValue !== $this->getValue();
     }
     
     /** @return boolean */

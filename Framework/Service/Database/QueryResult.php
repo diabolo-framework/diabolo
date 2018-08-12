@@ -121,26 +121,31 @@ class QueryResult implements \ArrayAccess, \Iterator, \Countable {
     
     /** */
     public function current () {
+        $this->fetchAll();
         return current($this->resultItems);
     }
     
     /** */
     public function next () {
+        $this->fetchAll();
         return next($this->resultItems);
     }
     
     /** */
     public function key () {
+        $this->fetchAll();
         return key($this->resultItems);
     }
     
     /***/
     public function valid () {
+        $this->fetchAll();
         return isset($this->resultItems[key($this->resultItems)]);
     }
     
     /***/
     public function rewind () {
+        $this->fetchAll();
         return reset($this->resultItems);
     }
     

@@ -4,6 +4,7 @@ use X\Service\Database\ActiveRecord;
 use X\Service\Database\DatabaseException;
 use X\Service\Database\Query;
 use X\Service\Database\Query\Expression;
+use X\Service\Database\Query\Condition;
 class Validator {
     /** @var Attribute */
     private $attribute = null;
@@ -77,9 +78,12 @@ class Validator {
         }
         
         $attrName = $attribute->getName();
+        $condition = Condition::build()->is($attrName, $attribute->getValue())
+            ->add($model->getExceptCondition());
+        
         $counter = Query::select($model->getDB())->expression(Expression::count(),'RowCount')
             ->from($model->tableName())
-            ->where([$attrName=>$attribute->getValue()])
+            ->where($condition)
             ->one();
         
         if ( "0" !== $counter['RowCount'] ) {

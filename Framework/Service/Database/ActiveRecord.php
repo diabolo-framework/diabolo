@@ -95,6 +95,17 @@ abstract class ActiveRecord {
     }
     
     /**
+     * @param array $data
+     * @return self
+     */
+    public function setValues( array $data ) {
+        foreach ( $data as $key => $value ) {
+            $this->set($key, $value);
+        }
+        return $this;
+    }
+    
+    /**
      * @param string $name
      * @param mixed $value
      * @return self
@@ -180,11 +191,15 @@ abstract class ActiveRecord {
     
     /** @return bool */
     private function update() {
+        $dirtyValues = $this->getDirtyValues();
+        if ( empty($dirtyValues) ) {
+            return true;
+        }
+        
         $qurey = Query::update($this->getDatabase())
             ->table(static::tableName())
-            ->values($this->getDirtyValues())
-            ->where($this->getOperationCondition())
-            ->limit(1);
+            ->values($dirtyValues)
+            ->where($this->getOperationCondition());
         return 1 === $qurey->exec();
     }
     
@@ -196,6 +211,23 @@ abstract class ActiveRecord {
         } else {
             return $this->toArray();
         }
+    }
+    
+    /**
+     * @return \X\Service\Database\Query\Condition
+     */
+    public function getExceptCondition() {
+        $condition = Condition::build();
+        if ( null !== $this->primaryKeyAttrName ) {
+            $pkName = $this->primaryKeyAttrName;
+            $condition->isNot($pkName, $this->get($pkName));
+        } else {
+            $values = $this->toArray();
+            foreach ( $values as $key => $value ) {
+                $condition->isNot($key, $value);
+            }
+        }
+        return $condition;
     }
     
     /**
@@ -244,7 +276,6 @@ abstract class ActiveRecord {
         $rowCount = Query::delete($this->getDatabase())
             ->from(static::tableName())
             ->where($this->getOperationCondition())
-            ->limit(1)
             ->exec();
         if ( 1 === $rowCount ) {
             $this->isNew = true;

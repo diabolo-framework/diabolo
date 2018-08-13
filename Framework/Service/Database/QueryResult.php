@@ -65,7 +65,11 @@ class QueryResult implements \ArrayAccess, \Iterator, \Countable {
     }
     
     /**
-     * @return array
+     * fetch row data from result set. as default, row data returns as array, if 
+     * fetchStyle has been set, the fetched row data will be applyed into target 
+     * class as returned result. if there is not result in result statement, null
+     * will be returned.
+     * @return array|mixed|null
      */
     public function fetch() {
         if ( null !== $this->resultItems ) {
@@ -75,6 +79,9 @@ class QueryResult implements \ArrayAccess, \Iterator, \Countable {
         if ( self::FETCH_CLASS === $this->fetchStyle
         && is_subclass_of($this->fetchClassName, ActiveRecord::class) ) {
             $item = $this->resultStatement->fetch(\PDO::FETCH_ASSOC);
+            if ( false === $item ) {
+                return null;
+            }
             $model = new $this->fetchClassName();
             $model->applyData($item);
             return $model;

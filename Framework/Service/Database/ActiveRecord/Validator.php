@@ -12,8 +12,11 @@ class Validator {
     private $validators = array();
     
     /**
+     * convert attribute defination part to validator, for example `NOT_NULL`
+     * convert into `validateNotNull`, if validator does not exists, false will
+     * be returned.
      * @param string $name
-     * @return string
+     * @return string|false
      */
     public static function formatAsBuildInValidator( $name ) {
         $name = explode('_', strtolower($name));
@@ -68,6 +71,19 @@ class Validator {
         if ( null === $attribute->getValue() ) {
             $name = $attribute->getName();
             $model->addError($name, "{$name} can not be null");
+        }
+    }
+    
+    /** validate not empty */
+    public function validateNotEmpty( ActiveRecord $model, Attribute $attribute ) {
+        if ( $attribute->getIsAutoIncrement() && $model->getIsNew() ) {
+            return;
+        }
+        
+        $value = $attribute->getValue();
+        if ( empty($value) ) {
+            $name = $attribute->getName();
+            $model->addError($name, "{$name} can not be empty");
         }
     }
     

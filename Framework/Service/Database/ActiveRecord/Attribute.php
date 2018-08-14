@@ -20,6 +20,8 @@ class Attribute {
     private $isAutoIncrement = false;
     /** @var mixed default value for attribute */
     private $defaultVal = null;
+    /** @var callable */
+    private $valueBuilder = null;
     
     /** @var Validator */
     private $validator = null;
@@ -113,6 +115,20 @@ class Attribute {
         return $this;
     }
     
+    /**
+     * set value builder to generate the value for attribute.
+     * @param callable $builder
+     * @return self
+     */
+    public function setValueBuilder( $builder ) {
+        if ( !is_callable($builder) ) {
+            throw new DatabaseException('attribute value builder is not callable.');
+        }
+        
+        $this->valueBuilder = $builder;
+        return $this;
+    }
+    
     /** @return self */
     public function addValidator( $validator ) {
         $this->validator->addValidator($validator);
@@ -143,6 +159,10 @@ class Attribute {
         if ( null === $value ) {
             $value = $this->defaultVal;
         }
+        if ( null === $value && null !== $this->valueBuilder ) {
+            $value = call_user_func_array($this->valueBuilder, array($this->model, $this));
+        }
+        $this->value = $value;
         return $value;
     }
     

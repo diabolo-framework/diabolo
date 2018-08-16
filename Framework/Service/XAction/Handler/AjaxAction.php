@@ -65,7 +65,7 @@ class AjaxAction extends Action {
      * 成功响应
      * @param array $data
      */
-    public function success($data) {
+    public function success($data=array()) {
         $this->response(array(
             'success' => true,
             'data' => $data,

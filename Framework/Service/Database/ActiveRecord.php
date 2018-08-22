@@ -3,8 +3,20 @@ namespace X\Service\Database;
 use X\Service\Database\ActiveRecord\Validator;
 use X\Service\Database\ActiveRecord\Attribute;
 use X\Service\Database\Query\Condition;
+use X\Core\Component\Stringx;
 
 abstract class ActiveRecord {
+    /** default database connection name configured in service */
+    const DB_DEFAULT_NAME = 'default';
+    
+    /**
+     * table column cache
+     * @var array
+     */
+    private static $columnCache = array(
+        # 'className' => array()
+    );
+    
     /** @var Attribute[] */
     private $attributes = array();
     /** @var boolean */
@@ -80,7 +92,21 @@ abstract class ActiveRecord {
      * </pre>
      * @return array
      */
-    abstract protected function getDefination();
+    protected function getDefination() {
+        $cacheKey = get_class($this);
+        
+        $attributes = array();
+        if ( !isset(self::$columnCache[$cacheKey]) ) {
+            $columns = $this->getDatabase()->columnList(self::tableName());
+            self::$columnCache[$cacheKey] = $columns;
+        }
+        
+        $columns = self::$columnCache[$cacheKey];
+        foreach ( $columns as $column ) {
+            $attributes[] = Attribute::loadFromTableColumn($column);
+        }
+        return $attributes;
+    }
     
     /**
      * @param array $values
@@ -334,22 +360,43 @@ abstract class ActiveRecord {
         return $this->attributes[$name];
     }
     
-    /** @return string|Database */
+    /** 
+     * get the database that current ar is using, as default,
+     * it returns the default database name, you can overwrite
+     * this method to custom the database that this ar is going
+     * to use, also, you can return the database directly in this
+     * method, it's allowed but not suggested.
+     * @return string|Database 
+     * */
     public static function getDB() {
-        return 'db';
+        return self::DB_DEFAULT_NAME;
     }
     
-    /** @return string */
+    /** 
+     * get table name of the active record, as default the table 
+     * name get from class's name and convert it into snake case 
+     * if not defined, you can overwrite this method to set table 
+     * name.
+     * @return string 
+     * */
     public static function tableName() {
-        throw new DatabaseException('table name is not defined');
+        $name = get_called_class();
+        if ( false !== strpos($name, '\\') ) {
+            $name = substr($name, strrpos($name, '\\')+1);
+        }
+        $name = Stringx::camelToSnake($name);
+        return $name;
     }
     
     /** @return \X\Service\Database\Query\Select */
     public static function find() {
-        $query = Query::select(static::getDB())
-            ->from(static::tableName());
+        $className = get_called_class();
+        $query = Query::select(static::getDB());
+        
+        $query->from(static::tableName());
+        $query->setReleatedActiveRecord($className);
         $query->setFetchStyle(QueryResult::FETCH_CLASS);
-        $query->setFetchClass(get_called_class());
+        $query->setFetchClass($className);
         return $query;
     }
     
@@ -367,6 +414,21 @@ abstract class ActiveRecord {
      */
     public static function findAll( $condition=null ) {
         return static::find()->where($condition)->all();
+    }
+    
+    /**
+     * @param unknown $name
+     * @return mixed
+     */
+    public static function getFilter( $name ) {
+        $filter = array(get_called_class(), 'filter'.ucfirst($name));
+        if ( is_callable($filter) ) {
+            return call_user_func($filter);
+        } else if ( 'default' === $name ) {
+            return null;
+        } else {
+            throw new DatabaseException("unable to find filter `{$name}`");
+        }
     }
     
     /**

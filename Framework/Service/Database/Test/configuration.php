@@ -21,6 +21,10 @@ return array(
         'delay' => true,
         'params' => array(
             'databases' => array(
+                'default' => array(
+                    'driver' => Sqlite::class,
+                    'path' => __DIR__.'/Resource/Data/diabolo.db',
+                ),
                 'mysqlTestDB' => array(
                     'driver' => Mysql::class,
                     'host' => '127.0.0.1',

@@ -42,6 +42,12 @@ class Select extends DatabaseLimitableQuery {
     private $fetchStyle = QueryResult::FETCH_ASSOC;
     /** @var string class name to fetch into */
     private $fetchClassName = null;
+    /** @var string name of releated active record */
+    private $arClass = null;
+    /** @var array */
+    private $arFilters = array();
+    /** @var boolean */
+    private $arUseDefaultFilter = true;
     
     /**
      * @param mixed $expression
@@ -121,6 +127,32 @@ class Select extends DatabaseLimitableQuery {
      */
     public function offset( $offset ) {
         $this->offset = $offset;
+        return $this;
+    }
+    
+    /**
+     * @param string $className
+     * @return self
+     */
+    public function setReleatedActiveRecord($className) {
+        $this->arClass = $className;
+        return $this;
+    }
+    
+    /**
+     * @param string $name
+     * @return self
+     */
+    public function filter( $name ) {
+        $this->arFilters[] = $name;
+        return $this;
+    }
+    
+    /**
+     * @return self
+     */
+    public function withoutDefaultFileter() {
+        $this->arUseDefaultFilter = false;
         return $this;
     }
     
@@ -226,6 +258,38 @@ class Select extends DatabaseLimitableQuery {
             $type = $join['type'];
             $query[] = "{$type} JOIN {$table} ON {$condition}";
         }
+    }
+    
+    /**
+     * @param array $query
+     * @return void
+     */
+    protected function buildCondition( &$query ) {
+        if ( null === $this->condition 
+        && empty($this->arFilters) 
+        && !$this->arUseDefaultFilter ) {
+            return;
+        }
+        
+        $condition = $this->condition;
+        if ( !($condition instanceof Condition ) ) {
+            $condition = Condition::build()->add($this->condition);
+        }
+        
+        if ( null !== $this->arClass ) {
+            $filters = $this->arFilters;
+            if ( $this->arUseDefaultFilter ) {
+                $filters[] = 'default';
+            }
+            foreach ( $filters as $filter ) {
+                $filterCondition = call_user_func_array(array($this->arClass, 'getFilter'), array($filter));
+                $condition->add($filterCondition);
+            }
+        }
+        
+        $condition->setPreviousParams($this->queryParams);
+        $condition->setDatabase($this->getDatabase());
+        $query[] = 'WHERE '.$condition->toString();
     }
     
     /**

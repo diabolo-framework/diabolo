@@ -6,6 +6,9 @@
 # Cache Files
 Document/phpdoc-cache-*
 
+# Builded Files
+Framework/Service/Database/Document/build/
+
 # Tools
 phpunit.phar
 phpDocumentor.phar

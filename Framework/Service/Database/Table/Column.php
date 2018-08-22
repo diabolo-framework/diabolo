@@ -88,12 +88,26 @@ class Column {
     }
     
     /**
+     * @return string
+     */
+    public function getType() {
+        return $this->type;
+    }
+    
+    /**
      * @param unknown $length
      * @return self
      */
     public function setLength( $length ) {
         $this->length = $length;
         return $this;
+    }
+    
+    /**
+     * @return number
+     */
+    public function getLength() {
+        return $this->length;
     }
     
     /**
@@ -115,6 +129,13 @@ class Column {
     }
     
     /**
+     * @return boolean
+     */
+    public function getIsNotNull() {
+        return $this->isNotNull;
+    }
+    
+    /**
      * @param unknown $defaultValue
      * @return self
      */
@@ -124,12 +145,26 @@ class Column {
     }
     
     /**
+     * @return mixed|unknown
+     */
+    public function getDefaultValue() {
+        return $this->defaultValue;
+    }
+    
+    /**
      * @param unknown $isAutoIncrement
      * @return self
      */
     public function setIsAutoIncrement( $isAutoIncrement ) {
         $this->isAutoIncrement = $isAutoIncrement;
         return $this;
+    }
+    
+    /***
+     * @return boolean
+     */
+    public function getIsAutoIncrement() {
+        return $this->isAutoIncrement;
     }
     
     /**
@@ -142,12 +177,26 @@ class Column {
     }
     
     /**
+     * @return boolean
+     */
+    public function getIsUnique() {
+        return $this->isUnique;
+    }
+    
+    /**
      * @param unknown $isPrimary
      * @return self
      */
     public function setIsPrimary( $isPrimary ) {
         $this->isPrimary = $isPrimary;
         return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsPrimary() {
+        return $this->isPrimary;
     }
     
     /**

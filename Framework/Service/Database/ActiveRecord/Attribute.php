@@ -2,6 +2,7 @@
 namespace X\Service\Database\ActiveRecord;
 use X\Service\Database\DatabaseException;
 use X\Service\Database\ActiveRecord;
+use X\Service\Database\Table\Column;
 
 class Attribute {
     /** attribute types for varchar,nvarchar */
@@ -50,6 +51,27 @@ class Attribute {
         return $attribute;
     }
     
+    /**
+     * @param Column $column
+     * @return self
+     */
+    public static function loadFromTableColumn( Column $column ) {
+        $attribute = new self();
+        $attribute->name = $column->getName();
+        $attribute->type = $column->getType();
+        $attribute->length = $column->getLength();
+        $attribute->isPrimaryKey = $column->getIsPrimary();
+        $attribute->isAutoIncrement = $column->getIsAutoIncrement();
+        $attribute->defaultVal = $column->getDefaultValue();
+        
+        if ( $column->getIsNotNull() ) {
+            $attribute->addValidator('NotNull');
+        }
+        if ( $column->getIsUnique() ) {
+            $attribute->addValidator('Unique');
+        }
+        return $attribute; 
+    }
     /**
      * @param string $defination
      * @return void

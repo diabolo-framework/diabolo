@@ -8,6 +8,10 @@ use X\Core\Component\Stringx;
 abstract class ActiveRecord {
     /** default database connection name configured in service */
     const DB_DEFAULT_NAME = 'default';
+    const REL_HAS_ONE = 1;
+    const REL_HAS_MANY = 2;
+    const REL_MANY_TO_MANY = 3;
+    const REL_BELONGS = 4;
     
     /**
      * table column cache
@@ -29,10 +33,14 @@ abstract class ActiveRecord {
     private $database = null;
     /** @var array */
     private $errors = array();
+    /** @var array */
+    private $relations = array();
     
     /** setup the ar */
     public function __construct() {
         $this->setupDefination();
+        $this->relations = $this->getRelations();
+        
         $this->init();
     }
     
@@ -138,7 +146,7 @@ abstract class ActiveRecord {
      */
     public function set( $name, $value ) {
         $setter = 'set'.ucfirst($name);
-        if ( is_callable(array($this, $setter)) ) {
+        if ( method_exists($this, $setter) ) {
             $this->$setter($value);
             return $this;
         }
@@ -161,7 +169,7 @@ abstract class ActiveRecord {
      */
     public function get( $name ) {
         $getter = 'get'.ucfirst($name);
-        if ( is_callable(array($this, $getter)) ) {
+        if ( method_exists($this, $getter) ) {
             $this->$getter();
             return $this;
         }
@@ -461,5 +469,136 @@ abstract class ActiveRecord {
      */
     public function has( $name ) {
         return isset($this->attributes[$name]);
+    }
+    
+    /** @return string */
+    public static function getPrimaryKeyName() {
+        $model = new static();
+        return $model->primaryKeyAttrName;
+    }
+    
+    /**
+     * @return array
+     */
+    protected function getRelations() {
+        return array();
+    }
+    
+    /**
+     * @param unknown $className
+     * @param unknown $relKeyName
+     * @return self
+     */
+    protected function relationHasOne ( $name, $className, $relKeyName ) {
+        $this->relations[$name] = array(
+            'type' => self::REL_HAS_ONE,
+            'class' => $className,
+            'key' => $relKeyName,
+        );
+        return $this;
+    }
+    
+    /**
+     * @param unknown $className
+     * @param unknown $relKeyName
+     * @return self
+     */
+    protected function relationHasMany( $name, $className, $relKeyName ) {
+        $this->relations[$name] = array(
+            'type' => self::REL_HAS_MANY,
+            'class' => $className,
+            'key' => $relKeyName,
+        );
+        return $this;
+    }
+    
+    /**
+     * @param unknown $className
+     * @param unknown $relKeyName
+     * @return self
+     */
+    protected function relationBelongs ( $name, $className, $relKeyName ) {
+        $this->relations[$name] = array(
+            'type' => self::REL_BELONGS,
+            'class' => $className,
+            'key' => $relKeyName,
+        );
+        return $this;
+    }
+    
+    /**
+     * @param unknown $targetClassName
+     * @param unknown $targetKeyName
+     * @param unknown $selfKeyName
+     * @param unknown $mapClassName
+     * @return self
+     */
+    protected function relationManyToMany( 
+        $name,
+        $targetClassName, 
+        $targetKeyName, 
+        $selfKeyName, 
+        $mapClassName 
+    ) {
+        $this->relations[$name] = array(
+            'type' => self::REL_MANY_TO_MANY,
+            'targetClass' => $targetClassName,
+            'targetKey' => $targetKeyName,
+            'selfKey' => $selfKeyName,
+            'mapClass' => $mapClassName,
+        );
+        return $this;
+    }
+    
+    /**
+     * @param unknown $relationName
+     * @return self|self[]|false
+     */
+    private function getReleatedRecordsByCaller( $relationCallerName ) {
+        $relationName = lcfirst(substr($relationCallerName, 3));
+        if ( !isset($this->relations[$relationName]) ) {
+            return false;
+        }
+        
+        $relation = $this->relations[$relationName];
+        switch ( $relation['type'] ) {
+        case self::REL_HAS_ONE : 
+            $className = $relation['class'];
+            $pkName = $className::getPrimaryKeyName();
+            return $className::findOne([$relation['key'] => $this->get($this->primaryKeyAttrName)]);
+        case self::REL_HAS_MANY : 
+            $className = $relation['class'];
+            return $className::findAll([$relation['key'] => $this->get($this->primaryKeyAttrName)]);
+        case self::REL_BELONGS : 
+            $className = $relation['class'];
+            $pkName = $className::getPrimaryKeyName();
+            return $className::findOne([$pkName=>$this->get($relation['key'])]);
+        case self::REL_MANY_TO_MANY :
+            $mapClassName = $relation['mapClass'];
+            $className = $relation['targetClass'];
+            $pkName = $className::getPrimaryKeyName();
+            return $className::find()
+                ->where(array(
+                    $pkName => Query::select($mapClassName::getDb())
+                        ->expression($relation['targetKey'])
+                        ->from($mapClassName::tableName())
+                        ->where(array($relation['selfKey']=>$this->get($this->primaryKeyAttrName)))
+                ))
+                ->all();
+        default :
+            throw new DatabaseException("unsupported relation type `{$relation['type']}`");
+        }
+    }
+    
+    /**
+     * @param unknown $name
+     * @param unknown $params
+     */
+    public function __call( $name, $params ) {
+        $relationData = $this->getReleatedRecordsByCaller($name);
+        if ( false !== $relationData ) {
+            return $relationData;
+        }
+        throw new DatabaseException("call to undefined method `{$name}`");
     }
 }

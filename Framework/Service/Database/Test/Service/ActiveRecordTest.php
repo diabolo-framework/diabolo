@@ -6,8 +6,82 @@ use X\Service\Database\Test\Resource\Model\ValidatorTestAR;
 use X\Service\Database\Test\Resource\Model\Book;
 use X\Service\Database\ActiveRecord;
 use X\Service\Database\Table;
+use X\Service\Database\Test\Resource\Model\Author;
+use X\Service\Database\Test\Resource\Model\Reader;
+use X\Service\Database\Test\Resource\Model\Label;
+use X\Service\Database\Test\Resource\Model\BookLabelMap;
+use X\Service\Database\Test\Resource\Model\Library;
 require_once __DIR__.'/../Resource/Model/BookStudentMap.php';
 class ActiveRecordTest extends TestCase {
+    public function test_relations() {
+        $library = new Library();
+        $library->name = 'LIB-001';
+        $library->save();
+        
+        $book = new Book();
+        $book->name = 'BOOK-AVAILABLE';
+        $book->is_borrowed = 0;
+        $book->is_deleted = 0;
+        $book->library_id = $library->id;
+        $book->save();
+        
+        $author = new Author();
+        $author->book_id = $book->id;
+        $author->name = 'AUTHOR-001';
+        $author->save();
+        
+        $reader = new Reader();
+        $reader->name = 'READER-001';
+        $reader->book_id = $book->id;
+        $reader->save();
+        
+        $reader = new Reader();
+        $reader->name = 'READER-002';
+        $reader->book_id = $book->id;
+        $reader->save();
+        
+        $label = new Label();
+        $label->name = 'LABEL-001';
+        $label->save();
+        
+        $labelMap = new BookLabelMap();
+        $labelMap->book_id = $book->id;
+        $labelMap->label_id = $label->id;
+        $labelMap->save();
+        
+        $label = new Label();
+        $label->name = 'LABEL-002';
+        $label->save();
+        
+        $labelMap = new BookLabelMap();
+        $labelMap->book_id = $book->id;
+        $labelMap->label_id = $label->id;
+        $labelMap->save();
+        
+        # test has one
+        $testAuthor = $book->getAuthor();
+        $this->assertEquals($author->name, $testAuthor->name);
+        Table::get(Author::getDB(), Author::tableName())->truncate();
+        
+        # test has many
+        $testReaders = $book->getReaders();
+        $this->assertEquals(2, count($testReaders));
+        Table::get(Reader::getDB(), Reader::tableName())->truncate();
+        
+        # test many to many
+        $testLabels = $book->getLabels();
+        $this->assertEquals(2, count($testLabels));
+        Table::get(Label::getDB(), Label::tableName())->truncate();
+        Table::get(BookLabelMap::getDB(), BookLabelMap::tableName())->truncate();
+        
+        # test belongs
+        $testLib = $book->getLibrary();
+        $this->assertEquals($library->name, $testLib->name);
+        Table::get(Library::getDB(), Library::tableName())->truncate();
+        
+        Table::get(Book::getDB(), Book::tableName())->truncate();
+    }
+    
     public function test_find_with_filters() {
         $book = new Book();
         $book->name = 'BOOK-DELETED';

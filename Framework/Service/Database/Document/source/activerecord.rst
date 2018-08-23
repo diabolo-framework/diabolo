@@ -125,8 +125,78 @@ here are some query examples : ::
 
 Create / Update
 ---------------
+Edit active record is much more easier that operation table row data by sql, you can set 
+object's attribute directly to update row value, to insert a new data for example : ::
 
-- Delete
-- Relation
+    $book = new Book();
+    $book->name = 'my-book';
+    $book->save();
+    
+or update a row data : ::
+
+    $book = Book::findOne(['id'=>1]);
+    $book->name = 'my-new-book';
+    $book->save();
+
+and that's all
+
+Delete
+------
+
+To delete an active record, you need to load the record first, and then delete it. for
+example : ::
+
+    $book = Book::findOne(['id'=>1]);
+    $book->delete();
+
+Relation
+--------
+
+Relations use to define the relationship between active records, such as one-to-one, many-to-many,
+and so on, 
+
+to define your own relations, you need to overwrite the ``getRelations()`` method, for example : ::
+
+    protected function getRelations() {
+        return array(
+            'author' => array(
+                'type' => self::REL_HAS_ONE,
+                'key' => 'book_id',
+                'class' => Author::class
+            ),
+            'readers' => array(
+                'type' => self::REL_HAS_MANY,
+                'key' => 'book_id',
+                'class' => Reader::class,
+            ),
+            'labels' => array(
+                'type' => self::REL_MANY_TO_MANY,
+                'targetClass' => Label::class,
+                'mapClass' => BookLabelMap::class,
+                'selfKey' => 'book_id',
+                'targetKey' => 'label_id',
+            ),
+            'library' => array(
+                'type' => self::REL_BELONGS,
+                'class' => Library::class,
+                'key' => 'library_id',
+            ),
+        );
+    }
+    
+or you can setup relationships in init method : ::
+
+     protected function init() {
+         parent::init();
+         
+         $this->relationHasOne('author', Author::class, 'book_id');
+         $this->relationHasMany('readers',Reader::class, 'book_id');
+         $this->relationBelongs('library', Library::class, 'library_id');
+         $this->relationManyToMany('labels',Label::class, 'book_id', 'label_id', LabelMap::class);
+     }
+
+and then you are able to use relation methods, as we just defined, we have ``getAuthor()``, 
+``getReaders()``, and ``getLabels()`` to get releated records.
+
 - Validate
 - Attribute

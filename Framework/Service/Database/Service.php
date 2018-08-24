@@ -4,8 +4,21 @@ use X\Core\Service\XService;
 class Service extends XService {
     /** @var array database config array */
     protected $databases = array();
+    /** @var array db command search path */
+    protected $commandPaths = array();
     /** @var Database[] */
     protected $databaseInstances = array();
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Core\Service\XService::onLoaded()
+     */
+    protected function onLoaded() {
+        parent::onLoaded();
+        foreach ( $this->commandPaths as $commandPath ) {
+            Commander::addPath($commandPath);
+        }
+    }
     
     /**
      * @param string|mixed $db

@@ -11,7 +11,7 @@ Welcome to Diabolo-Service-Database's documentation!
    :caption: Contents:
 
   activerecord
-  command
+  commander
   driver
   migration
   query

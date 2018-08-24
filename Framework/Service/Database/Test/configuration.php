@@ -20,6 +20,10 @@ return array(
         'enable' => true,
         'delay' => true,
         'params' => array(
+            'commandPaths' => array(
+                '/Paht/To/Command',
+                '/Another/Paht/To/Command'
+            ),
             'databases' => array(
                 'default' => array(
                     'driver' => Sqlite::class,

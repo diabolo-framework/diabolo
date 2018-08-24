@@ -12,11 +12,11 @@ Welcome to Diabolo-Service-Database's documentation!
 
   activerecord
   commander
-  driver
   migration
-  query
-  table
   test
+  table
+  query
+  driver
   service
   tools
 

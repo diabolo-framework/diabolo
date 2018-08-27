@@ -1,5 +1,5 @@
 <?php
-namespace X\Service\Database\Command\Token;
+namespace X\Service\Database\Commander\Token;
 class ContentToken extends BaseToken {
     /** @var string */
     private $content = null;

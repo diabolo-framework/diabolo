@@ -1,6 +1,6 @@
 <?php
-namespace X\Service\Database\Command\Token;
-use X\Service\Database\Command\Parser;
+namespace X\Service\Database\Commander\Token;
+use X\Service\Database\Commander\Parser;
 use X\Service\Database\DatabaseException;
 
 /**

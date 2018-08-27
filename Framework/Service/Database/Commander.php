@@ -1,6 +1,6 @@
 <?php
 namespace X\Service\Database;
-use X\Service\Database\Command\Command;
+use X\Service\Database\Commander\Command;
 class Commander {
     /** @var array The path to search commands */
     private static $paths = array();

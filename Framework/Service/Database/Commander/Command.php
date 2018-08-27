@@ -1,5 +1,5 @@
 <?php
-namespace X\Service\Database\Command;
+namespace X\Service\Database\Commander;
 use X\Service\Database\Database;
 use X\Service\Database\Service;
 class Command {

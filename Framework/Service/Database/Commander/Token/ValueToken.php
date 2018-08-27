@@ -1,7 +1,6 @@
 <?php
-namespace X\Service\Database\Command\Token;
+namespace X\Service\Database\Commander\Token;
 use X\Service\Database\DatabaseException;
-
 class ValueToken extends BaseToken {
     /** @var string */
     private $valueName = null;

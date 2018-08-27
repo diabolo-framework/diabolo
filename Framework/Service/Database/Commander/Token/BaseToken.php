@@ -1,5 +1,5 @@
 <?php
-namespace X\Service\Database\Command\Token;
+namespace X\Service\Database\Commander\Token;
 abstract class BaseToken {
     /**
      * @param unknown $commandParams

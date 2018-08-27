@@ -5,7 +5,7 @@ use X\Service\Database\Database;
 use PHPUnit\Framework\TestCase;
 use X\Service\Database\Service;
 use X\Service\Database\Commander;
-use X\Service\Database\Command\Command;
+use X\Service\Database\Commander\Command;
 class CommanderTest extends TestCase {
     private $db = null;
     
@@ -14,10 +14,7 @@ class CommanderTest extends TestCase {
      * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp() {
-        $config = X::system()->getConfiguration()->get('params')->get('MysqlDriverConfig');
-        $db = new Database($config);
-        $this->db = $db;
-        
+        $this->db = Service::getService()->getDB(TEST_DB_NAME_SQLITE);
         Commander::addPath(Service::getService()->getPath('Test/Resource/Command'));
     }
     

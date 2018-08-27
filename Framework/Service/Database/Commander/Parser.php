@@ -1,10 +1,10 @@
 <?php
-namespace X\Service\Database\Command;
-use X\Service\Database\Command\Token\ContentToken;
-use X\Service\Database\Command\Token\IfToken;
-use X\Service\Database\Command\Token\ForeachToken;
-use X\Service\Database\Command\Token\PlaceholderToken;
-use X\Service\Database\Command\Token\ValueToken;
+namespace X\Service\Database\Commander;
+use X\Service\Database\Commander\Token\ContentToken;
+use X\Service\Database\Commander\Token\IfToken;
+use X\Service\Database\Commander\Token\ForeachToken;
+use X\Service\Database\Commander\Token\PlaceholderToken;
+use X\Service\Database\Commander\Token\ValueToken;
 use X\Service\Database\DatabaseException;
 
 class Parser {

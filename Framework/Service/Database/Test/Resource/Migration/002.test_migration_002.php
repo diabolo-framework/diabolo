@@ -17,4 +17,12 @@ class test_migration_002 extends Migration {
     public function down() {
         echo "DOWN DOWN DOWN";
     }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Migration\Migration::getDb()
+     */
+    protected function getDb() {
+        return 'default';
+    }
 }

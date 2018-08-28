@@ -1,7 +1,16 @@
 <?php
 namespace X\Service\Database\Query\Sqlite;
 use X\Service\Database\Table\Column;
+use X\Service\Database\DatabaseException;
 class AlterTable extends \X\Service\Database\Query\AlterTable {
+    /**
+     * @param string $name
+     * @return self
+     */
+    public function dropColumn( $name ) {
+        throw new DatabaseException('sqlite does not support drop column');
+    }
+    
     /**
      * {@inheritDoc}
      * @see \X\Service\Database\Query\AlterTable::toString()

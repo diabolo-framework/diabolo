@@ -7,7 +7,10 @@ class test_migration_003 extends Migration {
      * @see \X\Service\Database\Migration\Migration::up()
      */
     public function up() {
-        echo "UP UP UP";
+        $this->createTable('table001', array(
+            'id' => 'VARCHAR(32)',
+            'name' => 'VARCHAR(255)',
+        ));
     }
 
     /**
@@ -15,6 +18,14 @@ class test_migration_003 extends Migration {
      * @see \X\Service\Database\Migration\Migration::down()
      */
     public function down() {
-        echo "DOWN DOWN DOWN";
+        $this->dropTable('table001');
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Migration\Migration::getDb()
+     */
+    protected function getDb() {
+        return 'MyDatabaseName';
     }
 }

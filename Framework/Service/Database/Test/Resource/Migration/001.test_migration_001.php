@@ -7,7 +7,7 @@ class test_migration_001 extends Migration {
      * @see \X\Service\Database\Migration\Migration::up()
      */
     public function up() {
-        echo "UP UP UP";
+        
     }
 
     /**
@@ -16,5 +16,13 @@ class test_migration_001 extends Migration {
      */
     public function down() {
         echo "DOWN DOWN DOWN";
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Service\Database\Migration\Migration::getDb()
+     */
+    protected function getDb() {
+        return 'default';
     }
 }

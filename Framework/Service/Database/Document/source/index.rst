@@ -13,8 +13,8 @@ Welcome to Diabolo-Service-Database's documentation!
   activerecord
   commander
   migration
-  test
   table
+  test
   query
   driver
   service

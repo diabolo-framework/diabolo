@@ -7,17 +7,14 @@ Welcome to Diabolo-Service-Database's documentation!
 ====================================================
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Contents:
-
+   
+  service
   activerecord
   commander
   migration
   table
   query
   driver
-  test
-  service
 
 Indices and tables
 ==================

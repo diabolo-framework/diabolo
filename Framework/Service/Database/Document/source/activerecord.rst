@@ -57,14 +57,17 @@ here is an example ::
 The definations support three data types : 
 
 - Name Only.
+
 define the name of attribute only, no key for the array element.
 
 - Attribute Object.
+
 create a new attribute object and set as attribute defineation.
 this is the best way to define the attribute, bacause you can do whatever you 
 want to define the attribute, such as add a custom validator or value builder.
-  
+
 - String
+
 defina an attribute by string is a quick way, you can set data type, data 
 length, and some other things easily. the key word ``PRIMARY_KEY`` to mark 
 the attribute as a primary key, and the key word ``AUTO_INCREASE`` use to mark 

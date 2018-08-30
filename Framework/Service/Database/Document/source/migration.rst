@@ -3,7 +3,8 @@ Migration
 migration use to manage database struct, it's controllable and able to roll back.
 
 Create migration script
-----------------
+-----------------------
+
 the quick way to create a migration file is using the follwing command : ::
 
     $ diabolo service/database/migration/create create_table_table001

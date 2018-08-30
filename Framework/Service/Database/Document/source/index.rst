@@ -14,11 +14,10 @@ Welcome to Diabolo-Service-Database's documentation!
   commander
   migration
   table
-  test
   query
   driver
+  test
   service
-  tools
 
 Indices and tables
 ==================

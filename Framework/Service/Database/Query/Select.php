@@ -122,6 +122,66 @@ class Select extends DatabaseLimitableQuery {
     }
     
     /**
+     * @param unknown $table
+     * @param unknown $condition
+     * @param unknown $tableAlias
+     * @return self
+     */
+    public function innerJoin( $table, $condition, $tableAlias=null ) {
+        return $this->join(self::INNER_JOIN, $table, $condition, $tableAlias);
+    }
+    
+    /**
+     * @param unknown $table
+     * @param unknown $condition
+     * @param unknown $tableAlias
+     * @return self
+     */
+    public function leftJoin( $table, $condition, $tableAlias=null ) {
+        return $this->join(self::LEFT_JOIN, $table, $condition, $tableAlias);
+    }
+    
+    /**
+     * @param unknown $table
+     * @param unknown $condition
+     * @param unknown $tableAlias
+     * @return self
+     */
+    public function rightJoin( $table, $condition, $tableAlias=null ) {
+        return $this->join(self::RIGHT_JOIN, $table, $condition, $tableAlias);
+    }
+    
+    /**
+     * @param unknown $table
+     * @param unknown $condition
+     * @param unknown $tableAlias
+     * @return self
+     */
+    public function fullJoin( $table, $condition, $tableAlias=null ) {
+        return $this->join(self::FULL_JOIN, $table, $condition, $tableAlias);
+    }
+    
+    /**
+     * @param unknown $table
+     * @param unknown $condition
+     * @param unknown $tableAlias
+     * @return self
+     */
+    public function crossJoin( $table, $condition, $tableAlias=null ) {
+        return $this->join(self::CROSS_JOIN, $table, $condition, $tableAlias);
+    }
+    
+    /**
+     * @param unknown $table
+     * @param unknown $condition
+     * @param unknown $tableAlias
+     * @return self
+     */
+    public function outerJoin( $table, $condition, $tableAlias=null ) {
+        return $this->join(self::OUTER_JOIN, $table, $condition, $tableAlias);
+    }
+    
+    /**
      * @param integer $offset
      * @return self
      */

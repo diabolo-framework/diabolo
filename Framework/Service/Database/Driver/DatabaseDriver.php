@@ -109,39 +109,4 @@ interface DatabaseDriver {
      * @param unknown $default
      */
     function getOption( $name, $default=null );
-    
-    //function insert( $option );
-    //function batchInsert( $option );
-    //function delete( $option );
-    
-//     function update();
-//     function select();
-    
-//     function tableCreate();
-//     function tableDelete();
-//     function tableRename();
-//     function tableTruncate();
-    
-//     function columAdd();
-//     function columnDelete();
-//     function columnUpdate();
-//     function columnRename();
-    
-//     function indexAdd();
-//     function indexDelete();
-    
-//     function foreignKeyAdd();
-//     function foreignKeyDelete();
-    
-//     function storedProcedureAdd();
-//     function storedProcedureDelete();
-//     function storedProcedureCall();
-    
-//     function functionAdd();
-//     function functionDelete();
-//     function functionCall();
-
-//     function beginTransaction();
-//     function commit();
-//     function rollback();
 }

@@ -7,6 +7,7 @@
 Document/phpdoc-cache-*
 
 # Builded Files
+Document/
 Framework/Service/Database/Document/build/
 
 # Tools

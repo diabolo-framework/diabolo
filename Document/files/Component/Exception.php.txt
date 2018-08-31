@@ -1,9 +1,0 @@
-<?php 
-namespace X\Core\Component;
-/**
- * 框架异常
- * @author Michael Luthor <michaelluthor@163.com>
- */
-class Exception extends \Exception {
-    
-}

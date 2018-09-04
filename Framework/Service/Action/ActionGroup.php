@@ -67,6 +67,15 @@ class ActionGroup {
     }
     
     /**
+     * @param unknown $name
+     * @return \X\Service\Action\ActionGroup
+     */
+    public function setDefaultAction( $name ) {
+        $this->defaultAction = $name;
+        return $this;
+    }
+    
+    /**
      * @param unknown $path
      * @return self
      */
@@ -78,5 +87,10 @@ class ActionGroup {
     /** @return string */
     public function getViewPath() {
         return $this->viewPath;
+    }
+    
+    /** @return string */
+    public function getName() {
+        return $this->name;
     }
 }

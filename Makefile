@@ -16,6 +16,7 @@ doc:
 	mkdir -p Document/source
 	mkdir -p Document/build
 	mkdir -p Document/source/_static
+	-rm -f Document/source/index.rst
 	echo "Welcome to Diabolo's documentation!" >> Document/source/index.rst
 	echo "===================================" >> Document/source/index.rst
 	echo "" >> Document/source/index.rst

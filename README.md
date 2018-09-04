@@ -2,6 +2,8 @@
 core of the framework ~
 
 ## Document
+online doc : https://diabolo.readthedocs.io
+
 document is wrote by [Sphinx](http://www.sphinx-doc.org/en/master/), and now, we only support html doc in make file,
 
 each module or service has an folder named `Document` to contains documents, 

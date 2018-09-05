@@ -64,6 +64,8 @@ class X {
      * @var \X\Core\Module\Manager 
      * */
     private $moduleManager = null;
+    /** @var array  */
+    private $magicHandlers = array();
     
     /**
      * 动该框架。
@@ -286,5 +288,30 @@ class X {
         $this->getServiceManager()->start();
         $this->getModuleManager()->start();
         $this->getModuleManager()->run();
+    }
+    
+    /**
+     * @param unknown $name
+     * @param unknown $callback
+     */
+    public function registerMagicHandler( $name, $callback ) {
+        if ( !isset($this->magicHandlers[$name]) ) {
+            $this->magicHandlers[$name] = array();
+        }
+        $this->magicHandlers[$name][] = $callback;
+    }
+    
+    /**
+     * @param unknown $name
+     * @param array $params
+     */
+    public function __call( $name, $params=array() ) {
+        if ( !isset($this->magicHandlers[$name]) ) {
+            return null;
+        }
+        
+        foreach ( $this->magicHandlers[$name] as $handler ) {
+            call_user_func_array($handler, $params);
+        }
     }
 }

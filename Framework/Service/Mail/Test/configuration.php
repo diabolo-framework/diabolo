@@ -15,6 +15,10 @@ return array(
         'enable' => true,
         'delay' => false,
         'params' => array(
+            'mailRuntimeError' => array(
+                'handler' => 'phpmail_tester',
+                'subject' => 'SYSTEM ERROR'
+            ),
             'mailers' => array(
                 'phpmail_tester' => array(
                     'class' => PhpMail::class,

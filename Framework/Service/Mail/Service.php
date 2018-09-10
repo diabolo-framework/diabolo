@@ -1,5 +1,6 @@
 <?php
 namespace X\Service\Mail;
+use X\Core\X;
 use X\Core\Service\XService;
 use X\Service\Mail\Handler\MailHandler;
 /**
@@ -9,6 +10,29 @@ use X\Service\Mail\Handler\MailHandler;
 class Service extends XService {
     /** @var array */
     protected $mailers = array();
+    /** @var string */
+    protected $mailRuntimeError = null;
+    /** @var boolean */
+    private static $isErrorHandlerRegistered = false;
+    
+    public function start() {
+        parent::start();
+        if ( null !== $this->mailRuntimeError && !self::$isErrorHandlerRegistered ) {
+            X::system()->registerMagicHandler('mailRuntimeError', array($this, 'sendRuntimeError'));
+            self::$isErrorHandlerRegistered = true;
+        }
+    }
+    
+    /**
+     * @param array $option
+     */
+    public function sendRuntimeError( $option ) {
+        $mail = new Mail();
+        $mail->subject = $this->mailRuntimeError['subject'];
+        $mail->content = $option['content'];
+        $mail->isHtml = $option['isHtml'];
+        $mail->send($this->mailRuntimeError['handler']);
+    }
     
     /**
      * @param unknown $name

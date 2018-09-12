@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Service &mdash; Router Service 0.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Router Service 0.0.0 documentation" href="index.html"/>
+        <link rel="prev" title="Service Router" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Router Service
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#routers">Routers</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Router Service</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Service</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/service.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="service">
+<h1>Service<a class="headerlink" href="#service" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>example :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?php
+use X\Service\Router\Router\UrlMap;
+use X\Service\Router\Service as RouterService;
+use X\Service\Router\Router\ActionPath;
+return array(
+    &#39;document_root&#39; =&gt; __DIR__,
+    &#39;module_path&#39; =&gt; array(),
+    &#39;service_path&#39; =&gt; array(),
+    &#39;library_path&#39; =&gt; array(),
+    &#39;modules&#39; =&gt; array(
+        &#39;Sport&#39; =&gt; array(),
+        &#39;User&#39; =&gt; array(),
+    ),
+&#39;params&#39; =&gt; array(),
+    &#39;services&#39; =&gt; array(
+        &#39;Router&#39; =&gt; array(
+            &#39;class&#39; =&gt; RouterService::class,
+            &#39;enable&#39; =&gt; true,
+            &#39;delay&#39; =&gt; false,
+            &#39;params&#39; =&gt; array(
+                &#39;routers&#39; =&gt; array(
+                    array(
+                        &#39;class&#39; =&gt; UrlMap::class,
+                        &#39;fakeExtension&#39; =&gt; &#39;html&#39;,
+                        &#39;map&#39; =&gt; array(
+                             # home page
+                             &#39;/&#39; =&gt; &#39;index.php?module=main&amp;action=index&#39;,
+                             # with params
+                             &#39;/food/edit/{id}&#39; =&gt;
+                                  &#39;index.php?module=food&amp;action=edit&amp;id={id}&#39;,
+                             &#39;{module}/{action}&#39; =&gt;
+                                  &#39;index.php?module={module}&amp;action={action}&#39;,
+                        ),
+                    ),
+                    array(
+                        &#39;class&#39; =&gt; ActionPath::class,
+                        &#39;fakeExtension&#39; =&gt; &#39;html&#39;,
+                        &#39;mergeParamIntoPath&#39; =&gt; true,
+                        &#39;defaultModuleName&#39; =&gt; &#39;user&#39;,
+                        &#39;defaultActionName&#39; =&gt; &#39;detail&#39;
+                    ),
+                ),
+            ),
+        ),
+    ),
+);
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">routers</span></code></li>
+</ul>
+<p>routers contains all rules to route url, and group by different
+routers.</p>
+<p>the service will try to route url with configed routers until the
+route result is false, and that means, the router will stop on the
+first match.</p>
+</div>
+<div class="section" id="routers">
+<h2>Routers<a class="headerlink" href="#routers" title="Permalink to this headline">¶</a></h2>
+<p>now we support two routers, here there are :</p>
+<p><strong>XServiceRouterRouterUrlMap</strong></p>
+<p>urlmap router route url by defined url map, for example :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># source url =&gt; target url</span>
+<span class="s1">&#39;/&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index.php?module=main&amp;action=index&#39;</span>
+<span class="s1">&#39;/food/edit/</span><span class="si">{id}</span><span class="s1">&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;index.php?module=food&amp;action=edit&amp;id=</span><span class="si">{id}</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+<p>urlmap support parameter place holder to match parameters in url, the
+placeholder start with <code class="docutils literal"><span class="pre">{</span></code> and end with <code class="docutils literal"><span class="pre">}</span></code>, for example, the <code class="docutils literal"><span class="pre">{id}</span></code>
+in demo url, the target placeholder will be replced if source url matched.</p>
+<p><strong>XServiceRouterRouterActionPath</strong></p>
+<p>action-path router will route url by defined format, for example :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>/sport/picture/edit =&gt; index.php?module=sport&amp;action=picture/edit
+</pre></div>
+</div>
+<p>so, the first part of path <code class="docutils literal"><span class="pre">sport</span></code> will be treated as module name, and
+others will be the action name, this is the main of action-path router.</p>
+<p><code class="docutils literal"><span class="pre">defaultModuleName</span></code> use to hide the module name in url path,
+for example :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span># defaultModuleName = user
+/login =&gt; index.php?module=user&amp;action=login
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">mergeParamIntoPath</span></code> use to parse parameters form path,
+for example :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span># mergeParamIntoPath = true
+# pathActionParamSeparator = -
+/sport-001/edit =&gt; index.php?module=sport&amp;action=edit&amp;sport=001
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">defaultActionName</span></code> use to set action name if no action set while mergeParamIntoPath enabled. for example :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>/sport-001/picture-001
+=&gt;
+index.php?module=sport&amp;action=picture&amp;sport=001&amp;picture=001
+</pre></div>
+</div>
+<p>so, it’s not good to understand what action it would do, of course, mostly we
+treat this kind of url to show the detail page, we can use the following url
+to make it clear :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">sport</span><span class="o">-</span><span class="mi">001</span><span class="o">/</span><span class="n">picture</span><span class="o">-</span><span class="mi">001</span><span class="o">/</span><span class="n">detail</span>
+</pre></div>
+</div>
+<p>but we don’t want to add <code class="docutils literal"><span class="pre">detail</span></code> to detail url, and we want to keep the action to detail, so we set default action name, if the last part of path has a parameter with it, the default action name will be appended to the path :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>/sport-001/picture-001
+=&gt;
+/sport-001/picture-001/detail
+=&gt;
+index.php?module=sport&amp;action=picture/detail&amp;sport=001&amp;picture=001
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Service Router" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, sige.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

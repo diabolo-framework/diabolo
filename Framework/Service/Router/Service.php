@@ -2,6 +2,7 @@
 namespace X\Service\Router;
 use X\Core\X;
 use X\Core\Service\XService;
+use X\Service\Router\Router\RouterBase;
 /** */
 class Service extends XService {
     /** @var array router config */

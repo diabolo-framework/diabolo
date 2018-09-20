@@ -325,15 +325,9 @@ class Select extends DatabaseLimitableQuery {
      * @return void
      */
     protected function buildCondition( &$query ) {
-        if ( null === $this->condition 
-        && empty($this->arFilters) 
-        && !$this->arUseDefaultFilter ) {
-            return;
-        }
-        
-        $condition = $this->condition;
-        if ( !($condition instanceof Condition ) ) {
-            $condition = Condition::build()->add($this->condition);
+        $condition = Condition::build();
+        if ( null !== $this->condition ) {
+            $condition->add($this->condition);
         }
         
         if ( null !== $this->arClass ) {
@@ -347,9 +341,11 @@ class Select extends DatabaseLimitableQuery {
             }
         }
         
-        $condition->setPreviousParams($this->queryParams);
-        $condition->setDatabase($this->getDatabase());
-        $query[] = 'WHERE '.$condition->toString();
+        if ( !$condition->isEmpty() ) {
+            $condition->setPreviousParams($this->queryParams);
+            $condition->setDatabase($this->getDatabase());
+            $query[] = 'WHERE '.$condition->toString();
+        }
     }
     
     /**

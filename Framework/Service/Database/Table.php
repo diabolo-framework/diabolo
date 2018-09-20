@@ -34,6 +34,15 @@ class Table {
     }
     
     /**
+     * @param unknown $db
+     * @param unknown $name
+     * @return boolean
+     */
+    public static function exists( $db, $name ) {
+        return null !== self::get($db, $name);
+    }
+    
+    /**
      * @param Database|string $db
      * @param string $name
      * @param string|Column $columns

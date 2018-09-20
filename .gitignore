@@ -8,6 +8,7 @@ Document/phpdoc-cache-*
 
 # Builded Files
 /Document/
+/Framework/Service/KeyValue/Document/build/
 /Framework/Service/Router/Document/build/
 /Framework/Service/Mail/Document/build/
 /Framework/Service/Error/Document/build/

@@ -38,6 +38,11 @@ class Condition {
         return $this;
     }
     
+    /** @return boolean */
+    public function isEmpty() {
+        return empty($this->conditions);
+    }
+    
     /**
      * @param string $name
      * @param mixed $value
@@ -179,6 +184,24 @@ class Condition {
                 'expr' => $name,
                 'operator' => 'LIKE',
                 'value' => '%'.$value.'%',
+            ),
+        );
+        return $this;
+    }
+    
+    /**
+     * @param unknown $name
+     * @param unknown $value
+     * @return self
+     */
+    public function like( $name, $value ) {
+        $this->cache = null;
+        $this->conditions[] = array(
+            'type' => self::TYPE_CONDITION,
+            'content' => array(
+                'expr' => $name,
+                'operator' => 'LIKE',
+                'value' => $value,
             ),
         );
         return $this;

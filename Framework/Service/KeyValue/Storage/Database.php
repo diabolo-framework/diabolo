@@ -50,7 +50,7 @@ class Database extends StorageBase {
      * {@inheritDoc}
      * @see \X\Service\KeyValue\Storage\StorageBase::get()
      */
-    public function get($key, &$option=null) {
+    public function get($key) {
         $key = $this->prefix.$key;
         
         if ( array_key_exists($key, $this->kvCached) ) {

@@ -28,4 +28,12 @@ class Service extends XService {
         }
         return $this->storageInstance[$name];
     }
+    
+    /**
+     * @param unknown $name
+     * @return unknown
+     */
+    public function hasStorage( $name ) {
+        return isset($this->storages[$name]);
+    }
 }

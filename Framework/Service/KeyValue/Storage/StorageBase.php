@@ -1,9 +1,7 @@
 <?php
 namespace X\Service\KeyValue\Storage;
 use X\Service\KeyValue\KeyValueException;
-abstract class StorageBase {
-    const KEYOPT_EXPIRE_AT = 0;
-    
+abstract class StorageBase implements KeyValueStorage {
     /**
      * */
     public function __construct( $config ) {
@@ -32,16 +30,6 @@ abstract class StorageBase {
      */
     abstract public function match( $pattern );
     abstract public function rename( $key, $newKey );
-    abstract public function delete( $key );
     abstract public function exists( $key );
     abstract public function size();
-    abstract public function get($key);
-    /**
-     * set a value to key
-     * @param unknown $key
-     * @param unknown $value
-     * @param array $option
-     * @return void
-     */
-    abstract public function set($key, $value, $option=array());
 }

@@ -41,6 +41,7 @@ class ActionGroup {
         if ( isset($this->registeredActions[$name]) ) {
             $actionClassName = $this->registeredActions[$name];
         } else {
+            $name = implode('\\', array_map('ucfirst', explode('/', $name)));
             $actionClassName = $this->namespace.'\\'.Stringx::middleSnakeToCamel($name);
         }
         

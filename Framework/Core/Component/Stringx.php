@@ -35,6 +35,15 @@ class Stringx {
     }
     
     /**
+     * convert snake case to camel case
+     * @param unknown $string
+     * @return string
+     */
+    public static function middleSnakeToCamel( $string ) {
+        return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
+    }
+    
+    /**
      * convert camel case to snake case
      * @param unknown $string
      * @return string

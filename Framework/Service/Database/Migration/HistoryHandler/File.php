@@ -10,7 +10,11 @@ class File implements DatabaseMigrationHistoryHandler {
      * @param unknown $config
      */
     public function __construct( $config ) {
-        $this->path = rtrim($config['path'], DIRECTORY_SEPARATOR."/")."/.history.php";
+        if ( !is_dir($config['path']) ) {
+            $this->path = $config['path'];
+        } else {
+            $this->path = rtrim($config['path'], DIRECTORY_SEPARATOR."/")."/.history.php";
+        }
         if ( file_exists($this->path) ) {
             $this->history = require $this->path;
         }

@@ -3,6 +3,7 @@ namespace X\Service\Database\Migration;
 use X\Service\Database\Database;
 use X\Service\Database\DatabaseException;
 use X\Service\Database\Table;
+use X\Service\Database\Query;
 abstract class Migration {
     /** @var callable */
     private $processHandler = null;
@@ -185,6 +186,44 @@ abstract class Migration {
         $this->processHandler('DropForginKey',array(
             'tableName' => $tableName,
             'fkName' => $fkName,
+        ));
+    }
+    
+    /**
+     * @param unknown $tableName
+     * @param unknown $condition
+     * @param string $message
+     */
+    protected function delete( $tableName, $condition=null, $message='' ) {
+        $count = Query::delete($this->getDb())->from($tableName)->where($condition)->exec();
+        $this->processHandler('DeleteData',array(
+            'tableName' => $tableName,
+            'message' => $message,
+            'count' => $count,
+        ));
+    }
+    
+    /**
+     * @param unknown $tableName
+     * @param unknown $data
+     * @param unknown $condition
+     * @param unknown $message
+     */
+    protected function update( $tableName, $data, $condition=null, $message='' ) {
+        $count = Query::update($this->getDb())->table($tableName)->values($data)->where($condition)->exec();
+        $this->processHandler('UpdateData',array(
+            'tableName' => $tableName,
+            'message' => $message,
+            'count' => $count,
+        ));
+    }
+    
+    /**
+     * @param unknown $text
+     */
+    protected function message( $text ) {
+        $this->processHandler('Message', array(
+            'text' => $text,
         ));
     }
 }

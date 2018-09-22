@@ -61,7 +61,11 @@ class Migrate {
             $migration = new $migrationClass();
             $migration->setProcessHandler(array($this, 'processHandler'));
             $this->processHandler('StartMigration',array('name'=>$name));
-            $migration->up();
+            try {
+                $migration->up();
+            } catch ( \Exception $e ) {
+                $this->processHandler('Error',array('message'=>$e->getMessage(), 'file'=>$e->getFile(), 'line'=>$e->getLine()));
+            }
             $this->history->add($name);
         }
         $this->history->save();
@@ -94,7 +98,11 @@ class Migrate {
             $migration = new $migrationClass();
             $migration->setProcessHandler(array($this, 'processHandler'));
             $this->processHandler('StartMigration',array('name'=>$name));
-            $migration->down();
+            try {
+                $migration->down();
+            } catch ( \Exception $e ) {
+                $this->processHandler('Error',array('message'=>$e->getMessage(), 'file'=>$e->getFile(), 'line'=>$e->getLine()));
+            }
             $this->history->drop($name);
         }
         $this->history->save();

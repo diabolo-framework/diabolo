@@ -15,6 +15,7 @@ class Up {
             'processHandler' => array($this, 'processHandler'),
             'history' => array(
                 'class' => File::class,
+                'path' => (isset($args['options']['history-path'])) ? $args['options']['history-path'] : null,
             ),
         ));
         

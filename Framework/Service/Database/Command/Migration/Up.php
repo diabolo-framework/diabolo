@@ -15,6 +15,7 @@ class Up {
             'processHandler' => array($this, 'processHandler'),
             'history' => array(
                 'class' => File::class,
+                'path' => (isset($args['options']['history-path'])) ? $args['options']['history-path'] : null,
             ),
         ));
         
@@ -42,7 +43,11 @@ class Up {
         case 'DropIndex'      : echo "    => drop index : {$process['tableName']}.{$process['indexName']}\n"; break;
         case 'AddForginKey'   : echo "    => add forgin key : {$process['tableName']}.{$process['fkName']}\n"; break;
         case 'DropForginKey'  : echo "    => drop forgin key : {$process['tableName']}.{$process['fkName']}\n"; break;
+        case 'DeleteData'     : echo "    => delete data : {$process['tableName']} [{$process['count']} row(s)] - {$process['message']}\n"; break;
+        case 'UpdateData'     : echo "    => update data : {$process['tableName']} [{$process['count']} row(s)] - {$process['message']}\n"; break;
+        case 'Message'        : echo "    => [msg] : {$process['text']} \n"; break;
         case 'DoneMigration'  : echo "\n\ndone migration : {$process['count']} executed.\n"; break;
+        case 'Error'          : echo "\n\nmigration failed : {$process['message']}\nLocation:{$process['file']}#{$process['line']}\n"; exit();
         default : echo "unknown process action `{$name}`\n"; break;
         }
     }

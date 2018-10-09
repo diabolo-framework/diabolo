@@ -303,6 +303,15 @@ class X {
     
     /**
      * @param unknown $name
+     */
+    public function unregisterMagicHandler( $name ) {
+        if ( isset($this->magicHandlers[$name]) ) {
+            unset($this->magicHandlers[$name]);
+        }
+    }
+    
+    /**
+     * @param unknown $name
      * @param array $params
      */
     public function __call( $name, $params=array() ) {

@@ -1,0 +1,6 @@
+Service Log
+================
+
+.. toctree::
+
+  service

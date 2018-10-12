@@ -470,6 +470,7 @@ class Condition {
         } else if ( is_string($condition) ) {
             return $condition;
         } else if ( is_array($condition) ) {
+            $conditionParts = array();
             foreach ( $condition as $key => $value ) {
                 $operator = (is_array($value) || ($value instanceof DatabaseQuery)) ? 'IN' : '=';
                 $content = array(
@@ -477,8 +478,9 @@ class Condition {
                     'operator' => $operator,
                     'value' => $value
                 );
-                return $this->convertNormalConditionToString($content);
+                $conditionParts = $this->convertNormalConditionToString($content);
             }
+            return implode(' AND ', $conditionParts);
         } else {
             throw new DatabaseException('custom condition format error');
         }

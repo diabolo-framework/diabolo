@@ -478,7 +478,7 @@ class Condition {
                     'operator' => $operator,
                     'value' => $value
                 );
-                $conditionParts = $this->convertNormalConditionToString($content);
+                $conditionParts[] = $this->convertNormalConditionToString($content);
             }
             return implode(' AND ', $conditionParts);
         } else {

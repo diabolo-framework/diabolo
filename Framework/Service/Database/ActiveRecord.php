@@ -293,7 +293,7 @@ abstract class ActiveRecord implements \JsonSerializable {
     }
     
     /** @return array */
-    private function toArray() {
+    public function toArray() {
         $values = array();
         foreach ( $this->attributes as $name => $attr ) {
             $values[$name] = $attr->getValue();

@@ -1,6 +1,6 @@
 <?php
 namespace X\Service\Database;
-class QueryResult implements \ArrayAccess, \Iterator, \Countable {
+class QueryResult implements \ArrayAccess, \Iterator, \Countable, \JsonSerializable {
     const FETCH_ASSOC = \PDO::FETCH_ASSOC;
     const FETCH_CLASS = \PDO::FETCH_CLASS;
     
@@ -163,5 +163,12 @@ class QueryResult implements \ArrayAccess, \Iterator, \Countable {
     public function count() {
         $this->fetchAll();
         return count($this->resultItems);
+    }
+    /**
+     * {@inheritDoc}
+     * @see JsonSerializable::jsonSerialize()
+     */
+    public function jsonSerialize() {
+        return $this->fetchAll();
     }
 }

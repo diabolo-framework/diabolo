@@ -5,7 +5,7 @@ use X\Service\Database\ActiveRecord\Attribute;
 use X\Service\Database\Query\Condition;
 use X\Core\Component\Stringx;
 
-abstract class ActiveRecord {
+abstract class ActiveRecord implements \JsonSerializable {
     /** default database connection name configured in service */
     const DB_DEFAULT_NAME = 'default';
     const REL_HAS_ONE = 1;
@@ -600,5 +600,13 @@ abstract class ActiveRecord {
             return $relationData;
         }
         throw new DatabaseException("call to undefined method `{$name}`");
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see JsonSerializable::jsonSerialize()
+     */
+    public function jsonSerialize () {
+        return $this->toArray();
     }
 }

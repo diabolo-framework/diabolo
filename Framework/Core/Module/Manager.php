@@ -70,7 +70,7 @@ class Manager extends UtilManager {
         unset($parameters['module']);
         
         if ( !$this->isEnabled($moduleName) ) {
-            throw new Exception('target module is disabled.');
+            throw new Exception("module `{$moduleName}` is disabled.");
         }
         $module = $this->load($moduleName);
         return $module->run($parameters);

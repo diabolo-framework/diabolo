@@ -4,6 +4,7 @@ use X\Service\Database\Database;
 use X\Service\Database\DatabaseException;
 use X\Service\Database\Table;
 use X\Service\Database\Query;
+use X\Service\Database\Service;
 abstract class Migration {
     /** @var callable */
     private $processHandler = null;
@@ -215,6 +216,20 @@ abstract class Migration {
             'tableName' => $tableName,
             'message' => $message,
             'count' => $count,
+        ));
+    }
+    
+    /**
+     * @param unknown $query
+     * @param array $params
+     */
+    protected function exec( $query,$params=array() ) {
+        $db = Service::getService()->getDB($this->getDb());
+        $rows = $db->exec($query, $params);
+        $this->processHandler('ExecQuery',array(
+            'query' => $query,
+            'params' => $params,
+            'rows' => $rows,
         ));
     }
     

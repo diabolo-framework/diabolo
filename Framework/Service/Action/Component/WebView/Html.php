@@ -211,7 +211,7 @@ class Html {
      * @return string
      */
     public static function HTMLAttributeEncode($string) {
-        return htmlentities($string, ENT_COMPAT,$this->getMetaManager()->getCharset());
+        return htmlentities($string, ENT_COMPAT,'UTF-8');
     }
     
     /**

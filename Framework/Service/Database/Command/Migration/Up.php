@@ -45,6 +45,7 @@ class Up {
         case 'DropForginKey'  : echo "    => drop forgin key : {$process['tableName']}.{$process['fkName']}\n"; break;
         case 'DeleteData'     : echo "    => delete data : {$process['tableName']} [{$process['count']} row(s)] - {$process['message']}\n"; break;
         case 'UpdateData'     : echo "    => update data : {$process['tableName']} [{$process['count']} row(s)] - {$process['message']}\n"; break;
+        case 'ExecQuery'      : echo "    => execute query : {$process['query']} [{$process['rows']} row(s)]\n"; break;
         case 'Message'        : echo "    => [msg] : {$process['text']} \n"; break;
         case 'DoneMigration'  : echo "\n\ndone migration : {$process['count']} executed.\n"; break;
         case 'Error'          : echo "\n\nmigration failed : {$process['message']}\nLocation:{$process['file']}#{$process['line']}\n"; exit();

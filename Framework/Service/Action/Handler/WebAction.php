@@ -84,13 +84,12 @@ abstract class WebAction extends ActionBase {
         if ( is_file($name) ) {
             return $name;
         } else if ( '/' === $name[0] ) {
-            $viewPath = ActionService::getService()->getGlobalViewPathByName($name, $type);
+            $viewPath = ActionService::getService()->getGlobalViewPathByName(substr($name, 1), $type);
         } else {
             $viewPath = $this->getGroup()->getViewPath();
+            $viewPath = rtrim($viewPath, DIRECTORY_SEPARATOR);
+            $viewPath .= DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$fileName.'.php';
         }
-        
-        $viewPath = rtrim($viewPath, DIRECTORY_SEPARATOR);
-        $viewPath .= DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$fileName.'.php';
         return $viewPath;
     }
     

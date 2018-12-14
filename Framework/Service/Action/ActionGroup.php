@@ -37,7 +37,10 @@ class ActionGroup {
      * @param array $params
      * @return mixed
      */
-    public function runAction( $name, $params=array() ) {
+    public function runAction( $name=null, $params=array() ) {
+        if ( empty($name) ) {
+            $name = $this->defaultAction;
+        }
         if ( isset($this->registeredActions[$name]) ) {
             $actionClassName = $this->registeredActions[$name];
         } else {

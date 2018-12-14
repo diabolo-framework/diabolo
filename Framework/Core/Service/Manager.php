@@ -32,14 +32,14 @@ class Manager extends UtilManager {
     public function start(){
         parent::start();
         foreach ( $this->getConfiguration() as $name => $configuration ) {
-            if ( $configuration['enable'] ) {
+            if ( isset($configuration['enable']) && false===$configuration['enable'] ) {
+                $this->services[$name]['isLoaded']  = false;
+                $this->services[$name]['service']   = null;
+            } else {
                 $this->load($name);
                 if ( isset($configuration['delay']) && false === $configuration['delay'] ) {
                     $this->get($name)->start();
                 }
-            } else {
-                $this->services[$name]['isLoaded']  = false;
-                $this->services[$name]['service']   = null;
             }
         }
     }

@@ -100,7 +100,9 @@ class Manager extends UtilManager {
         }
         
         $config = $this->getConfiguration()->get($name);
-        $module = new $moduleClass($config['params']);
+        
+        $params = isset($config['params']) ? $config['params'] : [];
+        $module = new $moduleClass($params);
         $this->loadedModules[$name] = $module;
         return $module;
     }
@@ -112,7 +114,7 @@ class Manager extends UtilManager {
      * */
     public function isEnabled( $name ) {
         $config = $this->getConfiguration()->get($name);
-        return isset($config['enable']) ? $config['enable'] : false;
+        return isset($config['enable']) ? $config['enable'] : true;
     }
     
     /**

@@ -83,7 +83,8 @@ class Manager extends UtilManager {
             throw new Exception("Service class '$serviceClass' should be extends from '\\X\\Core\\Service\\XService'.");
         }
         
-        $service = new $serviceClass($configuration['params']);
+        $params = isset($configuration['params']) ? $configuration['params'] : [];
+        $service = new $serviceClass($params);
         $this->services[$name]['isLoaded']  = true;
         $this->services[$name]['service']   = $service;
     }

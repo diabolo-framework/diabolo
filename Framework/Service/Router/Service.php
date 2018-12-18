@@ -6,7 +6,7 @@ use X\Service\Router\Router\RouterBase;
 /** */
 class Service extends XService {
     /** @var array router config */
-    protected $roters = array( );
+    protected $routers = array( );
     
     /**
      * {@inheritDoc}
@@ -25,7 +25,7 @@ class Service extends XService {
      * @return array|boolean
      */
     public function routeUrl( $url )  {
-        foreach ( $this->roters as $router ) {
+        foreach ( $this->routers as $router ) {
             $routerClasss = $router['class'];
             if ( !is_subclass_of($routerClasss, RouterBase::class) ) {
                 throw new RouterException('router class `'.$router['class'].'is not subclass of '.RouterBase::class);
@@ -33,7 +33,7 @@ class Service extends XService {
             
             /** @var $routerInstance RouterBase */
             $routerInstance = new $routerClasss($router);
-            $params = $routerInstance->router($this->getCurrentUrl());
+            $params = $routerInstance->router($url);
             if ( false !== $params ) {
                 return $params;
             }
@@ -51,6 +51,6 @@ class Service extends XService {
     
     /** @return unknown */
     private function getCurrentUrl() {
-        return $_REQUEST['URI'];
+        return $_SERVER['REQUEST_URI'];
     }
 }

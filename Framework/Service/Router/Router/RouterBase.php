@@ -27,8 +27,9 @@ abstract class RouterBase {
         }
         if ( $withoutFaceExt && null !== $this->fakeExtension ) {
             $fakeExt = '.'.$this->fakeExtension;
-            if ( $fakeExt === substr($path, -1*(strlen($fakeExt)) ) ) {
-                $path = substr($path, -1*(strlen($fakeExt)));
+            $fakeExtLength = strlen($fakeExt);
+            if ( $fakeExt === substr($path, -1*$fakeExtLength ) ) {
+                $path = substr($path, 0, $path-$fakeExtLength);
             }
         }
         return $path;

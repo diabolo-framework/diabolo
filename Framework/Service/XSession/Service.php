@@ -123,6 +123,7 @@ class Service extends XService {
         }
         
         session_start($options);
+        setcookie(session_name(),session_id(),time()+$options['cookie_lifetime'],'/'); 
         $this->sessionStatus = session_status();
     }
     

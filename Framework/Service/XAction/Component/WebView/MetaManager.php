@@ -87,6 +87,9 @@ class MetaManager {
      * @return void
      */
     public function addDescription ( $description ) {
+        if ( empty($description) ) {
+            return;
+        }
         $this->addMetaData('page.description', 'description' , $description);
     }
     
@@ -219,16 +222,22 @@ class MetaManager {
      * @return void
      */
     public function setOGTitle( $title ) {
+        if ( empty($title) ) {
+            return;
+        }
         $this->addOpenGraphData('OpenGraph:Title', 'og:title', $title);
     }
     
     /**
      * 设置 OG 类型
-     * @param string $tyle 类型，例如 article,book,movie
+     * @param string $type 类型，例如 article,book,movie
      * @return void
      */
-    public function setOGType( $tyle ) {
-        $this->addOpenGraphData('OpenGraph:Type', 'og:type', $tyle);
+    public function setOGType( $type ) {
+        if ( empty($type) ) {
+            return;
+        }
+        $this->addOpenGraphData('OpenGraph:Type', 'og:type', $type);
     }
     
     /**
@@ -237,6 +246,9 @@ class MetaManager {
      * @return void
      */
     public function setOGURL( $url ) {
+        if ( empty($url) ) {
+            return;
+        }
         $this->addOpenGraphData('OpenGraph:URL', 'og:url', $url);
     }
     
@@ -246,6 +258,9 @@ class MetaManager {
      * @return void
      */
     public function setOGImage( $image ) {
+        if ( empty($image) ) {
+            return;
+        }
         $this->addOpenGraphData('OpenGraph:Image', 'og:image', $image);
     }
     
@@ -255,6 +270,9 @@ class MetaManager {
      * @return void
      */
     public function setOGSiteName( $name ) {
+        if ( empty($name) ) {
+            return;
+        }
         $this->addOpenGraphData('OpenGraph:SiteName', 'og:site_name', $name);
     }
     
@@ -273,6 +291,9 @@ class MetaManager {
      * @return void
      */
     public function setOGDescription( $description ) {
+        if ( empty($description) ) {
+            return;
+        }
         $this->addOpenGraphData('OpenGraph:Description', 'og:description', $description);
     }
     

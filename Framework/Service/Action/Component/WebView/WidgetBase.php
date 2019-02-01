@@ -21,11 +21,12 @@ abstract class WidgetBase {
      */
     public static function setup( $options=array(), Html $hostView=null ) {
         $widget = new static();
-        $widget->init();
         $widget->hostView = $hostView;
         foreach ( $options as $attr => $value ) {
             $widget->$attr = $value;
         }
+        
+        $widget->init();
         return $widget;
     }
     

@@ -5,7 +5,7 @@
   "type":"library",
   "homepage":"http://diabolo-framework.com",
   "license":"MIT",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "prefer-stable": true,
   "keywords": [
     "framework",

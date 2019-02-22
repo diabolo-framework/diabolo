@@ -1,7 +1,6 @@
 {
   "name":"diabolo/diabolo-framework",
   "description":"Yet another easy-to-use framework.",
-  "version":"1.0.0",
   "type":"library",
   "homepage":"http://diabolo-framework.com",
   "license":"MIT",

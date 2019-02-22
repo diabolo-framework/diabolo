@@ -1,6 +1,22 @@
 # Diabolo
 core of the framework ~
 
+## Installation
+
+- Composer 
+```
+composer require diabolo/diabolo-framework
+```
+
+- Clone From Git
+```
+git clone git@github.com:diabolo-framework/diabolo.git
+```
+
+- Manual Download Source 
+
+https://github.com/diabolo-framework/diabolo/releases
+
 ## Document
 online doc : https://diabolo.readthedocs.io
 

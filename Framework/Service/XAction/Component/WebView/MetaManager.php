@@ -90,6 +90,7 @@ class MetaManager {
         if ( empty($description) ) {
             return;
         }
+        $description = Html::HTMLAttributeEncode($description);
         $this->addMetaData('page.description', 'description' , $description);
     }
     

@@ -22,6 +22,9 @@ class Service extends XService {
      */
     public function start() {
         parent::start();
+        if ( 'cli' === php_sapi_name() ) {
+            return;
+        }
         
         $this->request = CurrentRequest::buildFromCurrentRequest();
         

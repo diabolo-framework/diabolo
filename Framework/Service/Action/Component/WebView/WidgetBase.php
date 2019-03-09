@@ -21,11 +21,12 @@ abstract class WidgetBase {
      */
     public static function setup( $options=array(), Html $hostView=null ) {
         $widget = new static();
-        $widget->init();
         $widget->hostView = $hostView;
         foreach ( $options as $attr => $value ) {
             $widget->$attr = $value;
         }
+        
+        $widget->init();
         return $widget;
     }
     
@@ -60,10 +61,35 @@ abstract class WidgetBase {
         if ( !file_exists($viewPath) ) {
             throw new ActionException("widget view `{$viewPath}` does not exists");
         }
-        echo Html::renderView($viewPath, array_merge(
+        echo $this->renderView($viewPath, array_merge(
             $this->widgetViewData, 
             array('hostView'=>$this->hostView, 'widget'=>$this)
         ));
+    }
+    
+    /**
+     * 渲染视图文件
+     * @param string $view
+     * @param array $data
+     * @return string|unknown
+     */
+    protected function renderView($view, $data) {
+        $content = '';
+        if ( is_string($view) && is_file($view) ) {
+            $_view = $view;
+            extract($data, EXTR_OVERWRITE);
+            ob_start();
+            ob_implicit_flush(false);
+            require $_view;
+            $content = ob_get_clean();
+        } else if ( is_callable($view) ) {
+            $content = call_user_func_array($view, array($data));
+        } else if ( is_string($view) ) {
+            $content = $view;
+        } else {
+            $content = '';
+        }
+        return $content;
     }
     
     /**

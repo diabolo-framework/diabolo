@@ -1,6 +1,21 @@
 # Diabolo
 core of the framework ~
 
+## Installation
+
+Diabolo has been published on [Packagist](https://packagist.org/packages/diabolo/diabolo-framework), so you can install it by composer command. 
+```
+composer require diabolo/diabolo-framework
+```
+
+Also you are albe to clone the source code from github, and here is the command 
+```
+git clone git@github.com:diabolo-framework/diabolo.git
+```
+
+If you don't have the git or composer, you can download the source manually, here is the link for the downloading.
+https://github.com/diabolo-framework/diabolo/releases
+
 ## Document
 online doc : https://diabolo.readthedocs.io
 

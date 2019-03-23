@@ -213,7 +213,7 @@ class MetaManager {
     private function addOpenGraphData( $identifier, $property, $content ) {
         $this->metas[$identifier] = array(
             'property'  => $property,
-            'content'   => $content
+            'content'   => Html::HTMLAttributeEncode($content)
         );
     }
     

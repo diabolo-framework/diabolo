@@ -63,13 +63,13 @@ class Migrate {
             $this->processHandler('StartMigration',array('name'=>$name));
             try {
                 $migration->up();
+                $this->history->add($name);
+                $this->history->save();
             } catch ( \Exception $e ) {
                 $this->processHandler('Error',array('message'=>$e->getMessage(), 'file'=>$e->getFile(), 'line'=>$e->getLine()));
             }
-            $this->history->add($name);
+            
         }
-        $this->history->save();
-        
         $this->processHandler('DoneMigration',array('count'=>$counter));
     }
     
@@ -100,12 +100,12 @@ class Migrate {
             $this->processHandler('StartMigration',array('name'=>$name));
             try {
                 $migration->down();
+                $this->history->drop($name);
+                $this->history->save();
             } catch ( \Exception $e ) {
                 $this->processHandler('Error',array('message'=>$e->getMessage(), 'file'=>$e->getFile(), 'line'=>$e->getLine()));
             }
-            $this->history->drop($name);
         }
-        $this->history->save();
         $this->processHandler('DoneMigration',array('count'=>$counter));
     }
     

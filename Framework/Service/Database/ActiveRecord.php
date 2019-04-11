@@ -464,6 +464,7 @@ abstract class ActiveRecord implements \JsonSerializable {
     }
     
     /**
+     * Check attribute existence by given name
      * @param string $name
      * @return boolean
      */

@@ -33,7 +33,29 @@ class Validator {
     }
     
     /**
-     * @param unknown $validator
+     * Add validator to attribute.
+     * the validator callback accepts two parameters, the current activerecord and validator 
+     * instance, example :
+     * <pre>
+     *   $attr->addValidator('validateExampleCallback');
+     *   
+     *   function validateExampleCallback( ActiveRecord $mode, Attribute $attribute ) {
+     *   &nbsp;&nbsp;&nbsp;&nbsp;$model->addError($attribute->getName(), "this is a demo error");
+     *   }
+     * </pre>
+     * if validator is a string, the handler would be the method in attribute and activerecord
+     * itself with begin with 'validate', for example,
+     * <pre>
+     * $attr->addValidator('id');
+     * </pre> 
+     * the handler would be "validateId" in validator or activerecord.
+     * 
+     * here is the list of default validators :
+     * <li>not-null</li>
+     * <li>not-empty</li>
+     * <li>unique</li>
+     * <li>unsigned</li>
+     * @param string|callable $validator
      * return self
      */
     public function addValidator( $validator ) {

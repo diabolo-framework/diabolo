@@ -79,7 +79,7 @@ class GenerateModel {
                 $defination[] = 'AUTO_INCREASE';
             }
             if ( $column->getIsNotNull() ) {
-                $defination[] = 'not-null';
+                $defination[] = 'NOT_NULL';
             }
             
             $columns[$index] = [

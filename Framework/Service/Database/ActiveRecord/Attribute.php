@@ -139,6 +139,14 @@ class Attribute {
     
     /**
      * set value builder to generate the value for attribute.
+     * the builder callback accept two parameters, the first one is the 
+     * activerecord model and the second is attribute itself.
+     * @example 
+     * <pre>
+     * public function valueBuilderId(ActiveRecord $model, Attribute $attribute) {
+     * &nbsp;&nbsp;&nbsp;&nbsp;return unique();
+     * }
+     * </pre>
      * @param callable $builder
      * @return self
      */
@@ -151,7 +159,10 @@ class Attribute {
         return $this;
     }
     
-    /** @return self */
+    /** 
+     * @see \X\Service\Database\ActiveRecord\Validator::addValidator()
+     * @return self 
+     * */
     public function addValidator( $validator ) {
         $this->validator->addValidator($validator);
         return $this;

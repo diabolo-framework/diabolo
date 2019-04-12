@@ -40,6 +40,9 @@ class Cli extends Handler {
         $actionParams = array();
         $actionOptions = array();
         foreach ( $argv as $value ) {
+            if ( empty($value) ) {
+                continue;
+            }
             if ( '-'===$value[0] && '-'===$value[1] ) {
                 $sepPos = strpos($value, '=');
                 $actionOptions[substr($value, 2, $sepPos-2)] = substr($value, $sepPos+1);

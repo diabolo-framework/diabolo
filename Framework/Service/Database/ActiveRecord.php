@@ -105,7 +105,7 @@ abstract class ActiveRecord implements \JsonSerializable {
         
         $attributes = array();
         if ( !isset(self::$columnCache[$cacheKey]) ) {
-            $columns = $this->getDatabase()->columnList(self::tableName());
+            $columns = $this->getDatabase()->columnList(static::tableName());
             self::$columnCache[$cacheKey] = $columns;
         }
         

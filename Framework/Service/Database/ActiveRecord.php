@@ -234,7 +234,7 @@ abstract class ActiveRecord implements \JsonSerializable {
             ->table(static::tableName())
             ->values($dirtyValues)
             ->where($this->getOperationCondition());
-        return 1 === $qurey->exec();
+        return 0 <= $qurey->exec();
     }
     
     /** @return array|Condition */

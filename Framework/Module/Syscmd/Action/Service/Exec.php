@@ -17,6 +17,9 @@ class Exec extends CommandAction {
         $actionPath = implode('\\', $path);
         
         $actionClass = sprintf('X\\Service\\%s\\Command\\%s', $service, $actionPath);
+        if ( !class_exists($actionClass) ) {
+            $actionClass = sprintf('X\\Service\\%s\\Command\\Action\\%s', $service, $actionPath);
+        }
         $actionInstance = new $actionClass($service, implode('/', $path));
         $options = $this->getParameter('options');
         foreach ( $options as $optName => $optValue ) {

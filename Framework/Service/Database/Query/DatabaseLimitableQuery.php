@@ -40,6 +40,9 @@ abstract class DatabaseLimitableQuery extends DatabaseQuery {
      * @return self
      */
     public function where( $condition ) {
+        if ( is_array($condition) && empty($condition) ) {
+            return $this;
+        }
         $this->condition = $condition;
         return $this;
     }

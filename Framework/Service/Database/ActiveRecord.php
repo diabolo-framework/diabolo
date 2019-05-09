@@ -368,6 +368,14 @@ abstract class ActiveRecord implements \JsonSerializable {
         return $this->attributes[$name];
     }
     
+    /**
+     * 获取模型所有属性信息
+     * @return \X\Service\Database\ActiveRecord\Attribute[]
+     */
+    public function attributes() {
+        return $this->attributes;
+    }
+    
     /** 
      * get the database that current ar is using, as default,
      * it returns the default database name, you can overwrite

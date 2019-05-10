@@ -7,12 +7,34 @@ use X\Core\Component\Manager as UtilManager;
  */
 class Manager extends UtilManager {
     /**
+     * 服务配置键名
+     * @var string
+     * */
+    protected $configurationKey = 'events';
+    
+    /**
      * 已经注册的事件处理器列表
      * @var array
      */
     private $eventHandlers = array(
         /* 'event-nane' => array('event', 'handler') */
     );
+    
+    /**
+     * {@inheritDoc}
+     * @see \X\Core\Component\Manager::start()
+     */
+    public function start() {
+        parent::start();
+        
+        $eventConfig = $this->getConfiguration();
+        foreach ( $eventConfig as $eventName => $handlers ) {
+            foreach ( $handlers as $handler ) {
+                $this->registerHandler($eventName, $handler);
+            }
+        }
+        return true;
+    }
     
     /**
      * 注册事件处理器

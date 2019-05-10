@@ -113,8 +113,6 @@ class X {
         $this->configuration->setValues($config);
         
         $this->eventManager = \X\Core\Event\Manager::getManager();
-        
-        $this->eventManager->start();
         if ( self::$isFirstStart ) {
             register_shutdown_function(array($this, '_shutdown'));
         }
@@ -285,6 +283,7 @@ class X {
      * @return void
      */
     public function run() {
+        $this->getEventManager()->start();
         $this->getServiceManager()->start();
         $this->getModuleManager()->start();
         $this->getModuleManager()->run();

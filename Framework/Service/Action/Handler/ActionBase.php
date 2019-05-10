@@ -1,5 +1,6 @@
 <?php
 namespace X\Service\Action\Handler;
+use X\Core\X;
 use X\Service\Action\ActionGroup;
 use X\Service\Action\ActionException;
 /**
@@ -39,11 +40,13 @@ abstract class ActionBase {
      * @return boolean
      */
     public function execute() {
+        X::system()->getEventManager()->trigger('service-action-action-start', $this);
         if ( false === $this->beforeRunAction() ) {
             return false;
         }
         $result = $this->doRunAction();
         $this->afterRunAction();
+        X::system()->getEventManager()->trigger('service-action-action-end', $this);
         return $result;
     }
     

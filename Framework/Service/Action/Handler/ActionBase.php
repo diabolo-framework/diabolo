@@ -27,7 +27,7 @@ abstract class ActionBase {
      * @param mixed $default 默认值
      * @return mixed
      */
-    protected function getParameter( $name, $default=null ) {
+    public function getParameter( $name, $default=null ) {
         return key_exists($name, $this->parameters) 
         ? $this->parameters[$name] 
         : $default;
